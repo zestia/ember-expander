@@ -38,3 +38,22 @@
     World
   </expander.Content>
 </Expander>
+
+<h4>Nested</h4>
+
+<Expander as |expander|>
+  <button {{on "click" expander.toggleWithTransition}}>Toggle with transition</button>
+  <button {{on "click" expander.toggle}}>Toggle without transition</button>
+
+  <expander.Content>
+    <Expander as |expander|>
+      <button {{on "click" expander.toggleWithTransition}}>Toggle with transition</button>
+      <button {{on "click" expander.toggle}}>Toggle without transition</button>
+
+      <expander.Content>
+        Hello<br>
+        World
+      </expander.Content>
+    </Expander>
+  </expander.Content>
+</Expander>
