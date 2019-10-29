@@ -6,8 +6,9 @@ import { htmlSafe } from '@ember/string';
 import { Promise } from 'rsvp';
 const { requestAnimationFrame } = window;
 
-export default class ExpanderCompoent extends Component {
+export default class ExpanderComponent extends Component {
   layout = layout;
+  tagName = '';
 
   maxHeight = null;
   isExpanded = false;
@@ -114,7 +115,7 @@ export default class ExpanderCompoent extends Component {
       .then(() => this._waitForFrame())
       .then(() => this._adjustToZeroHeight())
       .then(() => this._waitForTransition())
-      .then(() => this._waitForFrame())
+      .then(() => this._adjustToNoneHeight())
       .then(() => this._afterCollapseWithTransition());
   }
 
