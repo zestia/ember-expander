@@ -1,6 +1,6 @@
 {
   "name": "@zestia/ember-expander",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A component to help transition to height auto",
   "directories": {
     "doc": "doc",

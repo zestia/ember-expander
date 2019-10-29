@@ -4,7 +4,7 @@
 
 Transitioning an element from a zero height to it's actual height is not possible to do well with pure CSS (at time of writing).
 
-This component has a `max-height` style with the correct maximum height set, so that transitioning to that value works correctly.
+This component has a `max-height` style set automatically, so that transitioning to works correctly.
 
 It also has the added benefit of not rendering the content when collapsed, which results in faster _initial_ rendering.
 
@@ -26,7 +26,7 @@ Collapsing goes from:
 
 ## Demo
 
-https://zestia.github.io/ember-expander
+https://zestia.github.io/ember-expander/
 
 ## Installation
 
