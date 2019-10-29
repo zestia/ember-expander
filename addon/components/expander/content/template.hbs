@@ -1,0 +1,9 @@
+{{! Issue: https://github.com/emberjs/rfcs/issues/497 }}
+
+<div
+  {{did-insert @onInsert}}
+  class="expander__content"
+  style={{@style}}
+  ...attributes>
+  {{yield}}
+</div>

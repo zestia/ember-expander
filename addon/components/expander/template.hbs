@@ -1,0 +1,27 @@
+<div
+  {{did-insert this.handleInsert}}
+  {{did-update this.handleUpdate @expanded}}
+  class={{concat
+    "expander"
+    (if this.isExpanded " expander--expanded" " expander--collapsed")
+    (if this.isTransitioning " expander--transitioning")
+  }}
+  aria-expanded={{if this.isExpanded "true" "false"}}
+  ...attributes>
+  {{yield (hash
+    Content=(if this.renderContent
+      (component "expander/content"
+        onInsert=this.registerContentElement
+        style=this.style
+      )
+    )
+    toggle=(action "toggle")
+    toggleWithTransition=(action "toggleWithTransition")
+    expand=(action "expand")
+    expandWithTransition=(action "expandWithTransition")
+    collapse=(action "collapse")
+    collapseWithTransition=(action "collapseWithTransition")
+    isExpanded=this.isExpanded
+    renderContent=this.renderContent
+  )}}
+</div>
