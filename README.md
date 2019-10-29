@@ -46,3 +46,8 @@ ember install @zestia/ember-expander
   </expander.Content>
 </Expander>
 ```
+
+#### Info
+
+- This addon does not (and will never) come with any styles.
+- You can nest Expanders.
