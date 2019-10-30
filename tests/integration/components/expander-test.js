@@ -23,7 +23,7 @@ module('expander', function(hooks) {
   });
 
   test('expanding / collapsing (with transition)', async function(assert) {
-    assert.expect(4);
+    assert.expect(7);
 
     await render(hbs`
       <Expander as |expander|>
@@ -34,10 +34,11 @@ module('expander', function(hooks) {
       </Expander>
     `);
 
-    assert.dom('.expander__content').doesNotExist();
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander').doesNotHaveClass('expander--expanded');
+    assert.dom('.expander').hasClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander__content').doesNotExist();
 
     click('button'); // Intentionally no await
 
@@ -54,6 +55,8 @@ module('expander', function(hooks) {
     await waitUntil(() =>
       find('.expander').classList.contains('expander--expanded')
     );
+
+    assert.dom('.expander').doesNotHaveClass('expander-collapsed');
 
     await waitUntil(() =>
       find('.expander').classList.contains('expander--transitioning')
@@ -81,6 +84,8 @@ module('expander', function(hooks) {
       () => !find('.expander').classList.contains('expander--expanded')
     );
 
+    assert.dom('.expander').hasClass('expander--collapsed');
+
     await waitUntil(() =>
       find('.expander').classList.contains('expander--transitioning')
     );
@@ -97,7 +102,7 @@ module('expander', function(hooks) {
   });
 
   test('expanding / collapsing (without transition)', async function(assert) {
-    assert.expect(11);
+    assert.expect(14);
 
     this.set('bool', false);
 
@@ -109,21 +114,24 @@ module('expander', function(hooks) {
       </Expander>
     `);
 
-    assert.dom('.expander__content').doesNotExist();
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander').doesNotHaveClass('expander--expanded');
+    assert.dom('.expander').hasClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander__content').doesNotExist();
 
     this.set('bool', true);
 
-    assert.dom('.expander__content').exists();
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander').hasClass('expander--expanded');
+    assert.dom('.expander').doesNotHaveClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander__content').exists();
 
     this.set('bool', false);
 
     assert.dom('.expander').doesNotHaveClass('expander--expanded');
+    assert.dom('.expander').hasClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
   });
