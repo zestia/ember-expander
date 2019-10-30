@@ -26,22 +26,10 @@ module('expander', function(hooks) {
     assert.expect(4);
 
     await render(hbs`
-      {{! template-lint-disable no-inline-styles }}
-
-      <style>
-        .expander__content {
-          transition: 100ms
-        }
-
-        .internal-height {
-          height: 10px;
-        }
-      </style>
-
       <Expander as |expander|>
         <button {{on "click" expander.toggleWithTransition}}></button>
         <expander.Content>
-          <div class="internal-height"></div>
+          <div class="test-internal-height"></div>
         </expander.Content>
       </Expander>
     `);
@@ -99,21 +87,9 @@ module('expander', function(hooks) {
     this.set('bool', false);
 
     await render(hbs`
-      {{! template-lint-disable no-inline-styles }}
-
-      <style>
-        .expander__content {
-          transition: 100ms;
-        }
-
-        .internal-height {
-          height: 10px;
-        }
-      </style>
-
       <Expander @expanded={{this.bool}} as |expander|>
         <expander.Content>
-          <div class="internal-height"></div>
+          <div class="test-internal-height"></div>
         </expander.Content>
       </Expander>
     `);
@@ -141,23 +117,11 @@ module('expander', function(hooks) {
     assert.expect(2);
 
     await render(hbs`
-      {{! template-lint-disable no-inline-styles }}
-
-      <style>
-        .expander__content {
-          transition: 100ms;
-        }
-
-        .internal-height {
-          height: 10px;
-        }
-      </style>
-
       <Expander as |expander|>
         Expanded: {{expander.isExpanded}}
         <button {{on "click" expander.expandWithTransition}}></button>
         <expander.Content>
-          <div class="internal-height"></div>
+          <div class="test-internal-height"></div>
         </expander.Content>
       </Expander>
     `);
@@ -181,22 +145,10 @@ module('expander', function(hooks) {
     });
 
     await render(hbs`
-      {{! template-lint-disable no-inline-styles }}
-
-      <style>
-        .expander__content {
-          transition: 100ms;
-        }
-
-        .internal-height {
-          height: 10px;
-        }
-      </style>
-
       <Expander @onAfterExpandTransition={{this.afterExpandTransition}} as |expander|>
         <button {{on "click" expander.expandWithTransition}}></button>
         <expander.Content>
-          <div class="internal-height"></div>
+          <div class="test-internal-height"></div>
         </expander.Content>
       </Expander>
     `);
