@@ -2,14 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForTransition from '../../helpers/wait-for-transition';
 import hbs from 'htmlbars-inline-precompile';
-import {
-  settled,
-  render,
-  find,
-  click,
-  waitUntil,
-  waitFor
-} from '@ember/test-helpers';
+import { render, find, click, waitUntil } from '@ember/test-helpers';
 
 module('expander', function(hooks) {
   setupRenderingTest(hooks);
@@ -154,38 +147,5 @@ module('expander', function(hooks) {
     await click('button');
 
     assert.dom('.expander').hasText('Expanded: true');
-  });
-
-  test('after expand transition', async function(assert) {
-    assert.expect(2);
-
-    let args;
-
-    this.set('afterExpandTransition', (..._args) => {
-      args = _args;
-    });
-
-    await render(hbs`
-      <Expander @onAfterExpandTransition={{this.afterExpandTransition}} as |expander|>
-        <button {{on "click" expander.expandWithTransition}}></button>
-        <expander.Content>
-          <div class="test-internal-height"></div>
-        </expander.Content>
-      </Expander>
-    `);
-
-    click('button'); // Intentionally no await
-
-    assert.strictEqual(args, undefined);
-
-    await waitFor('.expander__content');
-    await waitForTransition('.expander__content');
-    await settled();
-
-    assert.deepEqual(
-      args[0],
-      find('.expander__content'),
-      'after the expand transition, the expander content element is sent as an argument'
-    );
   });
 });

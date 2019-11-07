@@ -165,7 +165,7 @@ export default class ExpanderComponent extends Component {
   _afterExpandWithTransition() {
     set(this, 'isTransitioning', false);
 
-    this.onAfterExpandTransition(this.contentElement);
+    this.onAfterExpandTransition();
   }
 
   _toggle() {
