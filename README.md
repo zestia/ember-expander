@@ -24,17 +24,22 @@ Collapsing goes from:
 
 ...and remains as such, because the element is then removed from the DOM.
 
-## Demo
-
-https://zestia.github.io/ember-expander/
-
 ## Installation
 
 ```
 ember install @zestia/ember-expander
 ```
 
-## Usage
+## Demo
+
+https://zestia.github.io/ember-expander/
+
+## Notes
+
+- This addon intentionally does not come with any styles.
+- You can nest Expanders.
+
+## Example
 
 ```handlebars
 <Expander as |expander|>
@@ -46,8 +51,3 @@ ember install @zestia/ember-expander
   </expander.Content>
 </Expander>
 ```
-
-#### Info
-
-- This addon intentionally does not come with any styles.
-- You can nest Expanders.
