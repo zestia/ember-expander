@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Upgrade dependencies
+
 ## 0.2.0
 
 - Don't send element out with the actions
