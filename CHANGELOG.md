@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0
+
+- Bump version number
+
 ## 0.2.1
 
 - Upgrade dependencies
