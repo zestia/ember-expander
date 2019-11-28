@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Re-publish
+
 ## 1.0.1
 
 - Use `trySet` in case component is destroyed mid-expand/collapse
