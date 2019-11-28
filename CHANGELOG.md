@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Use `trySet` in case component is destroyed mid-expand/collapse
+
 ## 1.0.0
 
 - Bump version number

@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import layout from './template';
 import { scheduleOnce } from '@ember/runloop';
-import { computed, set, action } from '@ember/object';
+import { computed, set, trySet, action } from '@ember/object';
 import { htmlSafe } from '@ember/string';
 import { Promise } from 'rsvp';
 const { requestAnimationFrame } = window;
@@ -98,7 +98,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _afterCollapse() {
-    set(this, 'renderContent', false);
+    trySet(this, 'renderContent', false);
     this.onAfterCollapse();
   }
 
@@ -120,8 +120,8 @@ export default class ExpanderComponent extends Component {
   }
 
   _afterCollapseWithTransition() {
-    set(this, 'renderContent', false);
-    set(this, 'isTransitioning', false);
+    trySet(this, 'renderContent', false);
+    trySet(this, 'isTransitioning', false);
 
     this.onAfterCollapseTransition();
   }
@@ -163,7 +163,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _afterExpandWithTransition() {
-    set(this, 'isTransitioning', false);
+    trySet(this, 'isTransitioning', false);
 
     this.onAfterExpandTransition();
   }
@@ -185,15 +185,15 @@ export default class ExpanderComponent extends Component {
   }
 
   _adjustToZeroHeight() {
-    set(this, 'maxHeight', 0);
+    trySet(this, 'maxHeight', 0);
   }
 
   _adjustToNoneHeight() {
-    set(this, 'maxHeight', null);
+    trySet(this, 'maxHeight', null);
   }
 
   _adjustToScrollHeight() {
-    set(this, 'maxHeight', this.contentElement.scrollHeight);
+    trySet(this, 'maxHeight', this.contentElement.scrollHeight);
   }
 
   _waitForRender() {
