@@ -1,4 +1,6 @@
-<h1>@zestia/ember-expander</h1>
+<h1>
+  @zestia/ember-expander
+</h1>
 
 <style>
   .expander__content {
@@ -15,43 +17,68 @@
   }
 </style>
 
-<h4>Demo</h4>
+<h4>
+  Demo
+</h4>
 
 <Expander as |expander|>
-  <button {{on "click" expander.toggleWithTransition}}>Toggle with transition</button>
-  <button {{on "click" expander.toggle}}>Toggle without transition</button>
+  <button {{on "click" expander.toggleWithTransition}}>
+    Toggle with transition
+  </button>
+  <button {{on "click" expander.toggle}}>
+    Toggle without transition
+  </button>
 
   <expander.Content>
-    Hello<br>
+    Hello
+    <br>
     World
   </expander.Content>
 </Expander>
 
-<h4>Pre-expanded</h4>
+<h4>
+  Pre-expanded
+</h4>
 
 <Expander @expanded={{true}} as |expander|>
-  <button {{on "click" expander.toggleWithTransition}}>Toggle with transition</button>
-  <button {{on "click" expander.toggle}}>Toggle without transition</button>
+  <button {{on "click" expander.toggleWithTransition}}>
+    Toggle with transition
+  </button>
+  <button {{on "click" expander.toggle}}>
+    Toggle without transition
+  </button>
 
   <expander.Content>
-    Hello<br>
+    Hello
+    <br>
     World
   </expander.Content>
 </Expander>
 
-<h4>Nested</h4>
+<h4>
+  Nested
+</h4>
 
 <Expander as |expander|>
-  <button {{on "click" expander.toggleWithTransition}}>Toggle with transition</button>
-  <button {{on "click" expander.toggle}}>Toggle without transition</button>
+  <button {{on "click" expander.toggleWithTransition}}>
+    Toggle with transition
+  </button>
+  <button {{on "click" expander.toggle}}>
+    Toggle without transition
+  </button>
 
   <expander.Content>
     <Expander as |expander|>
-      <button {{on "click" expander.toggleWithTransition}}>Toggle with transition</button>
-      <button {{on "click" expander.toggle}}>Toggle without transition</button>
+      <button {{on "click" expander.toggleWithTransition}}>
+        Toggle with transition
+      </button>
+      <button {{on "click" expander.toggle}}>
+        Toggle without transition
+      </button>
 
       <expander.Content>
-        Hello<br>
+        Hello
+        <br>
         World
       </expander.Content>
     </Expander>

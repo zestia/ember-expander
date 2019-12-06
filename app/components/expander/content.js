@@ -1,3 +1,1 @@
-export {
-  default
-} from '@zestia/ember-expander/components/expander/content/component';
+export { default } from '@zestia/ember-expander/components/expander/content/component';
