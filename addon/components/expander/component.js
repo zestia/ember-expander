@@ -10,10 +10,16 @@ export default class ExpanderComponent extends Component {
   layout = layout;
   tagName = '';
 
+  // State
+
   maxHeight = null;
   isExpanded = false;
   isTransitioning = false;
   renderContent = false;
+
+  // Arguments
+
+  expanded = false;
 
   onAfterExpand() {}
   onAfterExpandTransition() {}
