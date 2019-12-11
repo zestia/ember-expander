@@ -20,7 +20,7 @@ module('expander', function(hooks) {
 
     await render(hbs`
       <Expander as |expander|>
-        <button {{on "click" expander.toggleWithTransition}}></button>
+        <button type="button" {{on "click" expander.toggleWithTransition}}></button>
         <expander.Content>
           <div class="test-internal-height"></div>
         </expander.Content>
@@ -135,7 +135,7 @@ module('expander', function(hooks) {
     await render(hbs`
       <Expander as |expander|>
         Expanded: {{expander.isExpanded}}
-        <button {{on "click" expander.expandWithTransition}}></button>
+        <button type="button" {{on "click" expander.expandWithTransition}}></button>
         <expander.Content>
           <div class="test-internal-height"></div>
         </expander.Content>
