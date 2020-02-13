@@ -1,32 +1,17 @@
-import Component from '@ember/component';
-import layout from './template';
+import Component from '@glimmer/component';
 import { scheduleOnce } from '@ember/runloop';
-import { computed, set, trySet, action } from '@ember/object';
+import { action } from '@ember/object';
 import { htmlSafe } from '@ember/string';
+import { tracked } from '@glimmer/tracking';
 import { Promise } from 'rsvp';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
-  layout = layout;
-  tagName = '';
+  @tracked maxHeight = null;
+  @tracked isExpanded = false;
+  @tracked isTransitioning = false;
+  @tracked renderContent = false;
 
-  // State
-
-  maxHeight = null;
-  isExpanded = false;
-  isTransitioning = false;
-  renderContent = false;
-
-  // Arguments
-
-  expanded = false;
-
-  onAfterExpand() {}
-  onAfterExpandTransition() {}
-  onAfterCollapse() {}
-  onAfterCollapseTransition() {}
-
-  @computed('maxHeight')
   get style() {
     let style = '';
 
@@ -79,13 +64,13 @@ export default class ExpanderComponent extends Component {
 
   @action
   registerContentElement(element) {
-    set(this, 'contentElement', element);
+    this.contentElement = element;
   }
 
   _handleManualState() {
-    if (this.expanded === true) {
+    if (this.args.expanded === true) {
       this._expand();
-    } else if (this.expanded === false) {
+    } else if (this.args.expanded === false) {
       this._collapse();
     }
   }
@@ -99,13 +84,13 @@ export default class ExpanderComponent extends Component {
       return;
     }
 
-    set(this, 'isExpanded', false);
+    this.isExpanded = false;
     this._afterCollapse();
   }
 
   _afterCollapse() {
-    trySet(this, 'renderContent', false);
-    this.onAfterCollapse();
+    this.renderContent = false;
+    this._invokeAction('onAfterCollapse');
   }
 
   _collapseWithTransition() {
@@ -113,8 +98,8 @@ export default class ExpanderComponent extends Component {
       return;
     }
 
-    set(this, 'isExpanded', false);
-    set(this, 'isTransitioning', true);
+    this.isExpanded = false;
+    this.isTransitioning = true;
 
     this._waitForFrame()
       .then(() => this._adjustToScrollHeight())
@@ -126,10 +111,10 @@ export default class ExpanderComponent extends Component {
   }
 
   _afterCollapseWithTransition() {
-    trySet(this, 'renderContent', false);
-    trySet(this, 'isTransitioning', false);
+    this.renderContent = false;
+    this.isTransitioning = false;
 
-    this.onAfterCollapseTransition();
+    this._invokeAction('onAfterCollapseTransition');
   }
 
   _canExpand() {
@@ -141,13 +126,13 @@ export default class ExpanderComponent extends Component {
       return;
     }
 
-    set(this, 'renderContent', true);
-    set(this, 'isExpanded', true);
+    this.renderContent = true;
+    this.isExpanded = true;
     this._afterExpand();
   }
 
   _afterExpand() {
-    this.onAfterExpand();
+    this._invokeAction('onAfterExpand');
   }
 
   _expandWithTransition() {
@@ -155,9 +140,9 @@ export default class ExpanderComponent extends Component {
       return;
     }
 
-    set(this, 'renderContent', true);
-    set(this, 'isExpanded', true);
-    set(this, 'isTransitioning', true);
+    this.renderContent = true;
+    this.isExpanded = true;
+    this.isTransitioning = true;
 
     this._waitForRender()
       .then(() => this._adjustToZeroHeight())
@@ -169,9 +154,9 @@ export default class ExpanderComponent extends Component {
   }
 
   _afterExpandWithTransition() {
-    trySet(this, 'isTransitioning', false);
+    this.isTransitioning = false;
 
-    this.onAfterExpandTransition();
+    this._invokeAction('onAfterExpandTransition');
   }
 
   _toggle() {
@@ -191,15 +176,15 @@ export default class ExpanderComponent extends Component {
   }
 
   _adjustToZeroHeight() {
-    trySet(this, 'maxHeight', 0);
+    this.maxHeight = 0;
   }
 
   _adjustToNoneHeight() {
-    trySet(this, 'maxHeight', null);
+    this.maxHeight = null;
   }
 
   _adjustToScrollHeight() {
-    trySet(this, 'maxHeight', this.contentElement.scrollHeight);
+    this.maxHeight = this.contentElement.scrollHeight;
   }
 
   _waitForRender() {
@@ -221,5 +206,13 @@ export default class ExpanderComponent extends Component {
 
       this.contentElement.addEventListener('transitionend', handler);
     });
+  }
+
+  _invokeAction(name, ...args) {
+    const action = this.args[name];
+
+    if (typeof action === 'function') {
+      action(...args);
+    }
   }
 }

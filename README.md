@@ -17,7 +17,7 @@
     <img src="https://emberobserver.com/badges/-zestia-ember-expander.svg">
   </a>
 
-  <img src="https://img.shields.io/badge/Ember-%3E%3D%203.11-brightgreen">
+  <img src="https://img.shields.io/badge/Ember-%3E%3D%203.16-brightgreen">
 </p>
 
 Transitioning an element from a zero height to it's actual height is not possible to do well with pure CSS (at time of writing).
@@ -29,7 +29,7 @@ It also has the added benefit of not rendering the content when collapsed, which
 Expanding goes from:
 
 1. zero height (collapsed)
-2. scroll height (transitioning)  &nbsp;&nbsp;&nbsp;← _max height set during this phase_
+2. scroll height (transitioning) &nbsp;&nbsp;&nbsp;← _max height set during this phase_
 3. none height (expanded)
 
 Notice that the maximum height style is only present for the duration of the transition. This is so that if content is added or removed, the element can still grow or shrink to fit that new content - without causing an additional transition.
@@ -37,7 +37,7 @@ Notice that the maximum height style is only present for the duration of the tra
 Collapsing goes from:
 
 1. scroll height (expanded)
-2. zero height (transitoning)  &nbsp;&nbsp;&nbsp;← _max height set during this phase_
+2. zero height (transitoning) &nbsp;&nbsp;&nbsp;← _max height set during this phase_
 3. none height (collapsed)
 
 ...and remains as such, because the element is then removed from the DOM.
