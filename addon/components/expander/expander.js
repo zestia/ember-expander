@@ -188,7 +188,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _waitForRender() {
-    return new Promise(resolve => scheduleOnce('afterRender', this, resolve));
+    return new Promise((resolve) => scheduleOnce('afterRender', this, resolve));
   }
 
   _waitForFrame() {
@@ -196,8 +196,8 @@ export default class ExpanderComponent extends Component {
   }
 
   _waitForTransition() {
-    return new Promise(resolve => {
-      const handler = e => {
+    return new Promise((resolve) => {
+      const handler = (e) => {
         if (e.propertyName === 'max-height') {
           resolve();
           this.contentElement.removeEventListener('transitionend', handler);

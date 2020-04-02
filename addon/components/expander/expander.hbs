@@ -1,5 +1,6 @@
 <div
-  class={{concat
+  class={{
+    concat
     "expander"
     (if this.isExpanded " expander--expanded" " expander--collapsed")
     (if this.isTransitioning " expander--transitioning")
@@ -9,7 +10,8 @@
   {{did-insert this.handleInsert}}
   {{did-update this.handleUpdate @expanded}}
 >
-  {{yield
+  {{
+    yield
     (hash
       Content=(if
         this.renderContent

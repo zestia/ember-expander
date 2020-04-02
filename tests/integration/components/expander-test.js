@@ -4,10 +4,10 @@ import waitForTransition from '../../helpers/wait-for-transition';
 import hbs from 'htmlbars-inline-precompile';
 import { render, find, click, waitUntil } from '@ember/test-helpers';
 
-module('expander', function(hooks) {
+module('expander', function (hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
+  test('it renders', async function (assert) {
     assert.expect(1);
 
     await render(hbs`<Expander />`);
@@ -15,7 +15,7 @@ module('expander', function(hooks) {
     assert.dom('.expander').exists('has an appropriate classname');
   });
 
-  test('expanding / collapsing (with transition)', async function(assert) {
+  test('expanding / collapsing (with transition)', async function (assert) {
     assert.expect(7);
 
     await render(hbs`
@@ -94,7 +94,7 @@ module('expander', function(hooks) {
     );
   });
 
-  test('expanding / collapsing (without transition)', async function(assert) {
+  test('expanding / collapsing (without transition)', async function (assert) {
     assert.expect(14);
 
     this.set('bool', false);
@@ -129,7 +129,7 @@ module('expander', function(hooks) {
     assert.dom('.expander__content').doesNotExist();
   });
 
-  test('yielded state', async function(assert) {
+  test('yielded state', async function (assert) {
     assert.expect(2);
 
     await render(hbs`
