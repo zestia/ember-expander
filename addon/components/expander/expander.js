@@ -24,6 +24,7 @@ export default class ExpanderComponent extends Component {
 
   @action
   handleInsert() {
+    this._handleReady(...arguments);
     this._handleManualState();
   }
 
@@ -65,6 +66,10 @@ export default class ExpanderComponent extends Component {
   @action
   registerContentElement(element) {
     this.contentElement = element;
+  }
+
+  _handleReady(api) {
+    this._invokeAction('onReady', api);
   }
 
   _handleManualState() {

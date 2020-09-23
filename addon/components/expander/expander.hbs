@@ -1,33 +1,32 @@
-<div
-  class={{
-    concat
-    "expander"
-    (if this.isExpanded " expander--expanded" " expander--collapsed")
-    (if this.isTransitioning " expander--transitioning")
-  }}
-  aria-expanded={{if this.isExpanded "true" "false"}}
-  ...attributes
-  {{did-insert this.handleInsert}}
-  {{did-update this.handleUpdate @expanded}}
->
-  {{
-    yield
-    (hash
-      Content=(if
-        this.renderContent
-        (component
-          "expander/content"
-          onInsert=this.registerContentElement
-          style=this.style
-        )
-      )
-      toggle=this.toggle
-      toggleWithTransition=this.toggleWithTransition
-      expand=this.expand
-      expandWithTransition=this.expandWithTransition
-      collapse=this.collapse
-      collapseWithTransition=this.collapseWithTransition
-      isExpanded=this.isExpanded
+{{#let (hash
+  Content=(if
+    this.renderContent
+    (component
+      "expander/content"
+      onInsert=this.registerContentElement
+      style=this.style
     )
-  }}
-</div>
+  )
+  toggle=this.toggle
+  toggleWithTransition=this.toggleWithTransition
+  expand=this.expand
+  expandWithTransition=this.expandWithTransition
+  collapse=this.collapse
+  collapseWithTransition=this.collapseWithTransition
+  isExpanded=this.isExpanded
+) as |api|}}
+  <div
+    class={{
+      concat
+      "expander"
+      (if this.isExpanded " expander--expanded" " expander--collapsed")
+      (if this.isTransitioning " expander--transitioning")
+    }}
+    aria-expanded={{if this.isExpanded "true" "false"}}
+    ...attributes
+    {{did-insert (fn this.handleInsert api)}}
+    {{did-update this.handleUpdate @expanded}}
+  >
+    {{yield api}}
+  </div>
+{{/let}}

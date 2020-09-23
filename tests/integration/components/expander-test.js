@@ -3,6 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import waitForTransition from '../../helpers/wait-for-transition';
 import hbs from 'htmlbars-inline-precompile';
 import { render, find, click, waitUntil } from '@ember/test-helpers';
+const { keys } = Object;
 
 module('expander', function (hooks) {
   setupRenderingTest(hooks);
@@ -13,6 +14,31 @@ module('expander', function (hooks) {
     await render(hbs`<Expander />`);
 
     assert.dom('.expander').exists('has an appropriate classname');
+  });
+
+  test('ready action', async function (assert) {
+    assert.expect(1);
+
+    let api;
+
+    this.handleReady = (expander) => (api = expander);
+
+    await render(hbs`<Expander @onReady={{this.handleReady}} />`);
+
+    assert.deepEqual(
+      keys(api),
+      [
+        'Content',
+        'toggle',
+        'toggleWithTransition',
+        'expand',
+        'expandWithTransition',
+        'collapse',
+        'collapseWithTransition',
+        'isExpanded'
+      ],
+      'exposes the api when ready'
+    );
   });
 
   test('expanding / collapsing (with transition)', async function (assert) {

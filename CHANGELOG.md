@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.0
+
+- Exposes API via `onReady` action
+
 ## 2.0.5
 
 - Upgrade dependencies
