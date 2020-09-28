@@ -174,4 +174,26 @@ module('expander', function (hooks) {
 
     assert.dom('.expander').hasText('Expanded: true');
   });
+
+  test('api promises', async function (assert) {
+    assert.expect(2);
+
+    let api;
+
+    this.handleReady = (expander) => (api = expander);
+
+    await render(hbs`
+      <Expander @onReady={{this.handleReady}} as |expander|>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    assert.dom('.expander').doesNotIncludeText('Hello World');
+
+    await api.expandWithTransition();
+
+    assert.dom('.expander').hasText('Hello World');
+  });
 });

@@ -40,7 +40,7 @@ export default class ExpanderComponent extends Component {
 
   @action
   expandWithTransition() {
-    this._expandWithTransition();
+    return this._expandWithTransition();
   }
 
   @action
@@ -50,7 +50,7 @@ export default class ExpanderComponent extends Component {
 
   @action
   collapseWithTransition() {
-    this._collapseWithTransition();
+    return this._collapseWithTransition();
   }
 
   @action
@@ -60,7 +60,7 @@ export default class ExpanderComponent extends Component {
 
   @action
   toggleWithTransition(e) {
-    this._toggleWithTransition();
+    return this._toggleWithTransition();
   }
 
   @action
@@ -106,7 +106,7 @@ export default class ExpanderComponent extends Component {
     this.isExpanded = false;
     this.isTransitioning = true;
 
-    this._waitForFrame()
+    return this._waitForFrame()
       .then(() => this._adjustToScrollHeight())
       .then(() => this._waitForFrame())
       .then(() => this._adjustToZeroHeight())
@@ -149,7 +149,7 @@ export default class ExpanderComponent extends Component {
     this.isExpanded = true;
     this.isTransitioning = true;
 
-    this._waitForRender()
+    return this._waitForRender()
       .then(() => this._adjustToZeroHeight())
       .then(() => this._waitForFrame())
       .then(() => this._adjustToScrollHeight())
@@ -174,9 +174,9 @@ export default class ExpanderComponent extends Component {
 
   _toggleWithTransition() {
     if (this.renderContent) {
-      this._collapseWithTransition();
+      return this._collapseWithTransition();
     } else {
-      this._expandWithTransition();
+      return this._expandWithTransition();
     }
   }
 

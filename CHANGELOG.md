@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1
+
+- Return promises from API actions
+
 ## 2.1.0
 
 - Exposes API via `onReady` action
