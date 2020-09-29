@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.2
+
+- Expose `isTransitioning` on API
+
 ## 2.1.1
 
 - Return promises from API actions
