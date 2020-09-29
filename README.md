@@ -62,13 +62,13 @@ When expanding, `max-height` goes from:
 3. scroll height (transitioning)
 4. none (expanded)
 
-Notice that the `max-height` style is only present for the duration of the transition.
-
-This is so that if the contents of your element change it can still grow or shrink to fit that new content - without causing an additional transition.
-
-Collapsing goes from:
+When collapsing, `max-height` goes from:
 
 1. none (expanded)
 2. scroll height (transitioning)
 3. zero (transitioning)
 4. none (collapsed)
+
+Notice that the `max-height` style is only present for the duration of the transition.
+
+This is so that if the contents of your element change it can still grow or shrink to fit that new content - without causing an additional transition.
