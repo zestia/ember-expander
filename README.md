@@ -53,7 +53,7 @@ https://zestia.github.io/ember-expander/
 </Expander>
 ```
 
-### Further explanation
+## Further explanation
 
 When expanding, `max-height` goes from:
 
@@ -72,4 +72,3 @@ Collapsing goes from:
 2. scroll height (transitioning)
 3. zero (transitioning)
 4. none (collapsed)
-
