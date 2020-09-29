@@ -35,7 +35,8 @@ module('expander', function (hooks) {
         'expandWithTransition',
         'collapse',
         'collapseWithTransition',
-        'isExpanded'
+        'isExpanded',
+        'isTransitioning'
       ],
       'exposes the api when ready'
     );
