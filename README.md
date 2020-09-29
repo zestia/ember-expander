@@ -20,27 +20,9 @@
   <img src="https://img.shields.io/badge/Ember-%3E%3D%203.16-brightgreen">
 </p>
 
-Transitioning an element from a zero height to it's actual height is not possible to do well with pure CSS (at time of writing).
+Transitioning an element from a zero height to it's actual height is not possible to do with pure CSS, unless you know the height in advance.
 
-This component has a `max-height` style set automatically, so that transitioning to works correctly. (They need this value set, so they know what value to transition to)
-
-It also has the added benefit of not rendering the content when collapsed, which results in faster _initial_ rendering.
-
-Expanding goes from:
-
-1. zero height (collapsed)
-2. scroll height (transitioning) &nbsp;&nbsp;&nbsp;← _max height set during this phase_
-3. none height (expanded)
-
-Notice that the maximum height style is only present for the duration of the transition. This is so that if content is added or removed, the element can still grow or shrink to fit that new content - without causing an additional transition.
-
-Collapsing goes from:
-
-1. scroll height (expanded)
-2. zero height (transitoning) &nbsp;&nbsp;&nbsp;← _max height set during this phase_
-3. none height (collapsed)
-
-...and remains as such, because the element is then removed from the DOM.
+This component automatically sets `max-height`, so that you can style transitions _to that height_.
 
 ## Installation
 
@@ -56,6 +38,7 @@ https://zestia.github.io/ember-expander/
 
 - This addon intentionally does not come with any styles.
 - You can nest Expanders.
+- Content is not rendered when collapsed, which results in faster rendering.
 
 ## Example
 
@@ -69,3 +52,24 @@ https://zestia.github.io/ember-expander/
   </expander.Content>
 </Expander>
 ```
+
+### Further explanation
+
+When expanding, `max-height` goes from:
+
+1. none (collapsed)
+2. zero (transitioning)
+3. scroll height (transitioning)
+4. none (expanded)
+
+Notice that the `max-height` style is only present for the duration of the transition.
+
+This is so that if the contents of your element change it can still grow or shrink to fit that new content - without causing an additional transition.
+
+Collapsing goes from:
+
+1. none (expanded)
+2. scroll height (transitioning)
+3. zero (transitioning)
+4. none (collapsed)
+
