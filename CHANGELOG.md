@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.3
+
+- Upgrade dependencies
+
 ## 2.1.2
 
 - Expose `isTransitioning` on API
