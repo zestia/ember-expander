@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.4
+
+- Run ember-cli-update
+
 ## 2.1.3
 
 - Upgrade dependencies
