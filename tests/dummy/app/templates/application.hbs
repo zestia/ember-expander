@@ -34,6 +34,13 @@
   Demo
 </h4>
 
+<button type="button" {{on "click" this.toggleMore}}>
+  Toggle more content
+</button>
+
+<br />
+<br />
+
 <Expander as |expander|>
   <button type="button" {{on "click" expander.toggleWithTransition}}>
     Toggle with transition
@@ -46,6 +53,10 @@
     Hello
     <br />
     World
+    {{#if this.more}}
+      <br />
+      More content
+    {{/if}}
   </expander.Content>
 </Expander>
 

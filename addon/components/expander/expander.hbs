@@ -1,21 +1,21 @@
-{{#let (hash
-  Content=(if
-    this.renderContent
-    (component
-      "expander/content"
-      onInsert=this.registerContentElement
-      style=this.style
+{{#let
+  (hash
+    Content=(if
+      this.renderContent
+      (component
+        "expander/content" onInsert=this.registerContentElement style=this.style
+      )
     )
-  )
-  toggle=this.toggle
-  toggleWithTransition=this.toggleWithTransition
-  expand=this.expand
-  expandWithTransition=this.expandWithTransition
-  collapse=this.collapse
-  collapseWithTransition=this.collapseWithTransition
-  isExpanded=this.isExpanded
-  isTransitioning=this.isTransitioning
-) as |api|}}
+    toggle=this.toggle
+    toggleWithTransition=this.toggleWithTransition
+    expand=this.expand
+    expandWithTransition=this.expandWithTransition
+    collapse=this.collapse
+    collapseWithTransition=this.collapseWithTransition
+    isExpanded=this.isExpanded
+    isTransitioning=this.isTransitioning
+  ) as |api|
+}}
   <div
     class={{
       concat
