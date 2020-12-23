@@ -25,8 +25,8 @@
     }}
     aria-expanded={{if this.isExpanded "true" "false"}}
     ...attributes
-    {{did-insert (fn this.handleInsert api)}}
-    {{did-update this.handleUpdate @expanded}}
+    {{did-insert (fn this.handleInsertElement api)}}
+    {{did-update this.handleUpdateExpanded @expanded}}
   >
     {{yield api}}
   </div>

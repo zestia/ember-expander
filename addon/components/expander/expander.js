@@ -23,13 +23,13 @@ export default class ExpanderComponent extends Component {
   }
 
   @action
-  handleInsert() {
+  handleInsertElement() {
     this._handleReady(...arguments);
     this._handleManualState();
   }
 
   @action
-  handleUpdate() {
+  handleUpdateExpanded() {
     this._handleManualState();
   }
 
