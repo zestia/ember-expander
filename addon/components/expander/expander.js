@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
-import { htmlSafe } from '@ember/string';
+import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { Promise } from 'rsvp';
 const { requestAnimationFrame } = window;
