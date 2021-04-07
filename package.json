@@ -89,7 +89,8 @@
     "configPath": "tests/dummy/config"
   },
   "bugs": {
-    "url": "https://github.com/zestia/ember-expander/issues"
+    "url": "https://github.com/zestia/ember-expander/issues",
+    "demoURL": "https://zestia.github.io/ember-expander"
   },
   "homepage": "https://github.com/zestia/ember-expander"
 }
