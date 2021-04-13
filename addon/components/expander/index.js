@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import ExpanderContent from './content';
 import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
@@ -12,6 +13,8 @@ export default class ExpanderComponent extends Component {
   @tracked isExpanded = false;
   @tracked isTransitioning = false;
   @tracked renderContent = false;
+
+  ExpanderContent = ExpanderContent;
 
   get style() {
     let style = '';
