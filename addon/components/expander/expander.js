@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { Promise } from 'rsvp';
+import { modifier } from 'ember-modifier';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
@@ -24,7 +25,6 @@ export default class ExpanderComponent extends Component {
 
   @action
   handleInsertElement() {
-    this._handleReady(...arguments);
     this._handleManualState();
   }
 
@@ -68,17 +68,17 @@ export default class ExpanderComponent extends Component {
     this.contentElement = element;
   }
 
-  _handleReady(api) {
-    this._invokeAction('onReady', api);
-  }
+  ready = modifier((element, [api]) => {
+    this.args.onReady?.(api);
+  });
 
-  _handleManualState() {
+  expandOrCollapse = modifier(() => {
     if (this.args.expanded === true) {
       this._expand();
     } else if (this.args.expanded === false) {
       this._collapse();
     }
-  }
+  });
 
   _canCollapse() {
     return this.isExpanded && !this.isTransitioning;
@@ -95,7 +95,7 @@ export default class ExpanderComponent extends Component {
 
   _afterCollapse() {
     this.renderContent = false;
-    this._invokeAction('onAfterCollapse');
+    this.args.onAfterCollapse?.();
   }
 
   _collapseWithTransition() {
@@ -119,7 +119,7 @@ export default class ExpanderComponent extends Component {
     this.renderContent = false;
     this.isTransitioning = false;
 
-    this._invokeAction('onAfterCollapseTransition');
+    this.args.onAfterCollapseTransition?.();
   }
 
   _canExpand() {
@@ -137,7 +137,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _afterExpand() {
-    this._invokeAction('onAfterExpand');
+    this.args.onAfterExpand?.();
   }
 
   _expandWithTransition() {
@@ -161,7 +161,7 @@ export default class ExpanderComponent extends Component {
   _afterExpandWithTransition() {
     this.isTransitioning = false;
 
-    this._invokeAction('onAfterExpandTransition');
+    this.args.onAfterExpandTransition?.();
   }
 
   _toggle() {
@@ -211,13 +211,5 @@ export default class ExpanderComponent extends Component {
 
       this.contentElement.addEventListener('transitionend', handler);
     });
-  }
-
-  _invokeAction(name, ...args) {
-    const action = this.args[name];
-
-    if (typeof action === 'function') {
-      action(...args);
-    }
   }
 }
