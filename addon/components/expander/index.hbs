@@ -3,7 +3,9 @@
     Content=(if
       this.renderContent
       (component
-        "expander/content" onInsert=this.registerContentElement style=this.style
+        this.ExpanderContent
+        onInsert=this.registerContentElement
+        style=this.style
       )
     )
     toggle=this.toggle

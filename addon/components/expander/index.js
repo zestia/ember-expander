@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import ExpanderContent from './content';
 import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
@@ -11,6 +12,8 @@ export default class ExpanderComponent extends Component {
   @tracked isExpanded = false;
   @tracked isTransitioning = false;
   @tracked renderContent = false;
+
+  ExpanderContent = ExpanderContent;
 
   get style() {
     let style = '';
@@ -69,7 +72,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _handleReady(api) {
-    this._invokeAction('onReady', api);
+    this.args.onReady?.(api);
   }
 
   _handleManualState() {
@@ -95,7 +98,7 @@ export default class ExpanderComponent extends Component {
 
   _afterCollapse() {
     this.renderContent = false;
-    this._invokeAction('onAfterCollapse');
+    this.args.onAfterCollapse?.();
   }
 
   _collapseWithTransition() {
@@ -119,7 +122,7 @@ export default class ExpanderComponent extends Component {
     this.renderContent = false;
     this.isTransitioning = false;
 
-    this._invokeAction('onAfterCollapseTransition');
+    this.args.onAfterCollapseTransition?.();
   }
 
   _canExpand() {
@@ -137,7 +140,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _afterExpand() {
-    this._invokeAction('onAfterExpand');
+    this.args.onAfterExpand?.();
   }
 
   _expandWithTransition() {
@@ -161,7 +164,7 @@ export default class ExpanderComponent extends Component {
   _afterExpandWithTransition() {
     this.isTransitioning = false;
 
-    this._invokeAction('onAfterExpandTransition');
+    this.args.onAfterExpandTransition?.();
   }
 
   _toggle() {
@@ -211,13 +214,5 @@ export default class ExpanderComponent extends Component {
 
       this.contentElement.addEventListener('transitionend', handler);
     });
-  }
-
-  _invokeAction(name, ...args) {
-    const action = this.args[name];
-
-    if (typeof action === 'function') {
-      action(...args);
-    }
   }
 }
