@@ -1,78 +1,83 @@
 # Changelog
 
-## 2.1.12 (unreleased)
-
-- Add aria-label to dismiss button
-- Remove use of ember render modifiers
-- Introduce local modifiers
-
-## 2.1.11
+## 2.2.0
 
 - Upgrade dependencies
-
-## 2.1.10
-
-- Upgrade dependencies
-- Run ember-cli-update
-
-## 2.1.9
-
-- Upgrade dependencies
-
-## 2.1.8
-
-- Upgrade dependencies
-
-## 2.1.7
-
-- Upgrade dependencies
-
-## 2.1.6
-
-- Makes sure when the same flash message is added more than once, it is inserted
-  in the queue in the correct position (appended).
+- Add Embroider support
 
 ## 2.1.5
 
-- Replaces a flash message when add the same one more than once.<br>
-  This ensures the flash message is rendered, and therefore scrolled to.
+- Upgrade dependencies
 
 ## 2.1.4
 
 - Upgrade dependencies
+- Run ember-cli-update
 
 ## 2.1.3
 
-- Remove use of set
+- Upgrade dependencies
 
 ## 2.1.2
 
-- Upgrade dependencies
+- Expose `isTransitioning` on API
 
 ## 2.1.1
 
-- Upgrade dependencies
+- Return promises from API actions
 
 ## 2.1.0
 
-- Does not render flash messages element if there are no flash messages to display
+- Exposes API via `onReady` action
+
+## 2.0.5
+
+- Upgrade dependencies
+
+## 2.0.4
+
+- Upgrade dependencies
+
+## 2.0.3
+
+- Upgrade dependencies
+
+## 2.0.2
+
+- Upgrade dependencies
+
+## 2.0.1
+
+- Move glimmer from devDeps to deps
 
 ## 2.0.0
 
 - Glimmerise component
 - Drop support for Ember < 3.16
 
-## 1.0.2
+## 1.0.3
 
 - Upgrade dependencies
+
+## 1.0.2
+
+- Re-publish
 
 ## 1.0.1
 
-- Upgrade dependencies
+- Use `trySet` in case component is destroyed mid-expand/collapse
 
 ## 1.0.0
 
+- Bump version number
+
+## 0.2.1
+
 - Upgrade dependencies
+
+## 0.2.0
+
+- Don't send element out with the actions
 
 ## 0.1.0
 
