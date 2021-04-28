@@ -9,6 +9,8 @@ import { modifier } from 'ember-modifier';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
+  ready = false;
+
   @tracked maxHeight = null;
   @tracked isExpanded = false;
   @tracked isTransitioning = false;
@@ -24,16 +26,6 @@ export default class ExpanderComponent extends Component {
     }
 
     return htmlSafe(style);
-  }
-
-  @action
-  handleInsertElement() {
-    this._handleManualState();
-  }
-
-  @action
-  handleUpdateExpanded() {
-    this._handleManualState();
   }
 
   @action
@@ -72,13 +64,15 @@ export default class ExpanderComponent extends Component {
   }
 
   ready = modifier((element, [api]) => {
-    this.args.onReady?.(api);
+    if (!this.ready) {
+      this.args.onReady?.(api);
+    }
   });
 
-  expandOrCollapse = modifier(() => {
-    if (this.args.expanded === true) {
+  expandOrCollapse = modifier((element, [expanded]) => {
+    if (expanded === true) {
       this._expand();
-    } else if (this.args.expanded === false) {
+    } else if (expanded === false) {
       this._collapse();
     }
   });

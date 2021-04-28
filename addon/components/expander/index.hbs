@@ -27,7 +27,7 @@
     }}
     aria-expanded={{if this.isExpanded "true" "false"}}
     ...attributes
-    {{this.expandOrCollapse}}
+    {{this.expandOrCollapse @expanded}}
     {{this.ready api}}
   >
     {{yield api}}
