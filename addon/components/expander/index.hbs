@@ -16,11 +16,11 @@
     collapseWithTransition=this.collapseWithTransition
     isExpanded=this.isExpanded
     isTransitioning=this.isTransitioning
-  ) as |api|
+  )
+  as |api|
 }}
   <div
-    class={{
-      concat
+    class={{concat
       "expander"
       (if this.isExpanded " expander--expanded" " expander--collapsed")
       (if this.isTransitioning " expander--transitioning")
