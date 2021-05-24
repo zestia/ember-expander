@@ -1,7 +1,31 @@
-.expander__content {
-  transition: 100ms;
+/* stylelint-disable selector-max-id */
+
+:root {
+  --collapsed: red;
+  --expanded: green;
 }
 
-.test-internal-height {
-  height: 10px;
+#ember-testing {
+  .expander__content {
+    transition: 100ms;
+  }
+
+  .test-internal-height {
+    height: 10px;
+  }
+}
+
+.demo {
+  .expander__content {
+    overflow: hidden;
+    transition: max-height 1s;
+  }
+
+  .expander--collapsed .expander__content {
+    border: 1px solid var(--collapsed);
+  }
+
+  .expander--expanded .expander__content {
+    border: 1px solid var(--expanded);
+  }
 }
