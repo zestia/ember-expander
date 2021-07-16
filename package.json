@@ -11,6 +11,10 @@
     "height",
     "transition"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zestia/ember-expander.git"
+  },
   "license": "MIT",
   "author": "Zestia",
   "directories": {
@@ -34,10 +38,6 @@
     "prettier": "prettier . --write",
     "release": "release-it",
     "deploy": "ember build --environment production && ember github-pages:commit --message \"Deploy gh-pages from commit $(git rev-parse HEAD)\" && git push origin gh-pages:gh-pages"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/zestia/ember-expander.git"
   },
   "dependencies": {
     "@ember/render-modifiers": "^1.0.2",
