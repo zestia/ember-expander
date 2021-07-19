@@ -4,7 +4,7 @@ import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
-import { Promise } from 'rsvp';
+import { Promise, defer } from 'rsvp';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
@@ -12,6 +12,8 @@ export default class ExpanderComponent extends Component {
   @tracked isExpanded = false;
   @tracked isTransitioning = false;
   @tracked renderContent = false;
+
+  willTransition = defer();
 
   ExpanderContent = ExpanderContent;
 
@@ -34,6 +36,16 @@ export default class ExpanderComponent extends Component {
   @action
   handleUpdateExpanded() {
     this._handleManualState();
+  }
+
+  @action
+  handleTransitionEnd(event) {
+    if (
+      event.target === this.contentElement &&
+      event.propertyName === 'max-height'
+    ) {
+      this.willTransition.resolve();
+    }
   }
 
   @action
@@ -204,15 +216,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _waitForTransition() {
-    return new Promise((resolve) => {
-      const handler = (e) => {
-        if (e.propertyName === 'max-height') {
-          resolve();
-          this.contentElement.removeEventListener('transitionend', handler);
-        }
-      };
-
-      this.contentElement.addEventListener('transitionend', handler);
-    });
+    this.willTransition = defer();
+    return this.willTransition.promise;
   }
 }

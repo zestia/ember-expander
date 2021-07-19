@@ -4,6 +4,7 @@
 
 - Upgrade dependencies
 - Add Embroider support
+- Fix waiting for transition: Make sure the transition happens on the actual content element.
 
 ## 2.1.5
 
