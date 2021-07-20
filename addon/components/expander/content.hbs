@@ -7,6 +7,7 @@
   style={{@style}}
   ...attributes
   {{this.lifecycleActions}}
+  {{on "transitionend" @onTransitionEnd}}
 >
   {{yield}}
 </div>

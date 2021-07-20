@@ -1,9 +1,11 @@
 # @zestia/ember-expander
 
 <p>
-  <a href="http://travis-ci.org/zestia/ember-expander">
-    <img src="https://travis-ci.org/zestia/ember-expander.svg?branch=master">
+  <!--
+  <a href="https://github.com/zestia/ember-expander/actions/workflows/ci.yml">
+    <img src="https://github.com/zestia/ember-expander/actions/workflows/ci.yml/badge.svg">
   </a>
+  -->
 
   <a href="https://david-dm.org/zestia/ember-expander#badge-embed">
     <img src="https://david-dm.org/zestia/ember-expander.svg">

@@ -15,92 +15,79 @@
   />
 </a>
 
-<style>
-  .expander__content {
-    overflow: hidden;
-    transition: max-height 1s;
-  }
-
-  .expander--collapsed .expander__content {
-    border: 1px solid red;
-  }
-
-  .expander--expanded .expander__content {
-    border: 1px solid green;
-  }
-</style>
-
 <h4>
   Demo
 </h4>
 
-<Expander as |expander|>
-  <button type="button" {{on "click" expander.toggleWithTransition}}>
-    Toggle with transition
-  </button>
-  <button type="button" {{on "click" expander.toggle}}>
-    Toggle without transition
-  </button>
-  <button type="button" {{on "click" this.toggleMore}}>
-    Toggle more content
-  </button>
+<div class="demo">
+  <Expander as |expander|>
+    <button type="button" {{on "click" expander.toggleWithTransition}}>
+      Toggle with transition
+    </button>
+    <button type="button" {{on "click" expander.toggle}}>
+      Toggle without transition
+    </button>
+    <button type="button" {{on "click" this.toggleMore}}>
+      Toggle more content
+    </button>
 
-  <expander.Content>
-    Hello
-    <br />
-    World
-    {{#if this.more}}
+    <expander.Content>
+      Hello
       <br />
-      More content
-    {{/if}}
-  </expander.Content>
-</Expander>
-
-<h4>
-  Pre-expanded
-</h4>
-
-<Expander @expanded={{true}} as |expander|>
-  <button type="button" {{on "click" expander.toggleWithTransition}}>
-    Toggle with transition
-  </button>
-  <button type="button" {{on "click" expander.toggle}}>
-    Toggle without transition
-  </button>
-
-  <expander.Content>
-    Hello
-    <br />
-    World
-  </expander.Content>
-</Expander>
-
-<h4>
-  Nested
-</h4>
-
-<Expander as |expander|>
-  <button type="button" {{on "click" expander.toggleWithTransition}}>
-    Toggle with transition
-  </button>
-  <button type="button" {{on "click" expander.toggle}}>
-    Toggle without transition
-  </button>
-
-  <expander.Content>
-    <Expander as |expander|>
-      <button type="button" {{on "click" expander.toggleWithTransition}}>
-        Toggle with transition
-      </button>
-      <button type="button" {{on "click" expander.toggle}}>
-        Toggle without transition
-      </button>
-
-      <expander.Content>
-        Hello
+      World
+      {{#if this.more}}
         <br />
-        World
-      </expander.Content>
-    </Expander>
-  </expander.Content>
-</Expander>
+        More content
+      {{/if}}
+    </expander.Content>
+  </Expander>
+
+  <h4>
+    Pre-expanded
+  </h4>
+
+  <Expander @expanded={{true}} as |expander|>
+    <button type="button" {{on "click" expander.toggleWithTransition}}>
+      Toggle with transition
+    </button>
+    <button type="button" {{on "click" expander.toggle}}>
+      Toggle without transition
+    </button>
+
+    <expander.Content>
+      Hello
+      <br />
+      World
+    </expander.Content>
+  </Expander>
+
+  <h4>
+    Nested
+  </h4>
+
+  <Expander as |expander|>
+    <button type="button" {{on "click" expander.toggleWithTransition}}>
+      Toggle with transition
+    </button>
+    <button type="button" {{on "click" expander.toggle}}>
+      Toggle without transition
+    </button>
+
+    <expander.Content>
+      <Expander as |expander|>
+        <button type="button" {{on "click" expander.toggleWithTransition}}>
+          Toggle with transition
+        </button>
+        <button type="button" {{on "click" expander.toggle}}>
+          Toggle without transition
+        </button>
+
+        <expander.Content>
+          Hello
+          <br />
+          World
+        </expander.Content>
+      </Expander>
+    </expander.Content>
+  </Expander>
+</div>

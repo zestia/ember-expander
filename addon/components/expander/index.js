@@ -4,8 +4,8 @@ import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
-import { Promise } from 'rsvp';
 import { modifier } from 'ember-modifier';
+import { Promise, defer } from 'rsvp';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
@@ -16,7 +16,23 @@ export default class ExpanderComponent extends Component {
   @tracked isTransitioning = false;
   @tracked renderContent = false;
 
+  willTransition = defer();
+
   ExpanderContent = ExpanderContent;
+
+  ready = modifier((element, [api]) => {
+    if (!this.ready) {
+      this.args.onReady?.(api);
+    }
+  });
+
+  expandOrCollapse = modifier((element, [expanded]) => {
+    if (expanded === true) {
+      this._expand();
+    } else if (expanded === false) {
+      this._collapse();
+    }
+  });
 
   get style() {
     let style = '';
@@ -26,6 +42,16 @@ export default class ExpanderComponent extends Component {
     }
 
     return htmlSafe(style);
+  }
+
+  @action
+  handleTransitionEnd(event) {
+    if (
+      event.target === this.contentElement &&
+      event.propertyName === 'max-height'
+    ) {
+      this.willTransition.resolve();
+    }
   }
 
   @action
@@ -62,20 +88,6 @@ export default class ExpanderComponent extends Component {
   registerContentElement(element) {
     this.contentElement = element;
   }
-
-  ready = modifier((element, [api]) => {
-    if (!this.ready) {
-      this.args.onReady?.(api);
-    }
-  });
-
-  expandOrCollapse = modifier((element, [expanded]) => {
-    if (expanded === true) {
-      this._expand();
-    } else if (expanded === false) {
-      this._collapse();
-    }
-  });
 
   _canCollapse() {
     return this.isExpanded && !this.isTransitioning;
@@ -198,15 +210,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _waitForTransition() {
-    return new Promise((resolve) => {
-      const handler = (e) => {
-        if (e.propertyName === 'max-height') {
-          resolve();
-          this.contentElement.removeEventListener('transitionend', handler);
-        }
-      };
-
-      this.contentElement.addEventListener('transitionend', handler);
-    });
+    this.willTransition = defer();
+    return this.willTransition.promise;
   }
 }
