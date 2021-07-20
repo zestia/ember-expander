@@ -4,10 +4,13 @@ import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
+import { modifier } from 'ember-modifier';
 import { Promise, defer } from 'rsvp';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
+  ready = false;
+
   @tracked maxHeight = null;
   @tracked isExpanded = false;
   @tracked isTransitioning = false;
@@ -17,6 +20,20 @@ export default class ExpanderComponent extends Component {
 
   ExpanderContent = ExpanderContent;
 
+  ready = modifier((element, [api]) => {
+    if (!this.ready) {
+      this.args.onReady?.(api);
+    }
+  });
+
+  expandOrCollapse = modifier((element, [expanded]) => {
+    if (expanded === true) {
+      this._expand();
+    } else if (expanded === false) {
+      this._collapse();
+    }
+  });
+
   get style() {
     let style = '';
 
@@ -25,17 +42,6 @@ export default class ExpanderComponent extends Component {
     }
 
     return htmlSafe(style);
-  }
-
-  @action
-  handleInsertElement() {
-    this._handleReady(...arguments);
-    this._handleManualState();
-  }
-
-  @action
-  handleUpdateExpanded() {
-    this._handleManualState();
   }
 
   @action
@@ -81,18 +87,6 @@ export default class ExpanderComponent extends Component {
   @action
   registerContentElement(element) {
     this.contentElement = element;
-  }
-
-  _handleReady(api) {
-    this.args.onReady?.(api);
-  }
-
-  _handleManualState() {
-    if (this.args.expanded === true) {
-      this._expand();
-    } else if (this.args.expanded === false) {
-      this._collapse();
-    }
   }
 
   _canCollapse() {
