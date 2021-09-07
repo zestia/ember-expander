@@ -1,10 +1,10 @@
 # Changelog
 
-## 2.2.0 (not yet published)
+## 3.0.0
 
 - Upgrade dependencies
 - Add Embroider support
-- Simplify waiting for animation
+- Simplify waiting for transition
 - Remove expanded/collapsed class names
 
 ## 2.1.5
