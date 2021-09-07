@@ -23,7 +23,6 @@
   <div
     class={{concat
       "expander"
-      (if this.isExpanded " expander--expanded" " expander--collapsed")
       (if this.isTransitioning " expander--transitioning")
     }}
     aria-expanded="{{this.isExpanded}}"

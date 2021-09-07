@@ -1,8 +1,9 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForTransition from '../../helpers/wait-for-transition';
+import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
-import { render, find, click, waitUntil } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 const { keys } = Object;
 
 module('expander', function (hooks) {
@@ -43,7 +44,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding / collapsing (with transition)', async function (assert) {
-    assert.expect(7);
+    assert.expect(9);
 
     await render(hbs`
       <Expander as |expander|>
@@ -55,74 +56,43 @@ module('expander', function (hooks) {
     `);
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').doesNotHaveClass('expander--expanded');
-    assert.dom('.expander').hasClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
 
     click('button'); // Intentionally no await
 
-    // Can't seem test this, due to Ember optimising initial render
+    await waitForMaxHeight('.expander__content', '0px');
 
-    // await waitUntil(() =>
-    //   find('.expander__content').style.maxHeight === '0px'
-    // );
+    const willExpand = waitForTransition('.expander__content');
 
-    await waitUntil(() =>
-      find('.expander').hasAttribute('aria-expanded', 'true')
-    );
+    assert.dom('.expander').hasAttribute('aria-expanded', 'true');
+    assert.dom('.expander').hasClass('expander--transitioning');
 
-    await waitUntil(() =>
-      find('.expander').classList.contains('expander--expanded')
-    );
+    await waitForMaxHeight('.expander__content', '10px');
+    await waitForMaxHeight('.expander__content', '');
+    await willExpand;
 
-    assert.dom('.expander').doesNotHaveClass('expander-collapsed');
+    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
 
-    await waitUntil(() =>
-      find('.expander').classList.contains('expander--transitioning')
-    );
-
-    await waitUntil(
-      () => find('.expander__content').style.maxHeight === '10px'
-    );
-
-    await waitForTransition('.expander__content');
-
-    await waitUntil(() => find('.expander__content').style.maxHeight === '');
-
-    await waitUntil(
-      () => !find('.expander').classList.contains('expander--transitioning')
-    );
+    // Collapse
 
     click('button'); // Intentionally no await
 
-    await waitUntil(
-      () => find('.expander__content').style.maxHeight === '10px'
-    );
+    const willCollapse = waitForTransition('.expander__content');
 
-    await waitUntil(
-      () => !find('.expander').classList.contains('expander--expanded')
-    );
+    await waitForMaxHeight('.expander__content', '10px');
 
-    assert.dom('.expander').hasClass('expander--collapsed');
+    assert.dom('.expander').hasClass('expander--transitioning');
 
-    await waitUntil(() =>
-      find('.expander').classList.contains('expander--transitioning')
-    );
+    await waitForMaxHeight('.expander__content', '0px');
+    await willCollapse;
 
-    await waitUntil(() => find('.expander__content').style.maxHeight === '0px');
-
-    await waitForTransition('.expander__content');
-
-    await waitUntil(() => !find('.expander__content'));
-
-    await waitUntil(
-      () => !find('.expander').classList.contains('expander--transitioning')
-    );
+    assert.dom('.expander__content').doesNotExist();
+    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
   });
 
   test('expanding / collapsing (without transition)', async function (assert) {
-    assert.expect(14);
+    assert.expect(8);
 
     this.set('bool', false);
 
@@ -135,23 +105,21 @@ module('expander', function (hooks) {
     `);
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').doesNotHaveClass('expander--expanded');
-    assert.dom('.expander').hasClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
+
+    // Expand
 
     this.set('bool', true);
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-    assert.dom('.expander').hasClass('expander--expanded');
-    assert.dom('.expander').doesNotHaveClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').exists();
 
+    // Collapse
+
     this.set('bool', false);
 
-    assert.dom('.expander').doesNotHaveClass('expander--expanded');
-    assert.dom('.expander').hasClass('expander--collapsed');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
   });

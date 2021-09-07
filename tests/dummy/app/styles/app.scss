@@ -7,7 +7,7 @@
 
 #ember-testing {
   .expander__content {
-    transition: 100ms;
+    transition: max-height 100ms;
   }
 
   .test-internal-height {
@@ -21,11 +21,11 @@
     transition: max-height 1s;
   }
 
-  .expander--collapsed .expander__content {
+  .expander[aria-expanded='false'] .expander__content {
     border: 1px solid var(--collapsed);
   }
 
-  .expander--expanded .expander__content {
+  .expander[aria-expanded='true'] .expander__content {
     border: 1px solid var(--expanded);
   }
 }

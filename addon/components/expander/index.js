@@ -8,14 +8,14 @@ import { Promise, defer } from 'rsvp';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
+  ExpanderContent = ExpanderContent;
+
+  willTransition = null;
+
   @tracked maxHeight = null;
   @tracked isExpanded = false;
   @tracked isTransitioning = false;
   @tracked renderContent = false;
-
-  willTransition = defer();
-
-  ExpanderContent = ExpanderContent;
 
   get style() {
     let style = '';
