@@ -59,6 +59,8 @@ module('expander', function (hooks) {
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
 
+    // Expand
+
     click('button'); // Intentionally no await
 
     await waitForMaxHeight('.expander__content', '0px');
