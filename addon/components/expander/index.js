@@ -95,15 +95,7 @@ export default class ExpanderComponent extends Component {
     }
   }
 
-  _canCollapse() {
-    return this.isExpanded && !this.isTransitioning;
-  }
-
   _collapse() {
-    if (!this._canCollapse()) {
-      return;
-    }
-
     this.isExpanded = false;
     this._afterCollapse();
   }
@@ -114,10 +106,6 @@ export default class ExpanderComponent extends Component {
   }
 
   _collapseWithTransition() {
-    if (!this._canCollapse()) {
-      return;
-    }
-
     this.isExpanded = false;
     this.isTransitioning = true;
 
@@ -137,15 +125,7 @@ export default class ExpanderComponent extends Component {
     this.args.onAfterCollapseTransition?.();
   }
 
-  _canExpand() {
-    return !this.isExpanded && !this.isTransitioning;
-  }
-
   _expand() {
-    if (!this._canExpand()) {
-      return;
-    }
-
     this.renderContent = true;
     this.isExpanded = true;
     this._afterExpand();
@@ -156,10 +136,6 @@ export default class ExpanderComponent extends Component {
   }
 
   _expandWithTransition() {
-    if (!this._canExpand()) {
-      return;
-    }
-
     this.renderContent = true;
     this.isExpanded = true;
     this.isTransitioning = true;

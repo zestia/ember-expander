@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.1
+
+- Allow expanding/collapsing if already expanding/collapsing
+
 ## 3.0.0
 
 - Upgrade dependencies
