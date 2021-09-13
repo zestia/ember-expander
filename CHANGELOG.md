@@ -1,8 +1,8 @@
 # Changelog
 
-## 3.0.1
+## 3.1.0
 
-- Allow expanding/collapsing if already expanding/collapsing
+- Allow expanding/collapsing, even if already expanding/collapsing
 
 ## 3.0.0
 
