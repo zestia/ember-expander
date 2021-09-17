@@ -7,8 +7,8 @@ import { tracked } from '@glimmer/tracking';
 import { Promise, defer } from 'rsvp';
 import { buildWaiter } from '@ember/test-waiters';
 
-export const expand = buildWaiter('@zestia/ember-expander:expand');
-export const collapse = buildWaiter('@zestia/ember-expander:collapse');
+const expand = buildWaiter('ember-expander:expand');
+const collapse = buildWaiter('ember-expander:collapse');
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
