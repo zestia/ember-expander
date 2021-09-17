@@ -1,9 +1,5 @@
 # Changelog
 
-## 3.2.0
-
-- Introduce `@ember/test-waiters`
-
 ## 3.1.0
 
 - Allow expanding/collapsing, even if already expanding/collapsing

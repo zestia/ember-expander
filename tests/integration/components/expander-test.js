@@ -1,9 +1,9 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import waitForWaiter from '../../helpers/wait-for-waiter';
+import waitForTransition from '../../helpers/wait-for-transition';
 import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
-import { render, waitFor, click } from '@ember/test-helpers';
+import { render, click } from '@ember/test-helpers';
 const { keys } = Object;
 
 module('expander', function (hooks) {
@@ -44,7 +44,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding / collapsing (with transition)', async function (assert) {
-    assert.expect(10);
+    assert.expect(9);
 
     await render(hbs`
       <Expander as |expander|>
@@ -63,15 +63,16 @@ module('expander', function (hooks) {
 
     click('button'); // Intentionally no await
 
-    await waitFor('.expander');
+    await waitForMaxHeight('.expander__content', '0px');
+
+    const willExpand = waitForTransition('.expander__content');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander').hasClass('expander--transitioning');
 
-    await waitForMaxHeight('.expander__content', '0px');
     await waitForMaxHeight('.expander__content', '10px');
-    await waitForWaiter('ember-expander:expand');
     await waitForMaxHeight('.expander__content', '');
+    await willExpand;
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
 
@@ -79,14 +80,14 @@ module('expander', function (hooks) {
 
     click('button'); // Intentionally no await
 
-    await waitFor('.expander');
-
-    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').hasClass('expander--transitioning');
+    const willCollapse = waitForTransition('.expander__content');
 
     await waitForMaxHeight('.expander__content', '10px');
+
+    assert.dom('.expander').hasClass('expander--transitioning');
+
     await waitForMaxHeight('.expander__content', '0px');
-    await waitForWaiter('ember-expander:collapse');
+    await willCollapse;
 
     assert.dom('.expander__content').doesNotExist();
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
