@@ -2,7 +2,13 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
-import { waitUntil, render, waitFor, click } from '@ember/test-helpers';
+import {
+  waitUntil,
+  render,
+  settled,
+  waitFor,
+  click
+} from '@ember/test-helpers';
 import { expand, collapse } from '@zestia/ember-expander/components/expander';
 const { keys } = Object;
 
@@ -72,6 +78,7 @@ module('expander', function (hooks) {
     await waitForMaxHeight('.expander__content', '10px');
     await waitUntil(() => expand.waitUntil());
     await waitForMaxHeight('.expander__content', '');
+    await settled();
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
 
@@ -87,6 +94,7 @@ module('expander', function (hooks) {
     await waitForMaxHeight('.expander__content', '10px');
     await waitForMaxHeight('.expander__content', '0px');
     await waitUntil(() => collapse.waitUntil());
+    await settled();
 
     assert.dom('.expander__content').doesNotExist();
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
@@ -142,8 +150,8 @@ module('expander', function (hooks) {
 
     click('button');
 
-    await waitForMaxHeight('.expander__content', '10px');
     await waitUntil(() => expand.waitUntil());
+    await settled();
 
     assert.dom('.expander').hasText('Expanded: true');
   });
