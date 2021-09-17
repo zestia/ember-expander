@@ -5,6 +5,10 @@ import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { Promise, defer } from 'rsvp';
+import { buildWaiter } from '@ember/test-waiters';
+
+const expand = buildWaiter('ember-expander:expand');
+const collapse = buildWaiter('ember-expander:collapse');
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
@@ -113,7 +117,7 @@ export default class ExpanderComponent extends Component {
       .then(() => this._adjustToScrollHeight())
       .then(() => this._waitForFrame())
       .then(() => this._adjustToZeroHeight())
-      .then(() => this._waitForTransition())
+      .then(() => this._waitForTransition(collapse))
       .then(() => this._adjustToNoneHeight())
       .then(() => this._afterCollapseWithTransition());
   }
@@ -140,11 +144,11 @@ export default class ExpanderComponent extends Component {
     this.isExpanded = true;
     this.isTransitioning = true;
 
-    return this._waitForRender()
+    return this._waitForFrame()
       .then(() => this._adjustToZeroHeight())
       .then(() => this._waitForFrame())
       .then(() => this._adjustToScrollHeight())
-      .then(() => this._waitForTransition())
+      .then(() => this._waitForTransition(expand))
       .then(() => this._adjustToNoneHeight())
       .then(() => this._afterExpandWithTransition());
   }
@@ -191,8 +195,9 @@ export default class ExpanderComponent extends Component {
     return new Promise(requestAnimationFrame);
   }
 
-  _waitForTransition() {
+  _waitForTransition(waiter) {
+    const token = waiter.beginAsync();
     this.willTransition = defer();
-    return this.willTransition.promise;
+    return this.willTransition.promise.then(() => waiter.endAsync(token));
   }
 }
