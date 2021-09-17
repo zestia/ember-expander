@@ -46,7 +46,7 @@ https://zestia.github.io/ember-expander/
 
 ```handlebars
 <Expander as |expander|>
-  <button {{on "click" expander.toggleWithTransition}}>
+  <button {{on 'click' expander.toggleWithTransition}}>
     Toggle
   </button>
   <expander.Content>

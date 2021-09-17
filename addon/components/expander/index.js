@@ -113,13 +113,16 @@ export default class ExpanderComponent extends Component {
     this.isExpanded = false;
     this.isTransitioning = true;
 
+    const token = collapse.beginAsync();
+
     return this._waitForFrame()
       .then(() => this._adjustToScrollHeight())
       .then(() => this._waitForFrame())
       .then(() => this._adjustToZeroHeight())
-      .then(() => this._waitForTransition(collapse))
+      .then(() => this._waitForTransition())
       .then(() => this._adjustToNoneHeight())
-      .then(() => this._afterCollapseWithTransition());
+      .then(() => this._afterCollapseWithTransition())
+      .then(() => collapse.endAsync(token));
   }
 
   _afterCollapseWithTransition() {
@@ -144,13 +147,16 @@ export default class ExpanderComponent extends Component {
     this.isExpanded = true;
     this.isTransitioning = true;
 
+    const token = expand.beginAsync();
+
     return this._waitForFrame()
       .then(() => this._adjustToZeroHeight())
       .then(() => this._waitForFrame())
       .then(() => this._adjustToScrollHeight())
-      .then(() => this._waitForTransition(expand))
+      .then(() => this._waitForTransition())
       .then(() => this._adjustToNoneHeight())
-      .then(() => this._afterExpandWithTransition());
+      .then(() => this._afterExpandWithTransition())
+      .then(() => expand.endAsync(token));
   }
 
   _afterExpandWithTransition() {
@@ -195,9 +201,8 @@ export default class ExpanderComponent extends Component {
     return new Promise(requestAnimationFrame);
   }
 
-  _waitForTransition(waiter) {
-    const token = waiter.beginAsync();
+  _waitForTransition() {
     this.willTransition = defer();
-    return this.willTransition.promise.then(() => waiter.endAsync(token));
+    return this.willTransition.promise;
   }
 }
