@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.2.0
+
+- The expand/collapse actions use a test waiter, and so are aware of the transitions.
+
 ## 3.1.0
 
 - Allow expanding/collapsing, even if already expanding/collapsing

@@ -167,4 +167,32 @@ module('expander', function (hooks) {
 
     assert.dom('.expander').hasText('Hello World');
   });
+
+  test('test waiter is aware of transitions', async function (assert) {
+    assert.expect(4);
+
+    this.handleExpand = () => assert.step('expanded');
+    this.handleCollapse = () => assert.step('collapsed');
+
+    await render(hbs`
+      <Expander
+        @onAfterExpandTransition={{this.handleExpand}}
+        @onAfterCollapseTransition={{this.handleCollapse}}
+        as |expander|
+      >
+        <button type="button" {{on "click" expander.toggleWithTransition}}></button>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    await click('button');
+
+    assert.verifySteps(['expanded']);
+
+    await click('button');
+
+    assert.verifySteps(['collapsed']);
+  });
 });

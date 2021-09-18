@@ -5,7 +5,11 @@ import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { Promise, defer } from 'rsvp';
+import { buildWaiter } from '@ember/test-waiters';
 const { requestAnimationFrame } = window;
+
+const expand = buildWaiter('@zestia/ember-expander:expand');
+const collapse = buildWaiter('@zestia/ember-expander:collapse');
 
 export default class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
@@ -106,6 +110,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _collapseWithTransition() {
+    const token = collapse.beginAsync();
     this.isExpanded = false;
     this.isTransitioning = true;
 
@@ -115,7 +120,8 @@ export default class ExpanderComponent extends Component {
       .then(() => this._adjustToZeroHeight())
       .then(() => this._waitForTransition())
       .then(() => this._adjustToNoneHeight())
-      .then(() => this._afterCollapseWithTransition());
+      .then(() => this._afterCollapseWithTransition())
+      .then(() => collapse.endAsync(token));
   }
 
   _afterCollapseWithTransition() {
@@ -136,6 +142,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _expandWithTransition() {
+    const token = expand.beginAsync();
     this.renderContent = true;
     this.isExpanded = true;
     this.isTransitioning = true;
@@ -146,7 +153,8 @@ export default class ExpanderComponent extends Component {
       .then(() => this._adjustToScrollHeight())
       .then(() => this._waitForTransition())
       .then(() => this._adjustToNoneHeight())
-      .then(() => this._afterExpandWithTransition());
+      .then(() => this._afterExpandWithTransition())
+      .then(() => expand.endAsync(token));
   }
 
   _afterExpandWithTransition() {
