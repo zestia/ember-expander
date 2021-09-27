@@ -46,6 +46,7 @@ export default class ExpanderComponent extends Component {
       event.propertyName === 'max-height'
     ) {
       this.willTransition.resolve();
+      this.willTransition = null;
     }
   }
 
