@@ -2,7 +2,7 @@
 
 ## 3.2.0
 
-- Introduce `@ember/test-waiters`
+- The expand/collapse actions use a test waiter, and so are aware of the transitions.
 
 ## 3.1.0
 

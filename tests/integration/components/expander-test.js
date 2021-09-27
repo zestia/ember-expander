@@ -1,16 +1,9 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
+import waitForTransition from '../../helpers/wait-for-transition';
 import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
-import {
-  waitUntil,
-  settled,
-  render,
-  waitFor,
-  click
-} from '@ember/test-helpers';
-import { expand, collapse } from '@zestia/ember-expander/components/expander';
-import { getPendingWaiterState } from '@ember/test-waiters';
+import { render, click } from '@ember/test-helpers';
 const { keys } = Object;
 
 module('expander', function (hooks) {
@@ -51,7 +44,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding / collapsing (with transition)', async function (assert) {
-    assert.expect(10);
+    assert.expect(9);
 
     await render(hbs`
       <Expander as |expander|>
@@ -70,16 +63,16 @@ module('expander', function (hooks) {
 
     click('button'); // Intentionally no await
 
-    await waitFor('.expander');
+    await waitForMaxHeight('.expander__content', '0px');
+
+    const willExpand = waitForTransition('.expander__content', 'max-height');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander').hasClass('expander--transitioning');
 
-    await waitForMaxHeight('.expander__content', '0px');
     await waitForMaxHeight('.expander__content', '10px');
     await waitForMaxHeight('.expander__content', '');
-    await waitUntil(() => expand.waitUntil());
-    await settled();
+    await willExpand;
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
 
@@ -87,15 +80,14 @@ module('expander', function (hooks) {
 
     click('button'); // Intentionally no await
 
-    await waitFor('.expander');
-
-    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').hasClass('expander--transitioning');
+    const willCollapse = waitForTransition('.expander__content', 'max-height');
 
     await waitForMaxHeight('.expander__content', '10px');
+
+    assert.dom('.expander').hasClass('expander--transitioning');
+
     await waitForMaxHeight('.expander__content', '0px');
-    await waitUntil(() => collapse.waitUntil());
-    await settled();
+    await willCollapse;
 
     assert.dom('.expander__content').doesNotExist();
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
@@ -174,5 +166,33 @@ module('expander', function (hooks) {
     await api.expandWithTransition();
 
     assert.dom('.expander').hasText('Hello World');
+  });
+
+  test('test waiter is aware of transitions', async function (assert) {
+    assert.expect(4);
+
+    this.handleExpand = () => assert.step('expanded');
+    this.handleCollapse = () => assert.step('collapsed');
+
+    await render(hbs`
+      <Expander
+        @onAfterExpandTransition={{this.handleExpand}}
+        @onAfterCollapseTransition={{this.handleCollapse}}
+        as |expander|
+      >
+        <button type="button" {{on "click" expander.toggleWithTransition}}></button>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    await click('button');
+
+    assert.verifySteps(['expanded']);
+
+    await click('button');
+
+    assert.verifySteps(['collapsed']);
   });
 });

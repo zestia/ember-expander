@@ -5,10 +5,7 @@ import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { Promise, defer } from 'rsvp';
-import { buildWaiter } from '@ember/test-waiters';
-
-export const expand = buildWaiter('@zestia/ember-expander:expand');
-export const collapse = buildWaiter('@zestia/ember-expander:collapse');
+import { waitForPromise } from '@ember/test-waiters';
 const { requestAnimationFrame } = window;
 
 export default class ExpanderComponent extends Component {
@@ -113,16 +110,15 @@ export default class ExpanderComponent extends Component {
     this.isExpanded = false;
     this.isTransitioning = true;
 
-    const token = collapse.beginAsync();
-
-    return this._waitForFrame()
-      .then(() => this._adjustToScrollHeight())
-      .then(() => this._waitForFrame())
-      .then(() => this._adjustToZeroHeight())
-      .then(() => this._waitForTransition())
-      .then(() => this._adjustToNoneHeight())
-      .then(() => this._afterCollapseWithTransition())
-      .then(() => collapse.endAsync(token));
+    return waitForPromise(
+      this._waitForFrame()
+        .then(() => this._adjustToScrollHeight())
+        .then(() => this._waitForFrame())
+        .then(() => this._adjustToZeroHeight())
+        .then(() => this._waitForTransition())
+        .then(() => this._adjustToNoneHeight())
+        .then(() => this._afterCollapseWithTransition())
+    );
   }
 
   _afterCollapseWithTransition() {
@@ -147,16 +143,15 @@ export default class ExpanderComponent extends Component {
     this.isExpanded = true;
     this.isTransitioning = true;
 
-    const token = expand.beginAsync();
-
-    return this._waitForFrame()
-      .then(() => this._adjustToZeroHeight())
-      .then(() => this._waitForFrame())
-      .then(() => this._adjustToScrollHeight())
-      .then(() => this._waitForTransition())
-      .then(() => this._adjustToNoneHeight())
-      .then(() => this._afterExpandWithTransition())
-      .then(() => expand.endAsync(token));
+    return waitForPromise(
+      this._waitForFrame()
+        .then(() => this._adjustToZeroHeight())
+        .then(() => this._waitForFrame())
+        .then(() => this._adjustToScrollHeight())
+        .then(() => this._waitForTransition())
+        .then(() => this._adjustToNoneHeight())
+        .then(() => this._afterExpandWithTransition())
+    );
   }
 
   _afterExpandWithTransition() {
