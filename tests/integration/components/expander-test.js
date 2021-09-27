@@ -65,7 +65,7 @@ module('expander', function (hooks) {
 
     await waitForMaxHeight('.expander__content', '0px');
 
-    const willExpand = waitForTransition('.expander__content');
+    const willExpand = waitForTransition('.expander__content', 'max-height');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander').hasClass('expander--transitioning');
@@ -80,7 +80,7 @@ module('expander', function (hooks) {
 
     click('button'); // Intentionally no await
 
-    const willCollapse = waitForTransition('.expander__content');
+    const willCollapse = waitForTransition('.expander__content', 'max-height');
 
     await waitForMaxHeight('.expander__content', '10px');
 
