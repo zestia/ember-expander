@@ -118,7 +118,8 @@ export default class ExpanderComponent extends Component {
         .then(() => this._adjustToZeroHeight())
         .then(() => this._waitForTransition())
         .then(() => this._adjustToNoneHeight())
-        .then(() => this._afterCollapseWithTransition())
+        .then(() => this._afterCollapseWithTransition()),
+      '@zestia/ember-expander:collapse'
     );
   }
 
@@ -151,7 +152,8 @@ export default class ExpanderComponent extends Component {
         .then(() => this._adjustToScrollHeight())
         .then(() => this._waitForTransition())
         .then(() => this._adjustToNoneHeight())
-        .then(() => this._afterExpandWithTransition())
+        .then(() => this._afterExpandWithTransition()),
+      '@zestia/ember-expander:expand'
     );
   }
 
