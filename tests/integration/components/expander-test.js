@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import waitForTransition from '../../helpers/wait-for-transition';
 import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
-import { render, click } from '@ember/test-helpers';
+import { render, find, click } from '@ember/test-helpers';
 const { keys } = Object;
 
 module('expander', function (hooks) {
@@ -194,5 +194,37 @@ module('expander', function (hooks) {
     await click('button');
 
     assert.verifySteps(['collapsed']);
+  });
+
+  test('bubbling transitions', async function (assert) {
+    assert.expect(1);
+
+    await render(hbs`
+      <style>
+        .expander__child {
+          transition: transform 100ms;
+        }
+        .expander__child.transition {
+          transform: translateX(100px);
+        }
+      </style>
+
+      <Expander as |expander|>
+        <button type="button" {{on "click" expander.toggleWithTransition}}></button>
+        <expander.Content>
+          <div class="expander__child">
+            Hello World
+          </div>
+        </expander.Content>
+      </Expander>
+    `);
+
+    await click('button');
+
+    find('.expander__child').classList.add('transition');
+
+    await waitForTransition('.expander__child', 'transform');
+
+    assert.ok(true, 'ignores bubbling child transitions');
   });
 });
