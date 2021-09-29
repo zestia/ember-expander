@@ -44,7 +44,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding / collapsing (with transition)', async function (assert) {
-    assert.expect(9);
+    assert.expect(10);
 
     await render(hbs`
       <Expander as |expander|>
@@ -84,6 +84,7 @@ module('expander', function (hooks) {
 
     await waitForMaxHeight('.expander__content', '10px');
 
+    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander').hasClass('expander--transitioning');
 
     await waitForMaxHeight('.expander__content', '0px');
