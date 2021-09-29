@@ -90,12 +90,12 @@ module('expander', function (hooks) {
     await waitForMaxHeight('.expander__content', '0px');
     await willCollapse;
 
-    assert.dom('.expander__content').doesNotExist();
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander__content').doesNotExist();
   });
 
   test('expanding / collapsing (without transition)', async function (assert) {
-    assert.expect(8);
+    assert.expect(9);
 
     this.set('bool', false);
 
@@ -123,6 +123,7 @@ module('expander', function (hooks) {
 
     this.set('bool', false);
 
+    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
   });
