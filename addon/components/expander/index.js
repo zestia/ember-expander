@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import ExpanderContent from './content';
-import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
@@ -126,7 +125,6 @@ export default class ExpanderComponent extends Component {
   _afterCollapseWithTransition() {
     this.renderContent = false;
     this.isTransitioning = false;
-
     this.args.onAfterCollapseTransition?.();
   }
 
@@ -159,7 +157,6 @@ export default class ExpanderComponent extends Component {
 
   _afterExpandWithTransition() {
     this.isTransitioning = false;
-
     this.args.onAfterExpandTransition?.();
   }
 
@@ -189,10 +186,6 @@ export default class ExpanderComponent extends Component {
 
   _adjustToScrollHeight() {
     this.maxHeight = this.contentElement.scrollHeight;
-  }
-
-  _waitForRender() {
-    return new Promise((resolve) => scheduleOnce('afterRender', this, resolve));
   }
 
   _waitForFrame() {
