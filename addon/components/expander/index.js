@@ -10,7 +10,7 @@ const { requestAnimationFrame } = window;
 export default class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
 
-  willTransition = null;
+  transition = null;
 
   @tracked maxHeight = null;
   @tracked isExpanded = false;
@@ -41,11 +41,12 @@ export default class ExpanderComponent extends Component {
   @action
   handleTransitionEnd(event) {
     if (
+      this.transition &&
       event.target === this.contentElement &&
       event.propertyName === 'max-height'
     ) {
-      this.willTransition.resolve();
-      this.willTransition = null;
+      this.transition.resolve();
+      this.transition = null;
     }
   }
 
@@ -193,7 +194,7 @@ export default class ExpanderComponent extends Component {
   }
 
   _waitForTransition() {
-    this.willTransition = defer();
-    return this.willTransition.promise;
+    this.transition = defer();
+    return this.transition.promise;
   }
 }
