@@ -3,14 +3,11 @@ import ExpanderContent from './content';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
-import { Promise, defer } from 'rsvp';
-import { waitForPromise } from '@ember/test-waiters';
-const { requestAnimationFrame } = window;
+import { waitFor } from '@ember/test-waiters';
+import { waitForFrame, waitForTransition } from '@zestia/animation-utils';
 
 export default class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
-
-  willTransition = null;
 
   @tracked maxHeight = null;
   @tracked isExpanded = false;
@@ -36,21 +33,6 @@ export default class ExpanderComponent extends Component {
   @action
   handleUpdateExpanded() {
     this._handleManualState();
-  }
-
-  @action
-  handleTransitionEnd(event) {
-    if (!this.willTransition) {
-      return;
-    }
-
-    if (
-      event.target === this.contentElement &&
-      event.propertyName === 'max-height'
-    ) {
-      this.willTransition.resolve();
-      this.willTransition = null;
-    }
   }
 
   @action
@@ -110,20 +92,18 @@ export default class ExpanderComponent extends Component {
     this.args.onAfterCollapse?.();
   }
 
-  _collapseWithTransition() {
+  @waitFor
+  async _collapseWithTransition() {
     this.isExpanded = false;
     this.isTransitioning = true;
 
-    return waitForPromise(
-      this._waitForFrame()
-        .then(() => this._adjustToScrollHeight())
-        .then(() => this._waitForFrame())
-        .then(() => this._adjustToZeroHeight())
-        .then(() => this._waitForTransition())
-        .then(() => this._adjustToNoneHeight())
-        .then(() => this._afterCollapseWithTransition()),
-      '@zestia/ember-expander:collapse'
-    );
+    await waitForFrame();
+    this._adjustToScrollHeight();
+    await waitForFrame();
+    this._adjustToZeroHeight();
+    await waitForTransition(this.contentElement, 'max-height');
+    this._adjustToNoneHeight();
+    this._afterCollapseWithTransition();
   }
 
   _afterCollapseWithTransition() {
@@ -142,21 +122,19 @@ export default class ExpanderComponent extends Component {
     this.args.onAfterExpand?.();
   }
 
-  _expandWithTransition() {
+  @waitFor
+  async _expandWithTransition() {
     this.renderContent = true;
     this.isExpanded = true;
     this.isTransitioning = true;
 
-    return waitForPromise(
-      this._waitForFrame()
-        .then(() => this._adjustToZeroHeight())
-        .then(() => this._waitForFrame())
-        .then(() => this._adjustToScrollHeight())
-        .then(() => this._waitForTransition())
-        .then(() => this._adjustToNoneHeight())
-        .then(() => this._afterExpandWithTransition()),
-      '@zestia/ember-expander:expand'
-    );
+    await waitForFrame();
+    this._adjustToZeroHeight();
+    await waitForFrame();
+    this._adjustToScrollHeight();
+    await waitForTransition(this.contentElement, 'max-height');
+    this._adjustToNoneHeight();
+    this._afterExpandWithTransition();
   }
 
   _afterExpandWithTransition() {
@@ -190,14 +168,5 @@ export default class ExpanderComponent extends Component {
 
   _adjustToScrollHeight() {
     this.maxHeight = this.contentElement.scrollHeight;
-  }
-
-  _waitForFrame() {
-    return new Promise(requestAnimationFrame);
-  }
-
-  _waitForTransition() {
-    this.willTransition = defer();
-    return this.willTransition.promise;
   }
 }

@@ -40,6 +40,7 @@
     "deploy": "ember build --environment production && ember github-pages:commit --message \"Deploy gh-pages from commit $(git rev-parse HEAD)\" && git push origin gh-pages:gh-pages"
   },
   "dependencies": {
+    "@zestia/animation-utils": "^1.0.0",
     "@ember/render-modifiers": "^1.0.2",
     "@ember/test-waiters": "^3.0.0",
     "@embroider/util": "^0.44.0",

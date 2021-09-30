@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import waitForTransition from '../../helpers/wait-for-transition';
 import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
-import { render, find, click } from '@ember/test-helpers';
+import { render, find, click, settled } from '@ember/test-helpers';
 const { keys } = Object;
 
 module('expander', function (hooks) {
@@ -73,6 +73,7 @@ module('expander', function (hooks) {
     await waitForMaxHeight('.expander__content', '10px');
     await waitForMaxHeight('.expander__content', '');
     await willExpand;
+    await settled();
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
 
@@ -89,6 +90,7 @@ module('expander', function (hooks) {
 
     await waitForMaxHeight('.expander__content', '0px');
     await willCollapse;
+    await settled();
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();

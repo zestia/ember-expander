@@ -1,17 +1,8 @@
-import { Promise } from 'rsvp';
 import { find } from '@ember/test-helpers';
+import { waitForTransition } from '@zestia/animation-utils';
 
-export default function waitForTransition(selector, propertyName) {
-  const el = typeof selector === 'string' ? find(selector) : selector;
+export default function (selector, propertyName) {
+  const element = typeof selector === 'string' ? find(selector) : selector;
 
-  return new Promise((resolve) => {
-    function handler(event) {
-      if (el === event.target && propertyName === event.propertyName) {
-        el.removeEventListener('transitionend', handler);
-        resolve();
-      }
-    }
-
-    el.addEventListener('transitionend', handler);
-  });
+  return waitForTransition(element, propertyName);
 }
