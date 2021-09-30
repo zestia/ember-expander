@@ -40,8 +40,11 @@ export default class ExpanderComponent extends Component {
 
   @action
   handleTransitionEnd(event) {
+    if (!this.transition) {
+      return;
+    }
+
     if (
-      this.transition &&
       event.target === this.contentElement &&
       event.propertyName === 'max-height'
     ) {
