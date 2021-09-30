@@ -40,7 +40,7 @@ export default class ExpanderComponent extends Component {
 
   @action
   handleTransitionEnd(event) {
-    if (!this.transition) {
+    if (!this.willTransition) {
       return;
     }
 
