@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
-import { waitForFrame, waitForTransition } from '@zestia/animation-utils';
+import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
 
 export default class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
@@ -101,7 +101,7 @@ export default class ExpanderComponent extends Component {
     this._adjustToScrollHeight();
     await waitForFrame();
     this._adjustToZeroHeight();
-    await waitForTransition(this.contentElement, 'max-height');
+    await this._waitForTransition();
     this._adjustToNoneHeight();
     this._afterCollapseWithTransition();
   }
@@ -132,7 +132,7 @@ export default class ExpanderComponent extends Component {
     this._adjustToZeroHeight();
     await waitForFrame();
     this._adjustToScrollHeight();
-    await waitForTransition(this.contentElement, 'max-height');
+    await this._waitForTransition();
     this._adjustToNoneHeight();
     this._afterExpandWithTransition();
   }
@@ -168,5 +168,11 @@ export default class ExpanderComponent extends Component {
 
   _adjustToScrollHeight() {
     this.maxHeight = this.contentElement.scrollHeight;
+  }
+
+  _waitForTransition() {
+    return waitForAnimation(this.contentElement, {
+      transitionProperty: 'max-height'
+    });
   }
 }

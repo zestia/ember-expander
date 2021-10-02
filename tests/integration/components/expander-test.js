@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import waitForTransition from '../../helpers/wait-for-transition';
+import waitForAnimation from '../../helpers/wait-for-animation';
 import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
 import { render, find, click, settled } from '@ember/test-helpers';
@@ -65,7 +65,9 @@ module('expander', function (hooks) {
 
     await waitForMaxHeight('.expander__content', '0px');
 
-    const willExpand = waitForTransition('.expander__content', 'max-height');
+    const willExpand = waitForAnimation('.expander__content', {
+      propertyName: 'max-height'
+    });
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander').hasClass('expander--transitioning');
@@ -81,7 +83,9 @@ module('expander', function (hooks) {
 
     click('button'); // Intentionally no await
 
-    const willCollapse = waitForTransition('.expander__content', 'max-height');
+    const willCollapse = waitForAnimation('.expander__content', {
+      transitionProperty: 'max-height'
+    });
 
     await waitForMaxHeight('.expander__content', '10px');
 
@@ -227,7 +231,9 @@ module('expander', function (hooks) {
 
     find('.expander__child').classList.add('transition');
 
-    await waitForTransition('.expander__child', 'transform');
+    await waitForAnimation('.expander__child', {
+      transitionProperty: 'transform'
+    });
 
     assert.ok(true, 'ignores bubbling child transitions');
   });
