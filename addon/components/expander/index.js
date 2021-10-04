@@ -82,6 +82,10 @@ export default class ExpanderComponent extends Component {
     }
   }
 
+  _canCollapse() {
+    return this.isExpanded && !this.isTransitioning;
+  }
+
   _collapse() {
     this.isExpanded = false;
     this._afterCollapse();
@@ -94,6 +98,10 @@ export default class ExpanderComponent extends Component {
 
   @waitFor
   async _collapseWithTransition() {
+    if (!this._canCollapse()) {
+      return;
+    }
+
     this.isExpanded = false;
     this.isTransitioning = true;
 
@@ -112,7 +120,15 @@ export default class ExpanderComponent extends Component {
     this.args.onAfterCollapseTransition?.();
   }
 
+  _canExpand() {
+    return !this.isExpanded && !this.isTransitioning;
+  }
+
   _expand() {
+    if (!this._canExpand()) {
+      return;
+    }
+
     this.renderContent = true;
     this.isExpanded = true;
     this._afterExpand();

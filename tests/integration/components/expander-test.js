@@ -44,7 +44,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding / collapsing (with transition)', async function (assert) {
-    assert.expect(10);
+    assert.expect(12);
 
     await render(hbs`
       <Expander as |expander|>
@@ -74,7 +74,9 @@ module('expander', function (hooks) {
 
     await waitForMaxHeight('.expander__content', '10px');
     await waitForMaxHeight('.expander__content', '');
-    await willExpand;
+
+    assert.equal((await willExpand).length, 1);
+
     await settled();
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
@@ -83,17 +85,19 @@ module('expander', function (hooks) {
 
     click('button'); // Intentionally no await
 
+    await waitForMaxHeight('.expander__content', '10px');
+
     const willCollapse = waitForAnimation('.expander__content', {
       transitionProperty: 'max-height'
     });
-
-    await waitForMaxHeight('.expander__content', '10px');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander').hasClass('expander--transitioning');
 
     await waitForMaxHeight('.expander__content', '0px');
-    await willCollapse;
+
+    assert.equal((await willCollapse).length, 1);
+
     await settled();
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');

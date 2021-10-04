@@ -4,6 +4,7 @@
 
 - Utilise `@zestia/animation-utils`
 - Upgrade dependencies
+- Revert changes from 3.1.0
 
 ## 3.2.2
 
