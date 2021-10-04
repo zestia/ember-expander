@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import waitForAnimation from '../../helpers/wait-for-animation';
 import waitForMaxHeight from '../../helpers/wait-for-max-height';
 import hbs from 'htmlbars-inline-precompile';
-import { render, find, click, settled } from '@ember/test-helpers';
+import { render, click, settled } from '@ember/test-helpers';
 const { keys } = Object;
 
 module('expander', function (hooks) {
