@@ -205,38 +205,4 @@ module('expander', function (hooks) {
 
     assert.verifySteps(['collapsed']);
   });
-
-  test('bubbling transitions', async function (assert) {
-    assert.expect(1);
-
-    await render(hbs`
-      <style>
-        .expander__child {
-          transition: transform 100ms;
-        }
-        .expander__child.transition {
-          transform: translateX(100px);
-        }
-      </style>
-
-      <Expander as |expander|>
-        <button type="button" {{on "click" expander.toggleWithTransition}}></button>
-        <expander.Content>
-          <div class="expander__child">
-            Hello World
-          </div>
-        </expander.Content>
-      </Expander>
-    `);
-
-    await click('button');
-
-    find('.expander__child').classList.add('transition');
-
-    await waitForAnimation('.expander__child', {
-      transitionProperty: 'transform'
-    });
-
-    assert.ok(true, 'ignores bubbling child transitions');
-  });
 });
