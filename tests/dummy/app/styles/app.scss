@@ -25,7 +25,10 @@
   }
 
   .expander--transition .expander__content {
-    overflow: hidden;
     transition: max-height 1s;
+  }
+
+  .expander--transitioning .expander__content {
+    overflow: hidden;
   }
 }
