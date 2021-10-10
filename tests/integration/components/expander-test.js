@@ -31,11 +31,8 @@ module('expander', function (hooks) {
       [
         'Content',
         'toggle',
-        'toggleWithTransition',
         'expand',
-        'expandWithTransition',
         'collapse',
-        'collapseWithTransition',
         'isExpanded',
         'isTransitioning'
       ],
@@ -43,12 +40,12 @@ module('expander', function (hooks) {
     );
   });
 
-  test('expanding / collapsing (with transition)', async function (assert) {
+  test('expanding / collapsing', async function (assert) {
     assert.expect(10);
 
     await render(hbs`
       <Expander as |expander|>
-        <button type="button" {{on "click" expander.toggleWithTransition}}></button>
+        <button type="button" {{on "click" expander.toggle}}></button>
         <expander.Content>
           <div class="test-internal-height"></div>
         </expander.Content>
@@ -102,60 +99,6 @@ module('expander', function (hooks) {
     assert.dom('.expander__content').doesNotExist();
   });
 
-  test('expanding / collapsing (without transition)', async function (assert) {
-    assert.expect(9);
-
-    this.set('bool', false);
-
-    await render(hbs`
-      <Expander @expanded={{this.bool}} as |expander|>
-        <expander.Content>
-          <div class="test-internal-height"></div>
-        </expander.Content>
-      </Expander>
-    `);
-
-    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
-    assert.dom('.expander__content').doesNotExist();
-
-    // Expand
-
-    this.set('bool', true);
-
-    assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
-    assert.dom('.expander__content').exists();
-
-    // Collapse
-
-    this.set('bool', false);
-
-    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
-    assert.dom('.expander__content').doesNotExist();
-  });
-
-  test('yielded state', async function (assert) {
-    assert.expect(2);
-
-    await render(hbs`
-      <Expander as |expander|>
-        Expanded: {{expander.isExpanded}}
-        <button type="button" {{on "click" expander.expandWithTransition}}></button>
-        <expander.Content>
-          <div class="test-internal-height"></div>
-        </expander.Content>
-      </Expander>
-    `);
-
-    assert.dom('.expander').hasText('Expanded: false');
-
-    await click('button');
-
-    assert.dom('.expander').hasText('Expanded: true');
-  });
-
   test('api promises', async function (assert) {
     assert.expect(2);
 
@@ -173,12 +116,12 @@ module('expander', function (hooks) {
 
     assert.dom('.expander').doesNotIncludeText('Hello World');
 
-    await api.expandWithTransition();
+    await api.expand();
 
     assert.dom('.expander').hasText('Hello World');
   });
 
-  test('test waiter is aware of transitions', async function (assert) {
+  test('after transition actions', async function (assert) {
     assert.expect(4);
 
     this.handleExpand = () => assert.step('expanded');
@@ -186,11 +129,11 @@ module('expander', function (hooks) {
 
     await render(hbs`
       <Expander
-        @onAfterExpandTransition={{this.handleExpand}}
-        @onAfterCollapseTransition={{this.handleCollapse}}
+        @onAfterExpand={{this.handleExpand}}
+        @onAfterCollapse={{this.handleCollapse}}
         as |expander|
       >
-        <button type="button" {{on "click" expander.toggleWithTransition}}></button>
+        <button type="button" {{on "click" expander.toggle}}></button>
         <expander.Content>
           Hello World
         </expander.Content>

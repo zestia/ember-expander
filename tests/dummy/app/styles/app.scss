@@ -16,16 +16,16 @@
 }
 
 .demo {
-  .expander__content {
-    overflow: hidden;
-    transition: max-height 1s;
-  }
-
   .expander[aria-expanded='false'] .expander__content {
     border: 1px solid var(--collapsed);
   }
 
   .expander[aria-expanded='true'] .expander__content {
     border: 1px solid var(--expanded);
+  }
+
+  .expander--transition .expander__content {
+    overflow: hidden;
+    transition: max-height 1s;
   }
 }

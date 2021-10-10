@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.0
+
+- Reduce API to just `expand`, `collapse`, and `toggle`
+
 ## 3.3.1
 
 - Bump `@zestia/animation-utils`
