@@ -123,15 +123,19 @@ module('expander', function (hooks) {
   });
 
   test('after transition actions', async function (assert) {
-    assert.expect(4);
+    assert.expect(6);
 
-    this.handleExpand = () => assert.step('expanded');
-    this.handleCollapse = () => assert.step('collapsed');
+    this.handleExpand = () => assert.step('expand');
+    this.handleCollapse = () => assert.step('collapse');
+    this.handleAfterExpand = () => assert.step('expanded');
+    this.handleAfterCollapse = () => assert.step('collapsed');
 
     await render(hbs`
       <Expander
-        @onAfterExpand={{this.handleExpand}}
-        @onAfterCollapse={{this.handleCollapse}}
+        @onExpand={{this.handleExpand}}
+        @onCollapse={{this.handleCollapse}}
+        @onAfterExpand={{this.handleAfterExpand}}
+        @onAfterCollapse={{this.handleAfterCollapse}}
         as |expander|
       >
         <button type="button" {{on "click" expander.toggle}}></button>
@@ -143,10 +147,10 @@ module('expander', function (hooks) {
 
     await click('button');
 
-    assert.verifySteps(['expanded']);
+    assert.verifySteps(['expand', 'expanded']);
 
     await click('button');
 
-    assert.verifySteps(['collapsed']);
+    assert.verifySteps(['collapse', 'collapsed']);
   });
 });
