@@ -40,7 +40,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding / collapsing', async function (assert) {
-    assert.expect(15);
+    assert.expect(13);
 
     await render(hbs`
       <Expander as |expander|>
@@ -63,7 +63,8 @@ module('expander', function (hooks) {
 
     assert.dom('.expander__content').hasStyle({ maxHeight: '0px' });
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-    assert.dom('.expander').hasClass('expander--transitioning');
+
+    await waitFor('.expander--transitioning');
 
     await waitForAnimation('.expander__content', {
       propertyName: 'max-height'
@@ -84,7 +85,8 @@ module('expander', function (hooks) {
 
     assert.dom('.expander__content').hasStyle({ maxHeight: '10px' });
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').hasClass('expander--transitioning');
+
+    await waitFor('.expander--transitioning');
 
     await waitForAnimation('.expander__content', {
       transitionProperty: 'max-height'
