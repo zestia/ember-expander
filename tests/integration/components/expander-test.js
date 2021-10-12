@@ -127,15 +127,15 @@ module('expander', function (hooks) {
 
     this.handleExpand = () => assert.step('expand');
     this.handleCollapse = () => assert.step('collapse');
-    this.handleAfterExpand = () => assert.step('expanded');
-    this.handleAfterCollapse = () => assert.step('collapsed');
+    this.handleExpanded = () => assert.step('expanded');
+    this.handleCollapsed = () => assert.step('collapsed');
 
     await render(hbs`
       <Expander
         @onExpand={{this.handleExpand}}
         @onCollapse={{this.handleCollapse}}
-        @onAfterExpand={{this.handleAfterExpand}}
-        @onAfterCollapse={{this.handleAfterCollapse}}
+        @onExpanded={{this.handleExpanded}}
+        @onCollapsed={{this.handleCollapsed}}
         as |expander|
       >
         <button type="button" {{on "click" expander.toggle}}></button>

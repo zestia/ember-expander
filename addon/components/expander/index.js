@@ -65,7 +65,7 @@ export default class ExpanderComponent extends Component {
     await this._waitForTransition();
     this.isTransitioning = false;
     this._adjustToNoneHeight();
-    this.args.onAfterExpand?.();
+    this.args.onExpanded?.();
   }
 
   @action
@@ -85,7 +85,7 @@ export default class ExpanderComponent extends Component {
     this.isTransitioning = false;
     this._adjustToNoneHeight();
     this.renderContent = false;
-    this.args.onAfterCollapse?.();
+    this.args.onCollapsed?.();
   }
 
   @action
