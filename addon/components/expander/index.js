@@ -57,14 +57,13 @@ export default class ExpanderComponent extends Component {
 
     this.renderContent = true;
     this.isExpanded = true;
-    this.isTransitioning = true;
-    await waitForFrame();
     this._adjustToZeroHeight();
     await waitForFrame();
     this._adjustToScrollHeight();
+    this.isTransitioning = true;
     await this._waitForTransition();
-    this._adjustToNoneHeight();
     this.isTransitioning = false;
+    this._adjustToNoneHeight();
     this.args.onAfterExpand?.();
   }
 
@@ -76,15 +75,14 @@ export default class ExpanderComponent extends Component {
     }
 
     this.isExpanded = false;
-    this.isTransitioning = true;
-    await waitForFrame();
     this._adjustToScrollHeight();
     await waitForFrame();
     this._adjustToZeroHeight();
+    this.isTransitioning = true;
     await this._waitForTransition();
+    this.isTransitioning = false;
     this._adjustToNoneHeight();
     this.renderContent = false;
-    this.isTransitioning = false;
     this.args.onAfterCollapse?.();
   }
 
