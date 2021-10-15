@@ -31,4 +31,8 @@
   .expander--transitioning .expander__content {
     overflow: hidden;
   }
+
+  .expander__content > .expander {
+    padding: 10px;
+  }
 }
