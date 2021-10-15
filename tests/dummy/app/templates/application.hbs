@@ -43,8 +43,16 @@
     Pre-expanded
   </h4>
 
-  <Expander class="expander--transition" @expanded={{true}} as |expander|>
-    <button type="button" {{on "click" expander.toggle}}>
+  <Expander
+    class={{if this.shouldTransition "expander--transition"}}
+    @expanded={{true}}
+    as |expander|
+  >
+    <button
+      type="button"
+      {{on "click" this.enableTransition}}
+      {{on "click" expander.toggle}}
+    >
       Toggle
     </button>
 

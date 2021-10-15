@@ -57,7 +57,6 @@ export default class ExpanderComponent extends Component {
 
     this.renderContent = true;
     this.isExpanded = true;
-    this.args.onExpand?.();
     this._adjustToZeroHeight();
     await waitForFrame();
     this._adjustToScrollHeight();
@@ -76,7 +75,6 @@ export default class ExpanderComponent extends Component {
     }
 
     this.isExpanded = false;
-    this.args.onCollapse?.();
     this._adjustToScrollHeight();
     await waitForFrame();
     this._adjustToZeroHeight();
