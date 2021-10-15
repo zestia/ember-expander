@@ -20,12 +20,9 @@
 </h4>
 
 <div class="demo">
-  <Expander as |expander|>
-    <button type="button" {{on "click" expander.toggleWithTransition}}>
-      Toggle with transition
-    </button>
+  <Expander class="expander--transition" as |expander|>
     <button type="button" {{on "click" expander.toggle}}>
-      Toggle without transition
+      Toggle
     </button>
     <button type="button" {{on "click" this.toggleMore}}>
       Toggle more content
@@ -46,12 +43,17 @@
     Pre-expanded
   </h4>
 
-  <Expander @expanded={{true}} as |expander|>
-    <button type="button" {{on "click" expander.toggleWithTransition}}>
-      Toggle with transition
-    </button>
-    <button type="button" {{on "click" expander.toggle}}>
-      Toggle without transition
+  <Expander
+    class={{if this.shouldTransition "expander--transition"}}
+    @expanded={{true}}
+    as |expander|
+  >
+    <button
+      type="button"
+      {{on "click" this.enableTransition}}
+      {{on "click" expander.toggle}}
+    >
+      Toggle
     </button>
 
     <expander.Content>
@@ -65,21 +67,14 @@
     Nested
   </h4>
 
-  <Expander as |expander|>
-    <button type="button" {{on "click" expander.toggleWithTransition}}>
-      Toggle with transition
-    </button>
+  <Expander class="expander--transition" as |expander|>
     <button type="button" {{on "click" expander.toggle}}>
-      Toggle without transition
+      Toggle
     </button>
-
     <expander.Content>
-      <Expander as |expander|>
-        <button type="button" {{on "click" expander.toggleWithTransition}}>
-          Toggle with transition
-        </button>
+      <Expander class="expander--transition" as |expander|>
         <button type="button" {{on "click" expander.toggle}}>
-          Toggle without transition
+          Toggle
         </button>
 
         <expander.Content>

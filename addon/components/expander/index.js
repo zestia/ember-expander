@@ -24,9 +24,17 @@ export default class ExpanderComponent extends Component {
     return htmlSafe(style);
   }
 
+  get canCollapse() {
+    return this.isExpanded && !this.isTransitioning;
+  }
+
+  get canExpand() {
+    return !this.isExpanded && !this.isTransitioning;
+  }
+
   @action
-  handleInsertElement() {
-    this._handleReady(...arguments);
+  handleInsertElement(api) {
+    this.args.onReady?.(api);
     this._handleManualState();
   }
 
@@ -36,38 +44,55 @@ export default class ExpanderComponent extends Component {
   }
 
   @action
-  expand() {
-    this._expand();
+  registerContentElement(element) {
+    this.contentElement = element;
   }
 
   @action
-  expandWithTransition() {
-    return this._expandWithTransition();
+  @waitFor
+  async expand() {
+    if (!this.canExpand) {
+      return;
+    }
+
+    this.renderContent = true;
+    this.isExpanded = true;
+    this._adjustToZeroHeight();
+    await waitForFrame();
+    this._adjustToScrollHeight();
+    this.isTransitioning = true;
+    await this._waitForTransition();
+    this.isTransitioning = false;
+    this._adjustToNoneHeight();
+    this.args.onExpanded?.();
   }
 
   @action
-  collapse() {
-    this._collapse();
-  }
+  @waitFor
+  async collapse() {
+    if (!this.canCollapse) {
+      return;
+    }
 
-  @action
-  collapseWithTransition() {
-    return this._collapseWithTransition();
+    this.isExpanded = false;
+    this._adjustToScrollHeight();
+    await waitForFrame();
+    this._adjustToZeroHeight();
+    this.isTransitioning = true;
+    await this._waitForTransition();
+    this.isTransitioning = false;
+    this._adjustToNoneHeight();
+    this.renderContent = false;
+    this.args.onCollapsed?.();
   }
 
   @action
   toggle() {
-    this._toggle();
-  }
-
-  @action
-  toggleWithTransition(e) {
-    return this._toggleWithTransition();
-  }
-
-  @action
-  registerContentElement(element) {
-    this.contentElement = element;
+    if (this.renderContent) {
+      this.collapse();
+    } else {
+      this.expand();
+    }
   }
 
   _handleReady(api) {
@@ -76,101 +101,9 @@ export default class ExpanderComponent extends Component {
 
   _handleManualState() {
     if (this.args.expanded === true) {
-      this._expand();
+      this.expand();
     } else if (this.args.expanded === false) {
-      this._collapse();
-    }
-  }
-
-  _canCollapse() {
-    return this.isExpanded && !this.isTransitioning;
-  }
-
-  _collapse() {
-    this.isExpanded = false;
-    this._afterCollapse();
-  }
-
-  _afterCollapse() {
-    this.renderContent = false;
-    this.args.onAfterCollapse?.();
-  }
-
-  @waitFor
-  async _collapseWithTransition() {
-    if (!this._canCollapse()) {
-      return;
-    }
-
-    this.isExpanded = false;
-    this.isTransitioning = true;
-
-    await waitForFrame();
-    this._adjustToScrollHeight();
-    await waitForFrame();
-    this._adjustToZeroHeight();
-    await this._waitForTransition();
-    this._adjustToNoneHeight();
-    this._afterCollapseWithTransition();
-  }
-
-  _afterCollapseWithTransition() {
-    this.renderContent = false;
-    this.isTransitioning = false;
-    this.args.onAfterCollapseTransition?.();
-  }
-
-  _canExpand() {
-    return !this.isExpanded && !this.isTransitioning;
-  }
-
-  _expand() {
-    if (!this._canExpand()) {
-      return;
-    }
-
-    this.renderContent = true;
-    this.isExpanded = true;
-    this._afterExpand();
-  }
-
-  _afterExpand() {
-    this.args.onAfterExpand?.();
-  }
-
-  @waitFor
-  async _expandWithTransition() {
-    this.renderContent = true;
-    this.isExpanded = true;
-    this.isTransitioning = true;
-
-    await waitForFrame();
-    this._adjustToZeroHeight();
-    await waitForFrame();
-    this._adjustToScrollHeight();
-    await this._waitForTransition();
-    this._adjustToNoneHeight();
-    this._afterExpandWithTransition();
-  }
-
-  _afterExpandWithTransition() {
-    this.isTransitioning = false;
-    this.args.onAfterExpandTransition?.();
-  }
-
-  _toggle() {
-    if (this.renderContent) {
-      this._collapse();
-    } else {
-      this._expand();
-    }
-  }
-
-  _toggleWithTransition() {
-    if (this.renderContent) {
-      return this._collapseWithTransition();
-    } else {
-      return this._expandWithTransition();
+      this.collapse();
     }
   }
 

@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 export default class ApplicationController extends Controller {
   @tracked show = true;
   @tracked more = false;
+  @tracked shouldTransition = false;
 
   @action
   toggle() {
@@ -14,5 +15,10 @@ export default class ApplicationController extends Controller {
   @action
   toggleMore() {
     this.more = !this.more;
+  }
+
+  @action
+  enableTransition() {
+    this.shouldTransition = true;
   }
 }
