@@ -95,10 +95,6 @@ export default class ExpanderComponent extends Component {
     }
   }
 
-  _handleReady(api) {
-    this.args.onReady?.(api);
-  }
-
   _handleManualState() {
     if (this.args.expanded === true) {
       this.expand();
