@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.1
+
+- Correct app re-exports
+
 ## 4.0.0
 
 - Reduce API to just `expand`, `collapse`, and `toggle`
