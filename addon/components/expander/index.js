@@ -31,7 +31,7 @@ class ExpanderComponent extends Component {
 
   get api() {
     return {
-      Content: this.Content,
+      Content: this.renderContent ? this.Content : null,
       toggle: this.toggle,
       expand: this.expand,
       collapse: this.collapse,

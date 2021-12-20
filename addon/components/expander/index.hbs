@@ -1,12 +1,9 @@
 {{this.registerComponents
   this
-  Content=(if
-    this.renderContent
-    (component
-      (ensure-safe-component this.ExpanderContent)
-      onInsert=this.registerContentElement
-      style=this.style
-    )
+  Content=(component
+    (ensure-safe-component this.ExpanderContent)
+    onInsert=this.registerContentElement
+    style=this.style
   )
 }}
 <div
