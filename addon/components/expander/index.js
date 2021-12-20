@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
 import Modifier from 'ember-modifier';
 import { helper } from '@ember/component/helper';
+import { next } from '@ember/runloop';
 import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
 const { assign } = Object;
 
@@ -19,14 +20,9 @@ export class LifecycleHooks extends Modifier {
   }
 }
 
-const registerComponents = helper(function ([component], components) {
-  assign(component, components);
-});
-
 class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
   lifecycleHooks = LifecycleHooks;
-  registerComponents = registerComponents;
 
   @tracked maxHeight = null;
   @tracked isExpanded = false;
@@ -64,7 +60,8 @@ class ExpanderComponent extends Component {
 
   handleInsertElement = () => {
     this.args.onReady?.(this.api);
-    this._handleManualState();
+
+    next(() => this._handleManualState());
   };
 
   handleUpdateArguments = () => {
@@ -75,8 +72,11 @@ class ExpanderComponent extends Component {
     this.contentElement = element;
   };
 
-  @waitFor
-  expand = async () => {
+  registerComponents = helper(function ([component], components) {
+    assign(component, components);
+  });
+
+  expand = waitFor(async () => {
     if (!this.canExpand) {
       return;
     }
@@ -91,10 +91,9 @@ class ExpanderComponent extends Component {
     this.isTransitioning = false;
     this._adjustToNoneHeight();
     this.args.onExpanded?.();
-  };
+  });
 
-  @waitFor
-  collapse = async () => {
+  collapse = waitFor(async () => {
     if (!this.canCollapse) {
       return;
     }
@@ -109,7 +108,7 @@ class ExpanderComponent extends Component {
     this._adjustToNoneHeight();
     this.renderContent = false;
     this.args.onCollapsed?.();
-  };
+  });
 
   toggle = () => {
     if (this.renderContent) {
@@ -120,12 +119,6 @@ class ExpanderComponent extends Component {
   };
 
   _handleManualState() {
-    // if (this.args.expanded === this.isExpanded) {
-    //   return;
-    // }
-
-    console.log('here', this.isExpanded);
-
     if (this.args.expanded === true) {
       this.expand();
     } else if (this.args.expanded === false) {
