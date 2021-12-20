@@ -8,7 +8,7 @@ import { helper } from '@ember/component/helper';
 import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
 const { assign } = Object;
 
-class LifecycleHooks extends Modifier {
+export class LifecycleHooks extends Modifier {
   didInstall() {
     this.args.named.didInstall(this.element);
   }
@@ -120,6 +120,12 @@ class ExpanderComponent extends Component {
   };
 
   _handleManualState() {
+    // if (this.args.expanded === this.isExpanded) {
+    //   return;
+    // }
+
+    console.log('here', this.isExpanded);
+
     if (this.args.expanded === true) {
       this.expand();
     } else if (this.args.expanded === false) {
