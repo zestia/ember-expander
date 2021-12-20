@@ -1,9 +1,9 @@
 import Component from '@glimmer/component';
 import ExpanderContent from './content';
+import Modifier from 'ember-modifier';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
-import Modifier from 'ember-modifier';
 import { helper } from '@ember/component/helper';
 import { next } from '@ember/runloop';
 import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
@@ -64,7 +64,7 @@ class ExpanderComponent extends Component {
     next(() => this._handleManualState());
   };
 
-  handleUpdateArguments = () => {
+  handleUpdatedArguments = () => {
     this._handleManualState();
   };
 
