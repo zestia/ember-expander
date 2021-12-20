@@ -14,6 +14,10 @@ export class LifecycleHooks extends Modifier {
     this.args.named.didInstall(this.element);
   }
 
+  didReceiveArguments() {
+    this.args.named.didReceiveArguments?.();
+  }
+
   willDestroy() {
     super.willDestroy(...arguments);
     this.args.named.willDestroy?.();
@@ -60,12 +64,10 @@ class ExpanderComponent extends Component {
 
   handleInsertElement = () => {
     this.args.onReady?.(this.api);
-
-    next(() => this._handleManualState());
   };
 
-  handleUpdatedArguments = () => {
-    this._handleManualState();
+  handleReceivedArguments = () => {
+    next(() => this._handleManualState());
   };
 
   registerContentElement = (element) => {

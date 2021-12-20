@@ -100,6 +100,26 @@ module('expander', function (hooks) {
     assert.dom('.expander__content').doesNotExist();
   });
 
+  test('manual control', async function (assert) {
+    assert.expect(2);
+
+    await render(hbs`
+      <Expander @expanded={{this.expanded}} as |expander|>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
+
+    this.set('expanded', true);
+
+    await settled();
+
+    assert.dom('.expander').hasAttribute('aria-expanded', 'true');
+  });
+
   test('api promises', async function (assert) {
     assert.expect(2);
 
