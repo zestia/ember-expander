@@ -1,18 +1,48 @@
 import Component from '@glimmer/component';
 import ExpanderContent from './content';
-import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
+import Modifier from 'ember-modifier';
+import { helper } from '@ember/component/helper';
 import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
+const { assign } = Object;
 
-export default class ExpanderComponent extends Component {
+class LifecycleHooks extends Modifier {
+  didInstall() {
+    this.args.named.didInstall(this.element);
+  }
+
+  willDestroy() {
+    super.willDestroy(...arguments);
+    this.args.named.willDestroy?.();
+  }
+}
+
+const registerComponents = helper(function ([component], components) {
+  assign(component, components);
+});
+
+class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
+  lifecycleHooks = LifecycleHooks;
+  registerComponents = registerComponents;
 
   @tracked maxHeight = null;
   @tracked isExpanded = false;
   @tracked isTransitioning = false;
   @tracked renderContent = false;
+
+  get api() {
+    return {
+      Content: this.Content,
+      toggle: this.toggle,
+      expand: this.expand,
+      collapse: this.collapse,
+      isExpanded: this.isExpanded,
+      isTransitioning: this.isTransitioning
+    };
+  }
 
   get style() {
     let style = '';
@@ -32,25 +62,21 @@ export default class ExpanderComponent extends Component {
     return !this.isExpanded && !this.isTransitioning;
   }
 
-  @action
-  handleInsertElement(api) {
-    this.args.onReady?.(api);
+  handleInsertElement = () => {
+    this.args.onReady?.(this.api);
     this._handleManualState();
-  }
+  };
 
-  @action
-  handleUpdateExpanded() {
+  handleUpdateArguments = () => {
     this._handleManualState();
-  }
+  };
 
-  @action
-  registerContentElement(element) {
+  registerContentElement = (element) => {
     this.contentElement = element;
-  }
+  };
 
-  @action
   @waitFor
-  async expand() {
+  expand = async () => {
     if (!this.canExpand) {
       return;
     }
@@ -65,11 +91,10 @@ export default class ExpanderComponent extends Component {
     this.isTransitioning = false;
     this._adjustToNoneHeight();
     this.args.onExpanded?.();
-  }
+  };
 
-  @action
   @waitFor
-  async collapse() {
+  collapse = async () => {
     if (!this.canCollapse) {
       return;
     }
@@ -84,16 +109,15 @@ export default class ExpanderComponent extends Component {
     this._adjustToNoneHeight();
     this.renderContent = false;
     this.args.onCollapsed?.();
-  }
+  };
 
-  @action
-  toggle() {
+  toggle = () => {
     if (this.renderContent) {
       this.collapse();
     } else {
       this.expand();
     }
-  }
+  };
 
   _handleManualState() {
     if (this.args.expanded === true) {
@@ -121,3 +145,5 @@ export default class ExpanderComponent extends Component {
     });
   }
 }
+
+export default ExpanderComponent;

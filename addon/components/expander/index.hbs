@@ -1,31 +1,26 @@
-{{#let
-  (hash
-    Content=(if
-      this.renderContent
-      (component
-        (ensure-safe-component this.ExpanderContent)
-        onInsert=this.registerContentElement
-        style=this.style
-      )
+{{this.registerComponents
+  this
+  Content=(if
+    this.renderContent
+    (component
+      (ensure-safe-component this.ExpanderContent)
+      onInsert=this.registerContentElement
+      style=this.style
     )
-    toggle=this.toggle
-    expand=this.expand
-    collapse=this.collapse
-    isExpanded=this.isExpanded
-    isTransitioning=this.isTransitioning
   )
-  as |api|
 }}
-  <div
-    class={{concat
-      "expander"
-      (if this.isTransitioning " expander--transitioning")
-    }}
-    aria-expanded="{{this.isExpanded}}"
-    ...attributes
-    {{did-insert (fn this.handleInsertElement api)}}
-    {{did-update this.handleUpdateExpanded @expanded}}
-  >
-    {{yield api}}
-  </div>
-{{/let}}
+<div
+  class={{concat
+    "expander"
+    (if this.isTransitioning " expander--transitioning")
+  }}
+  aria-expanded="{{this.isExpanded}}"
+  ...attributes
+  {{this.lifecycleHooks
+    @expanded
+    didInstall=this.handleInsertElement
+    didUpdateArguments=this.handleUpdateArguments
+  }}
+>
+  {{yield this.api}}
+</div>
