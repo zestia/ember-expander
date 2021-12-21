@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
 import { helper } from '@ember/component/helper';
 import { next } from '@ember/runloop';
+import { action } from '@ember/object';
 import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
 const { assign } = Object;
 
@@ -24,9 +25,14 @@ export class LifecycleHooks extends Modifier {
   }
 }
 
+const registerComponents = helper(function ([component], components) {
+  assign(component, components);
+});
+
 class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
   lifecycleHooks = LifecycleHooks;
+  registerComponents = registerComponents;
 
   @tracked maxHeight = null;
   @tracked isExpanded = false;
@@ -62,23 +68,24 @@ class ExpanderComponent extends Component {
     return !this.isExpanded && !this.isTransitioning;
   }
 
-  handleInsertElement = () => {
+  @action
+  handleInsertElement() {
     this.args.onReady?.(this.api);
-  };
+  }
 
-  handleReceivedArguments = () => {
+  @action
+  handleReceivedArguments() {
     next(() => this._handleManualState());
-  };
+  }
 
-  registerContentElement = (element) => {
+  @action
+  registerContentElement(element) {
     this.contentElement = element;
-  };
+  }
 
-  registerComponents = helper(function ([component], components) {
-    assign(component, components);
-  });
-
-  expand = waitFor(async () => {
+  @action
+  @waitFor
+  async expand() {
     if (!this.canExpand) {
       return;
     }
@@ -93,9 +100,11 @@ class ExpanderComponent extends Component {
     this.isTransitioning = false;
     this._adjustToNoneHeight();
     this.args.onExpanded?.();
-  });
+  }
 
-  collapse = waitFor(async () => {
+  @action
+  @waitFor
+  async collapse() {
     if (!this.canCollapse) {
       return;
     }
@@ -110,15 +119,16 @@ class ExpanderComponent extends Component {
     this._adjustToNoneHeight();
     this.renderContent = false;
     this.args.onCollapsed?.();
-  });
+  }
 
-  toggle = () => {
+  @action
+  toggle() {
     if (this.renderContent) {
       this.collapse();
     } else {
       this.expand();
     }
-  };
+  }
 
   _handleManualState() {
     if (this.args.expanded === true) {
