@@ -16,29 +16,6 @@ module('expander', function (hooks) {
     assert.dom('.expander').exists('has an appropriate classname');
   });
 
-  test('ready action', async function (assert) {
-    assert.expect(1);
-
-    let api;
-
-    this.handleReady = (expander) => (api = expander);
-
-    await render(hbs`<Expander @onReady={{this.handleReady}} />`);
-
-    assert.deepEqual(
-      keys(api),
-      [
-        'Content',
-        'toggle',
-        'expand',
-        'collapse',
-        'isExpanded',
-        'isTransitioning'
-      ],
-      'exposes the api when ready'
-    );
-  });
-
   test('expanding / collapsing', async function (assert) {
     assert.expect(13);
 
@@ -120,8 +97,8 @@ module('expander', function (hooks) {
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
   });
 
-  test('api promises', async function (assert) {
-    assert.expect(2);
+  test('api', async function (assert) {
+    assert.expect(3);
 
     let api;
 
@@ -135,11 +112,26 @@ module('expander', function (hooks) {
       </Expander>
     `);
 
+    assert.deepEqual(
+      keys(api),
+      [
+        'Content',
+        'toggle',
+        'expand',
+        'collapse',
+        'isExpanded',
+        'isTransitioning'
+      ],
+      'exposes the api when ready'
+    );
+
     assert.dom('.expander').doesNotIncludeText('Hello World');
 
     await api.expand();
 
     assert.dom('.expander').hasText('Hello World');
+
+    // assert.true(api.isExpanded, 'api is up to date');
   });
 
   test('after transition actions', async function (assert) {
