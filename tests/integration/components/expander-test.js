@@ -36,12 +36,10 @@ module('expander', function (hooks) {
 
     click('button');
 
-    await waitFor('.expander');
+    await waitFor('.expander--transitioning');
 
     assert.dom('.expander__content').hasStyle({ maxHeight: '0px' });
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-
-    await waitFor('.expander--transitioning');
 
     await waitForAnimation('.expander__content', {
       propertyName: 'max-height'
@@ -58,12 +56,10 @@ module('expander', function (hooks) {
 
     click('button');
 
-    await waitFor('.expander');
+    await waitFor('.expander--transitioning');
 
     assert.dom('.expander__content').hasStyle({ maxHeight: '10px' });
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-
-    await waitFor('.expander--transitioning');
 
     await waitForAnimation('.expander__content', {
       transitionProperty: 'max-height'
