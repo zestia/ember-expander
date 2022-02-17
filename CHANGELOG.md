@@ -4,6 +4,10 @@
 
 - Ember Auto Import 2x
 
+## 4.0.2
+
+- Upgrade `@embroider/util`
+
 ## 4.0.1
 
 - Correct app re-exports
