@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.2
+
+- Upgrade embroider dependencies
+
 ## 4.0.1
 
 - Correct app re-exports

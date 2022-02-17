@@ -40,18 +40,18 @@
     "deploy": "ember build --environment production && ember github-pages:commit --message \"Deploy gh-pages from commit $(git rev-parse HEAD)\" && git push origin gh-pages:gh-pages"
   },
   "dependencies": {
-    "@zestia/animation-utils": "^3.0.2",
     "@ember/render-modifiers": "^2.0.0",
     "@ember/test-waiters": "^3.0.0",
-    "@embroider/util": "^0.46.2",
+    "@embroider/util": "^1.2.0",
+    "@zestia/animation-utils": "^3.0.2",
+    "ember-auto-import": "^1.11.2",
     "ember-cli-babel": "^7.26.6",
-    "ember-cli-htmlbars": "^5.7.1",
-    "ember-auto-import": "^1.11.2"
+    "ember-cli-htmlbars": "^5.7.1"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.5.0",
-    "@embroider/test-setup": "^0.46.2",
+    "@embroider/test-setup": "^1.2.0",
     "@glimmer/component": "^1.0.4",
     "@glimmer/tracking": "^1.0.4",
     "@zestia/eslint-config": "^4.0.6",
