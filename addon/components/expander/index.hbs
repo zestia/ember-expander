@@ -12,6 +12,7 @@
     (if this.isTransitioning " expander--transitioning")
   }}
   aria-expanded="{{this.isExpanded}}"
+  tabindex="0"
   ...attributes
   {{this.lifecycleHooks
     @expanded

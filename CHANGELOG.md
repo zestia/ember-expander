@@ -4,9 +4,13 @@
 
 - Ember Auto Import 2x
 
+## 4.0.3
+
+- Add `tabindex="0"`
+
 ## 4.0.2
 
-- Upgrade `@embroider/util`
+- Upgrade embroider dependencies
 
 ## 4.0.1
 
