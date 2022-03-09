@@ -9,11 +9,12 @@ module('expander', function (hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function (assert) {
-    assert.expect(1);
+    assert.expect(2);
 
     await render(hbs`<Expander />`);
 
     assert.dom('.expander').exists('has an appropriate classname');
+    assert.dom('.expander').hasAttribute('tabindex', '0');
   });
 
   test('ready action', async function (assert) {

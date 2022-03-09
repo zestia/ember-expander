@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.0.3
+
+- Add `tabindex="0"`
+
 ## 4.0.2
 
 - Upgrade embroider dependencies
