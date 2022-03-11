@@ -5,10 +5,10 @@ import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
 import { helper } from '@ember/component/helper';
-import { next } from '@ember/runloop';
+import { next, scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
-import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
+import { waitForAnimation } from '@zestia/animation-utils';
 const { assign } = Object;
 
 export class LifecycleHooks extends Modifier {
@@ -127,7 +127,7 @@ class ExpanderComponent extends Component {
     this.renderContent = true;
     this.isExpanded = true;
     this._adjustToZeroHeight();
-    yield waitForFrame();
+    yield this._waitForRender();
     this._adjustToScrollHeight();
     this.isTransitioning = true;
     yield this._waitForTransition();
@@ -140,7 +140,7 @@ class ExpanderComponent extends Component {
   *_collapse() {
     this.isExpanded = false;
     this._adjustToScrollHeight();
-    yield waitForFrame();
+    yield this._waitForRender();
     this._adjustToZeroHeight();
     this.isTransitioning = true;
     yield this._waitForTransition();
@@ -167,6 +167,12 @@ class ExpanderComponent extends Component {
 
   _adjustToScrollHeight() {
     this.maxHeight = this.contentElement.scrollHeight;
+  }
+
+  _waitForRender() {
+    return new Promise((resolve) => {
+      scheduleOnce('afterRender', resolve);
+    });
   }
 
   _waitForTransition() {
