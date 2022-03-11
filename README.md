@@ -43,11 +43,15 @@ https://zestia.github.io/ember-expander/
 - Content is not rendered when collapsed, which results in faster rendering.
 - Transitions/animations can be interrupted part way through
 
+## Usage
+
+Control the content area by using the yielded API: `expand`, `collapse` and `toggle`. Or alternatively, use the `@expanded` argument.
+
 ## Example
 
 ```handlebars
 <Expander as |expander|>
-  <button {{on 'click' expander.toggleWithTransition}}>
+  <button {{on 'click' expander.toggle}}>
     Toggle
   </button>
   <expander.Content>
