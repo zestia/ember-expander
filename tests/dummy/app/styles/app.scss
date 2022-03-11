@@ -5,6 +5,10 @@
   --expanded: green;
 }
 
+.expander--transitioning .expander__content {
+  overflow: hidden;
+}
+
 #ember-testing {
   .expander__content {
     transition: max-height 100ms;
@@ -26,10 +30,6 @@
 
   .expander--transition .expander__content {
     transition: max-height 1s;
-  }
-
-  .expander--transitioning .expander__content {
-    overflow: hidden;
   }
 
   .expander__content > .expander {

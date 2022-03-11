@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+- Use ember concurrency to allow expanding/collapsing mid-way (Re-attempt of 3.1.0)
+
 ## 4.0.3
 
 - Add `tabindex="0"`

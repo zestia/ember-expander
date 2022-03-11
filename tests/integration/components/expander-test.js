@@ -1,12 +1,34 @@
-import { module, test } from 'qunit';
+import { module, test, skip } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForAnimation from '../../helpers/wait-for-animation';
 import hbs from 'htmlbars-inline-precompile';
-import { render, click, settled, waitFor } from '@ember/test-helpers';
+import { waitForFrame } from '@zestia/animation-utils';
+import {
+  render,
+  click,
+  settled,
+  waitFor,
+  waitUntil,
+  find
+} from '@ember/test-helpers';
 const { keys } = Object;
 
 module('expander', function (hooks) {
   setupRenderingTest(hooks);
+
+  hooks.beforeEach(function () {
+    this.midWay = () => {
+      const element = find('.expander__content');
+
+      if (!element) {
+        return;
+      }
+
+      const height = parseInt(getComputedStyle(element).height, 10);
+
+      return height > 0 && height < 10;
+    };
+  });
 
   test('it renders', async function (assert) {
     assert.expect(2);
@@ -17,35 +39,12 @@ module('expander', function (hooks) {
     assert.dom('.expander').hasAttribute('tabindex', '0');
   });
 
-  test('ready action', async function (assert) {
-    assert.expect(1);
-
-    let api;
-
-    this.handleReady = (expander) => (api = expander);
-
-    await render(hbs`<Expander @onReady={{this.handleReady}} />`);
-
-    assert.deepEqual(
-      keys(api),
-      [
-        'Content',
-        'toggle',
-        'expand',
-        'collapse',
-        'isExpanded',
-        'isTransitioning'
-      ],
-      'exposes the api when ready'
-    );
-  });
-
-  test('expanding / collapsing', async function (assert) {
-    assert.expect(13);
+  test('expanding', async function (assert) {
+    assert.expect(10);
 
     await render(hbs`
       <Expander as |expander|>
-        <button type="button" {{on "click" expander.toggle}}></button>
+        <button type="button" {{on "click" expander.expand}}></button>
         <expander.Content>
           <div class="test-internal-height"></div>
         </expander.Content>
@@ -56,53 +55,141 @@ module('expander', function (hooks) {
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
 
-    // Expand
-
     click('button');
+
+    await waitForFrame();
+
+    assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
 
     await waitFor('.expander');
 
-    assert.dom('.expander__content').hasStyle({ maxHeight: '0px' });
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-
-    await waitFor('.expander--transitioning');
+    assert.dom('.expander').hasClass('expander--transitioning');
+    assert.dom('.expander__content').exists();
+    assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
 
     await waitForAnimation('.expander__content', {
       propertyName: 'max-height'
     });
 
-    assert.dom('.expander__content').hasStyle({ maxHeight: '10px' });
-
-    await settled();
-
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
-    assert.dom('.expander__content').hasStyle({ maxHeight: 'none' });
+    assert.dom('.expander__content').hasAttribute('style', '');
+  });
 
-    // Collapse
+  skip('collapsing', async function (assert) {
+    assert.expect(10);
+
+    await render(hbs`
+      <Expander @expanded={{true}} as |expander|>
+        <button type="button" {{on "click" expander.collapse}}></button>
+        <expander.Content>
+          <div class="test-internal-height"></div>
+        </expander.Content>
+      </Expander>
+    `);
+
+    assert.dom('.expander').hasAttribute('aria-expanded', 'true');
+    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander__content').exists();
+    assert.dom('.expander__content').hasAttribute('style', '');
 
     click('button');
 
+    await waitForFrame();
+
+    assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
+
     await waitFor('.expander');
 
-    assert.dom('.expander__content').hasStyle({ maxHeight: '10px' });
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-
-    await waitFor('.expander--transitioning');
+    assert.dom('.expander').hasClass('expander--transitioning');
+    assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
 
     await waitForAnimation('.expander__content', {
-      transitionProperty: 'max-height'
+      propertyName: 'max-height'
     });
-
-    assert.dom('.expander__content').hasStyle({ maxHeight: '0px' });
-
-    await settled();
 
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').doesNotExist();
   });
 
-  test('api promises', async function (assert) {
+  test('collapsing mid expand', async function (assert) {
     assert.expect(2);
+
+    this.handleExpanded = () => assert.step('expanded');
+    this.handleCollapsed = () => assert.step('collapsed');
+
+    await render(hbs`
+      <Expander
+        @onExpanded={{this.handleExpanded}}
+        @onCollapsed={{this.handleCollapsed}}
+        as |expander|
+      >
+        <button type="button" {{on "click" expander.toggle}}></button>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    click('button');
+
+    await waitUntil(this.midWay);
+    await click('button');
+
+    assert.verifySteps(['collapsed']);
+  });
+
+  test('expanding mid collapse', async function (assert) {
+    assert.expect(2);
+
+    await render(hbs`
+      <Expander
+        @expanded={{true}}
+        @onExpanded={{this.handleExpanded}}
+        @onCollapsed={{this.handleCollapsed}}
+        as |expander|
+      >
+        <button type="button" {{on "click" expander.toggle}}></button>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    this.set('handleExpanded', () => assert.step('expanded'));
+    this.set('handleCollapsed', () => assert.step('collapsed'));
+
+    click('button');
+
+    await waitUntil(this.midWay);
+    await click('button');
+
+    assert.verifySteps(['expanded']);
+  });
+
+  test('manual control', async function (assert) {
+    assert.expect(2);
+
+    await render(hbs`
+      <Expander @expanded={{this.expanded}} as |expander|>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
+
+    this.set('expanded', true);
+
+    await settled();
+
+    assert.dom('.expander').hasAttribute('aria-expanded', 'true');
+  });
+
+  test('api', async function (assert) {
+    assert.expect(3);
 
     let api;
 
@@ -116,11 +203,28 @@ module('expander', function (hooks) {
       </Expander>
     `);
 
+    assert.deepEqual(
+      keys(api),
+      [
+        'Content',
+        'toggle',
+        'expand',
+        'collapse',
+        'isExpanded',
+        'isTransitioning'
+      ],
+      'exposes the api when ready'
+    );
+
     assert.dom('.expander').doesNotIncludeText('Hello World');
 
-    await api.expand();
+    api.expand();
+
+    await settled();
 
     assert.dom('.expander').hasText('Hello World');
+
+    // assert.true(api.isExpanded, 'api is up to date');
   });
 
   test('after transition actions', async function (assert) {
@@ -149,5 +253,49 @@ module('expander', function (hooks) {
     await click('button');
 
     assert.verifySteps(['collapsed']);
+  });
+
+  test('skipping collapsing', async function (assert) {
+    assert.expect(2);
+
+    this.handleCollapsed = () => assert.step('collapsed');
+
+    await render(hbs`
+      <Expander
+        @expanded={{true}}
+        @onCollapsed={{this.handleCollapsed}}
+        as |expander|
+      >
+        <button type="button" {{on "click" expander.collapse}}></button>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    click('button');
+    await click('button');
+
+    assert.verifySteps(['collapsed']);
+  });
+
+  test('skipping expanding', async function (assert) {
+    assert.expect(2);
+
+    this.handleExpanded = () => assert.step('expanded');
+
+    await render(hbs`
+      <Expander @onExpanded={{this.handleExpanded}} as |expander|>
+        <button type="button" {{on "click" expander.expand}}></button>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    click('button');
+    await click('button');
+
+    assert.verifySteps(['expanded']);
   });
 });
