@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForAnimation from '../../helpers/wait-for-animation';
 import hbs from 'htmlbars-inline-precompile';
+import { waitForFrame } from '@zestia/animation-utils';
 import {
   render,
   click,
@@ -39,7 +40,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding', async function (assert) {
-    assert.expect(8);
+    assert.expect(10);
 
     await render(hbs`
       <Expander as |expander|>
@@ -56,9 +57,14 @@ module('expander', function (hooks) {
 
     click('button');
 
-    await waitFor('.expander--transitioning');
+    await waitForFrame();
+
+    assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
+
+    await waitFor('.expander');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
+    assert.dom('.expander').hasClass('expander--transitioning');
     assert.dom('.expander__content').exists();
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
 
@@ -71,7 +77,7 @@ module('expander', function (hooks) {
   });
 
   test('collapsing', async function (assert) {
-    assert.expect(7);
+    assert.expect(10);
 
     await render(hbs`
       <Expander @expanded={{true}} as |expander|>
@@ -85,12 +91,18 @@ module('expander', function (hooks) {
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander').doesNotHaveClass('expander--transitioning');
     assert.dom('.expander__content').exists();
+    assert.dom('.expander__content').hasAttribute('style', '');
 
     click('button');
 
-    await waitFor('.expander--transitioning');
+    await waitForFrame();
+
+    assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
+
+    await waitFor('.expander');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
+    assert.dom('.expander').hasClass('expander--transitioning');
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
 
     await waitForAnimation('.expander__content', {
