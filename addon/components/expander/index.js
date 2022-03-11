@@ -7,6 +7,7 @@ import { waitFor } from '@ember/test-waiters';
 import { helper } from '@ember/component/helper';
 import { next } from '@ember/runloop';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
 const { assign } = Object;
 
@@ -60,14 +61,6 @@ class ExpanderComponent extends Component {
     return htmlSafe(style);
   }
 
-  get canCollapse() {
-    return this.isExpanded && !this.isTransitioning;
-  }
-
-  get canExpand() {
-    return !this.isExpanded && !this.isTransitioning;
-  }
-
   @action
   handleInsertElement() {
     this.args.onReady?.(this.api);
@@ -84,50 +77,76 @@ class ExpanderComponent extends Component {
   }
 
   @action
-  @waitFor
   async expand() {
-    if (!this.canExpand) {
+    if (this.isExpanded) {
       return;
     }
 
-    this.renderContent = true;
-    this.isExpanded = true;
-    this.isTransitioning = true;
-    this._adjustToZeroHeight();
-    await waitForFrame();
-    this._adjustToScrollHeight();
-    await this._waitForTransition();
-    this._adjustToNoneHeight();
-    this.isTransitioning = false;
-    this.args.onExpanded?.();
+    if (this.isTransitioning) {
+      this.collapseTask.cancel();
+    }
+
+    this.expandTask = this._expand.perform();
+
+    try {
+      await this.expandTask;
+      this.args.onExpanded?.();
+    } catch {}
   }
 
   @action
-  @waitFor
   async collapse() {
-    if (!this.canCollapse) {
+    if (!this.isExpanded) {
       return;
     }
 
-    this.isExpanded = false;
-    this.isTransitioning = true;
-    this._adjustToScrollHeight();
-    await waitForFrame();
-    this._adjustToZeroHeight();
-    await this._waitForTransition();
-    this._adjustToNoneHeight();
-    this.renderContent = false;
-    this.isTransitioning = false;
-    this.args.onCollapsed?.();
+    if (this.isTransitioning) {
+      this.expandTask.cancel();
+    }
+
+    this.collapseTask = await this._collapse.perform();
+
+    try {
+      await this.collapseTask;
+      this.args.onCollapsed?.();
+    } catch {}
   }
 
   @action
   toggle() {
-    if (this.renderContent) {
+    if (this.isExpanded) {
       this.collapse();
     } else {
       this.expand();
     }
+  }
+
+  @task
+  @waitFor
+  *_expand() {
+    this.renderContent = true;
+    this.isExpanded = true;
+    this._adjustToZeroHeight();
+    yield waitForFrame();
+    this._adjustToScrollHeight();
+    this.isTransitioning = true;
+    yield this._waitForTransition();
+    this.isTransitioning = false;
+    this._adjustToNoneHeight();
+  }
+
+  @task
+  @waitFor
+  *_collapse() {
+    this.isExpanded = false;
+    this._adjustToScrollHeight();
+    yield waitForFrame();
+    this._adjustToZeroHeight();
+    this.isTransitioning = true;
+    yield this._waitForTransition();
+    this.isTransitioning = false;
+    this._adjustToNoneHeight();
+    this.renderContent = false;
   }
 
   _handleManualState() {
