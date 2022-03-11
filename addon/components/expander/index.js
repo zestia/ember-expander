@@ -104,7 +104,7 @@ class ExpanderComponent extends Component {
       this.expandTask.cancel();
     }
 
-    this.collapseTask = await this._collapse.perform();
+    this.collapseTask = this._collapse.perform();
 
     try {
       await this.collapseTask;
