@@ -41,12 +41,13 @@ https://zestia.github.io/ember-expander/
 - This addon intentionally does not come with any styles.
 - You can nest Expanders.
 - Content is not rendered when collapsed, which results in faster rendering.
+- Transitions/animations can be interrupted part way through
 
 ## Example
 
 ```handlebars
 <Expander as |expander|>
-  <button {{on "click" expander.toggleWithTransition}}>
+  <button {{on 'click' expander.toggleWithTransition}}>
     Toggle
   </button>
   <expander.Content>
