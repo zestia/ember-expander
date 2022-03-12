@@ -74,7 +74,6 @@ When collapsing, `max-height` goes from:
 1. none (expanded)
 2. scroll height (transitioning)
 3. zero (transitioning)
-4. none (collapsed)
 
 Notice that the `max-height` style is only present for the duration of the transition.
 
