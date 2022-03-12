@@ -65,15 +65,15 @@ Control the content area by using the yielded API: `expand`, `collapse` and `tog
 When expanding, `max-height` goes from:
 
 1. none (collapsed)
-2. zero (transitioning)
-3. scroll height (transitioning)
+2. zero (required to start the transition)
+3. scroll height (the destination of the transition)
 4. none (expanded)
 
 When collapsing, `max-height` goes from:
 
 1. none (expanded)
-2. scroll height (transitioning)
-3. zero (transitioning)
+2. scroll height (required to start the transition)
+3. zero (the destination of the transition)
 
 Notice that the `max-height` style is only present for the duration of the transition.
 
