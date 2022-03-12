@@ -141,6 +141,7 @@ class ExpanderComponent extends Component {
     this.isExpanded = false;
     this._adjustToScrollHeight();
     yield this._waitForRender();
+    yield this._draw();
     this._adjustToZeroHeight();
     this.isTransitioning = true;
     yield this._waitForTransition();
@@ -167,6 +168,10 @@ class ExpanderComponent extends Component {
 
   _adjustToScrollHeight() {
     this.maxHeight = this.contentElement.scrollHeight;
+  }
+
+  _draw() {
+    this.contentElement.getBoundingClientRect();
   }
 
   _waitForRender() {
