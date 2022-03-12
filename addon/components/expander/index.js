@@ -126,27 +126,26 @@ class ExpanderComponent extends Component {
   *_expand() {
     this.renderContent = true;
     this.isExpanded = true;
-    this._adjustToZeroHeight();
+    this.maxHeight = 0;
     yield this._waitForRender();
-    this._adjustToScrollHeight();
+    this.maxHeight = this.contentElement.scrollHeight;
     this.isTransitioning = true;
     yield this._waitForTransition();
     this.isTransitioning = false;
-    this._adjustToNoneHeight();
+    this.maxHeight = null;
   }
 
   @task
   @waitFor
   *_collapse() {
     this.isExpanded = false;
-    this._adjustToScrollHeight();
+    this.maxHeight = this.contentElement.scrollHeight;
     yield this._waitForRender();
-    yield this._draw();
-    this._adjustToZeroHeight();
+    this.contentElement.getBoundingClientRect();
+    this.maxHeight = 0;
     this.isTransitioning = true;
     yield this._waitForTransition();
     this.isTransitioning = false;
-    this._adjustToNoneHeight();
     this.renderContent = false;
   }
 
@@ -156,22 +155,6 @@ class ExpanderComponent extends Component {
     } else if (this.args.expanded === false) {
       this.collapse();
     }
-  }
-
-  _adjustToZeroHeight() {
-    this.maxHeight = 0;
-  }
-
-  _adjustToNoneHeight() {
-    this.maxHeight = null;
-  }
-
-  _adjustToScrollHeight() {
-    this.maxHeight = this.contentElement.scrollHeight;
-  }
-
-  _draw() {
-    this.contentElement.getBoundingClientRect();
   }
 
   _waitForRender() {
