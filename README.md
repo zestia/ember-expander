@@ -51,7 +51,7 @@ Control the content area by using the yielded API: `expand`, `collapse` and `tog
 
 ```handlebars
 <Expander as |expander|>
-  <button {{on 'click' expander.toggle}}>
+  <button {{on "click" expander.toggle}}>
     Toggle
   </button>
   <expander.Content>
