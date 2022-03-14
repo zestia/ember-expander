@@ -56,7 +56,7 @@ module('expander', function (hooks) {
 
     click('button');
 
-    await waitFor('.expander');
+    await waitFor('.expander--transitioning');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander').hasClass('expander--transitioning');

@@ -7,6 +7,7 @@ import { waitFor } from '@ember/test-waiters';
 import { waitForAnimation } from '@zestia/animation-utils';
 import { next, scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
+import { defer } from 'rsvp';
 
 export default class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
@@ -93,7 +94,7 @@ export default class ExpanderComponent extends Component {
     this.renderContent = true;
     this.isExpanded = true;
     this.maxHeight = 0;
-    yield this._waitForRender();
+    yield new Promise(window.requestAnimationFrame);
     this.maxHeight = this.contentElement.scrollHeight;
     this.isTransitioning = true;
     yield this._waitForTransition();
@@ -113,6 +114,7 @@ export default class ExpanderComponent extends Component {
     yield this._waitForTransition();
     this.isTransitioning = false;
     this.renderContent = false;
+    this.maxHeight = null;
   }
 
   _handleManualState() {
