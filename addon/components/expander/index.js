@@ -147,6 +147,7 @@ class ExpanderComponent extends Component {
     yield this._waitForTransition();
     this.isTransitioning = false;
     this.renderContent = false;
+    this.maxHeight = null;
   }
 
   _handleManualState() {
