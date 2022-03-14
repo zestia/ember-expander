@@ -12,9 +12,9 @@ export default class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
 
   @tracked maxHeight = null;
-  @tracked isExpanded = false;
+  @tracked isExpanded = !!this.args.expanded;
+  @tracked renderContent = !!this.args.expanded;
   @tracked isTransitioning = false;
-  @tracked renderContent = false;
 
   get style() {
     let style = '';
@@ -29,7 +29,6 @@ export default class ExpanderComponent extends Component {
   @action
   handleInsertElement(api) {
     this.args.onReady?.(api);
-    this._handleManualState();
   }
 
   @action

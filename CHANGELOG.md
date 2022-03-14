@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.0
+
+- Skip expand code if initially expanded
+
 ## 4.1.1
 
 - Upgrade `@zestia/animation-utils`

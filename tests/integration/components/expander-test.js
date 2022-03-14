@@ -159,26 +159,6 @@ module('expander', function (hooks) {
     assert.verifySteps(['expanded']);
   });
 
-  test('manual control', async function (assert) {
-    assert.expect(2);
-
-    await render(hbs`
-      <Expander @expanded={{this.expanded}} as |expander|>
-        <expander.Content>
-          Hello World
-        </expander.Content>
-      </Expander>
-    `);
-
-    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-
-    this.set('expanded', true);
-
-    await settled();
-
-    assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-  });
-
   test('api', async function (assert) {
     assert.expect(3);
 
@@ -288,5 +268,64 @@ module('expander', function (hooks) {
     await click('button');
 
     assert.verifySteps(['expanded']);
+  });
+
+  test('pre expanding', async function (assert) {
+    assert.expect(2);
+
+    this.handleExpanded = () => assert.step('expanded');
+
+    await render(hbs`
+      <Expander @expanded={{true}} @onExpanded={{this.handleExpanded}} as |expander|>
+        <button type="button" {{on "click" expander.expand}}></button>
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    assert.rejects(
+      waitForAnimation('.expander__content', {
+        propertyName: 'max-height'
+      })
+    );
+
+    assert.verifySteps([]);
+  });
+
+  test('manual control', async function (assert) {
+    assert.expect(6);
+
+    this.handleExpanded = () => assert.step('expanded');
+    this.handleCollapsed = () => assert.step('collapsed');
+
+    await render(hbs`
+      <Expander
+        @expanded={{this.expanded}}
+        @onExpanded={{this.handleExpanded}}
+        @onCollapsed={{this.handleCollapsed}}
+        as |expander|
+      >
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    assert.dom('.expander').hasAttribute('aria-expanded', 'false');
+
+    this.set('expanded', true);
+
+    await settled();
+
+    assert.dom('.expander').hasAttribute('aria-expanded', 'true');
+
+    assert.verifySteps(['expanded']);
+
+    this.set('expanded', false);
+
+    await settled();
+
+    assert.verifySteps(['collapsed']);
   });
 });
