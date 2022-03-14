@@ -1,8 +1,7 @@
-import { module, test, skip } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForAnimation from '../../helpers/wait-for-animation';
 import hbs from 'htmlbars-inline-precompile';
-import { waitForFrame } from '@zestia/animation-utils';
 import {
   render,
   click,
@@ -40,7 +39,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding', async function (assert) {
-    assert.expect(10);
+    assert.expect(9);
 
     await render(hbs`
       <Expander as |expander|>
@@ -57,10 +56,6 @@ module('expander', function (hooks) {
 
     click('button');
 
-    await waitForFrame();
-
-    assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
-
     await waitFor('.expander');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
@@ -76,8 +71,8 @@ module('expander', function (hooks) {
     assert.dom('.expander__content').hasAttribute('style', '');
   });
 
-  skip('collapsing', async function (assert) {
-    assert.expect(10);
+  test('collapsing', async function (assert) {
+    assert.expect(9);
 
     await render(hbs`
       <Expander @expanded={{true}} as |expander|>
@@ -94,10 +89,6 @@ module('expander', function (hooks) {
     assert.dom('.expander__content').hasAttribute('style', '');
 
     click('button');
-
-    await waitForFrame();
-
-    assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
 
     await waitFor('.expander');
 

@@ -4,8 +4,8 @@ import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
-import { waitForFrame, waitForAnimation } from '@zestia/animation-utils';
-import { next } from '@ember/runloop';
+import { waitForAnimation } from '@zestia/animation-utils';
+import { next, scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
 
 export default class ExpanderComponent extends Component {
@@ -92,26 +92,26 @@ export default class ExpanderComponent extends Component {
   *_expand() {
     this.renderContent = true;
     this.isExpanded = true;
-    this._adjustToZeroHeight();
-    yield waitForFrame();
-    this._adjustToScrollHeight();
+    this.maxHeight = 0;
+    yield this._waitForRender();
+    this.maxHeight = this.contentElement.scrollHeight;
     this.isTransitioning = true;
     yield this._waitForTransition();
     this.isTransitioning = false;
-    this._adjustToNoneHeight();
+    this.maxHeight = null;
   }
 
   @task
   @waitFor
   *_collapse() {
     this.isExpanded = false;
-    this._adjustToScrollHeight();
-    yield waitForFrame();
-    this._adjustToZeroHeight();
+    this.maxHeight = this.contentElement.scrollHeight;
+    yield this._waitForRender();
+    this.contentElement.getBoundingClientRect();
+    this.maxHeight = 0;
     this.isTransitioning = true;
     yield this._waitForTransition();
     this.isTransitioning = false;
-    this._adjustToNoneHeight();
     this.renderContent = false;
   }
 
@@ -123,16 +123,10 @@ export default class ExpanderComponent extends Component {
     }
   }
 
-  _adjustToZeroHeight() {
-    this.maxHeight = 0;
-  }
-
-  _adjustToNoneHeight() {
-    this.maxHeight = null;
-  }
-
-  _adjustToScrollHeight() {
-    this.maxHeight = this.contentElement.scrollHeight;
+  _waitForRender() {
+    return new Promise((resolve) => {
+      scheduleOnce('afterRender', resolve);
+    });
   }
 
   _waitForTransition() {
