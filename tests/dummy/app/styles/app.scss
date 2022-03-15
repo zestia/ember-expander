@@ -28,7 +28,7 @@
     border: 1px solid var(--expanded);
   }
 
-  .expander--transition > .expander__content {
+  .expander__content {
     transition: max-height 1s;
   }
 

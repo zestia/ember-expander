@@ -4,6 +4,14 @@
 
 - Ember Auto Import 2x
 
+## 4.2.0
+
+- Skip expand code if initially expanded
+
+## 4.1.1
+
+- Upgrade `@zestia/animation-utils`
+
 ## 4.1.0
 
 - Use ember concurrency to allow expanding/collapsing mid-way (Re-attempt of 3.1.0)

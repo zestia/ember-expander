@@ -16,8 +16,8 @@ export class LifecycleHooks extends Modifier {
     this.args.named.didInstall(this.element);
   }
 
-  didReceiveArguments() {
-    this.args.named.didReceiveArguments?.();
+  didUpdateArguments() {
+    this.args.named.didUpdateArguments?.();
   }
 
   willDestroy() {
@@ -36,9 +36,9 @@ class ExpanderComponent extends Component {
   registerComponents = registerComponents;
 
   @tracked maxHeight = null;
-  @tracked isExpanded = false;
+  @tracked isExpanded = !!this.args.expanded;
+  @tracked renderContent = !!this.args.expanded;
   @tracked isTransitioning = false;
-  @tracked renderContent = false;
 
   get api() {
     return {
@@ -67,7 +67,7 @@ class ExpanderComponent extends Component {
   }
 
   @action
-  handleReceivedArguments() {
+  handleUpdatedArguments() {
     next(() => this._handleManualState());
   }
 

@@ -20,7 +20,7 @@
 </h4>
 
 <div class="demo">
-  <Expander class="expander--transition" as |expander|>
+  <Expander as |expander|>
     <button type="button" {{on "click" expander.toggle}}>
       Toggle
     </button>
@@ -43,16 +43,8 @@
     Pre-expanded
   </h4>
 
-  <Expander
-    class={{if this.shouldTransition "expander--transition"}}
-    @expanded={{true}}
-    as |expander|
-  >
-    <button
-      type="button"
-      {{on "click" this.enableTransition}}
-      {{on "click" expander.toggle}}
-    >
+  <Expander @expanded={{true}} as |expander|>
+    <button type="button" {{on "click" expander.toggle}}>
       Toggle
     </button>
 
@@ -67,12 +59,12 @@
     Nested
   </h4>
 
-  <Expander class="expander--transition" as |expander|>
+  <Expander as |expander|>
     <button type="button" {{on "click" expander.toggle}}>
       Toggle
     </button>
     <expander.Content>
-      <Expander class="expander--transition" as |expander|>
+      <Expander as |expander|>
         <button type="button" {{on "click" expander.toggle}}>
           Toggle
         </button>
