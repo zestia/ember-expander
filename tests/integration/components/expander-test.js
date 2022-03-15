@@ -160,7 +160,7 @@ module('expander', function (hooks) {
   });
 
   test('api', async function (assert) {
-    assert.expect(3);
+    assert.expect(4);
 
     let api;
 
@@ -195,7 +195,7 @@ module('expander', function (hooks) {
 
     assert.dom('.expander').hasText('Hello World');
 
-    // assert.true(api.isExpanded, 'api is up to date');
+    assert.true(api.isExpanded, 'api is up to date');
   });
 
   test('after transition actions', async function (assert) {

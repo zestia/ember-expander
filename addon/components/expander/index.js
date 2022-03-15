@@ -40,15 +40,17 @@ class ExpanderComponent extends Component {
   @tracked renderContent = !!this.args.expanded;
   @tracked isTransitioning = false;
 
+  stableAPI = {};
+
   get api() {
-    return {
+    return assign(this.stableAPI, {
       Content: this.renderContent ? this.Content : null,
       toggle: this.toggle,
       expand: this.expand,
       collapse: this.collapse,
       isExpanded: this.isExpanded,
       isTransitioning: this.isTransitioning
-    };
+    });
   }
 
   get style() {
