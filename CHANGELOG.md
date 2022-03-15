@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.1
+
+- Make sure yielded API is up to date
+
 ## 4.2.0
 
 - Skip expand code if initially expanded

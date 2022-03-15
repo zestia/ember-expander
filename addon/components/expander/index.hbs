@@ -22,9 +22,9 @@
       (if this.isTransitioning " expander--transitioning")
     }}
     tabindex="0"
-    aria-expanded="{{this.isExpanded}}"
+    aria-expanded="{{this.api.isExpanded}}"
     ...attributes
-    {{did-insert (fn this.handleInsertElement api)}}
+    {{did-insert this.handleInsertElement}}
     {{did-update this.handleUpdateExpanded @expanded}}
   >
     {{yield api}}

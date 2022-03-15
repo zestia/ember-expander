@@ -7,6 +7,7 @@ import { waitFor } from '@ember/test-waiters';
 import { waitForAnimation } from '@zestia/animation-utils';
 import { next, scheduleOnce } from '@ember/runloop';
 import { task } from 'ember-concurrency';
+const { assign } = Object;
 
 export default class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
@@ -15,6 +16,18 @@ export default class ExpanderComponent extends Component {
   @tracked isExpanded = !!this.args.expanded;
   @tracked renderContent = !!this.args.expanded;
   @tracked isTransitioning = false;
+
+  stableAPI = {};
+
+  get api() {
+    return assign(this.stableAPI, {
+      toggle: this.toggle,
+      expand: this.expand,
+      collapse: this.collapse,
+      isExpanded: this.isExpanded,
+      isTransitioning: this.isTransitioning
+    });
+  }
 
   get style() {
     let style = '';
@@ -27,8 +40,8 @@ export default class ExpanderComponent extends Component {
   }
 
   @action
-  handleInsertElement(api) {
-    this.args.onReady?.(api);
+  handleInsertElement() {
+    this.args.onReady?.(this.api);
   }
 
   @action
