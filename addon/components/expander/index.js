@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import ExpanderContent from './content';
-import Modifier from 'ember-modifier';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
@@ -11,28 +10,12 @@ import { task } from 'ember-concurrency';
 import { waitForAnimation } from '@zestia/animation-utils';
 const { assign } = Object;
 
-export class LifecycleHooks extends Modifier {
-  didInstall() {
-    this.args.named.didInstall(this.element);
-  }
-
-  didUpdateArguments() {
-    this.args.named.didUpdateArguments?.();
-  }
-
-  willDestroy() {
-    super.willDestroy(...arguments);
-    this.args.named.willDestroy?.();
-  }
-}
-
 const registerComponents = helper(function ([component], components) {
   assign(component, components);
 });
 
 class ExpanderComponent extends Component {
   ExpanderContent = ExpanderContent;
-  lifecycleHooks = LifecycleHooks;
   registerComponents = registerComponents;
 
   @tracked maxHeight = null;

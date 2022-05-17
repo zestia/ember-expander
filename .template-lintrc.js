@@ -1,3 +1,6 @@
 'use strict';
 
-module.exports = require('@zestia/template-lint-config');
+module.exports = {
+  plugins: ['@zestia/template-lint-config'],
+  extends: 'zestia:recommended'
+};
