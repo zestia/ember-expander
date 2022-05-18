@@ -1,26 +1,15 @@
 # @zestia/ember-expander
 
-<p>
-  <!--
-  <a href="https://github.com/zestia/ember-expander/actions/workflows/ci.yml">
-    <img src="https://github.com/zestia/ember-expander/actions/workflows/ci.yml/badge.svg">
-  </a>
-  -->
+[![Latest npm release][npm-badge]][npm-badge-url]
+[![GitHub Actions][github-actions-badge]][github-actions-url]
+[![Ember Observer][ember-observer-badge]][ember-observer-url]
 
-  <a href="https://david-dm.org/zestia/ember-expander#badge-embed">
-    <img src="https://david-dm.org/zestia/ember-expander.svg">
-  </a>
-
-  <a href="https://david-dm.org/zestia/ember-expander#dev-badge-embed">
-    <img src="https://david-dm.org/zestia/ember-expander/dev-status.svg">
-  </a>
-
-  <a href="https://emberobserver.com/addons/@zestia/ember-expander">
-    <img src="https://emberobserver.com/badges/-zestia-ember-expander.svg">
-  </a>
-
-  <img src="https://img.shields.io/badge/Ember-%3E%3D%203.16-brightgreen">
-</p>
+[npm-badge]: https://img.shields.io/npm/v/@zestia/ember-expander.svg
+[npm-badge-url]: https://www.npmjs.com/package/@zestia/ember-expander
+[github-actions-badge]: https://github.com/zestia/ember-expander/workflows/CI/badge.svg
+[github-actions-url]: https://github.com/zestia/ember-expander/actions
+[ember-observer-badge]: https://emberobserver.com/badges/-zestia-ember-expander.svg
+[ember-observer-url]: https://emberobserver.com/addons/@zestia/ember-expander
 
 Transitioning an element from a zero height to it's actual height is not possible to do with pure CSS, unless you know the height in advance.
 
@@ -51,7 +40,7 @@ Control the content area by using the yielded API: `expand`, `collapse` and `tog
 
 ```handlebars
 <Expander as |expander|>
-  <button {{on "click" expander.toggle}}>
+  <button {{on 'click' expander.toggle}}>
     Toggle
   </button>
   <expander.Content>
