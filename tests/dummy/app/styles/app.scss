@@ -5,7 +5,7 @@
   --expanded: green;
 }
 
-.expander--transitioning > .expander__content {
+.expander[data-transitioning='true'] > .expander__content {
   overflow: hidden;
 }
 
