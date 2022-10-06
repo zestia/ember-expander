@@ -51,7 +51,7 @@ module('expander', function (hooks) {
     `);
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander').hasAttribute('data-transitioning', 'false');
     assert.dom('.expander__content').doesNotExist();
 
     click('button');
@@ -59,7 +59,7 @@ module('expander', function (hooks) {
     await waitFor('.expander');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-    assert.dom('.expander').hasClass('expander--transitioning');
+    assert.dom('.expander').hasAttribute('data-transitioning', 'true');
     assert.dom('.expander__content').exists();
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
 
@@ -84,7 +84,7 @@ module('expander', function (hooks) {
     `);
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'true');
-    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander').hasAttribute('data-transitioning', 'false');
     assert.dom('.expander__content').exists();
     assert.dom('.expander__content').hasAttribute('style', '');
 
@@ -93,14 +93,14 @@ module('expander', function (hooks) {
     await waitFor('.expander');
 
     assert.dom('.expander').hasAttribute('aria-expanded', 'false');
-    assert.dom('.expander').hasClass('expander--transitioning');
+    assert.dom('.expander').hasAttribute('data-transitioning', 'true');
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
 
     await waitForAnimation('.expander__content', {
       propertyName: 'max-height'
     });
 
-    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander').hasAttribute('data-transitioning', 'false');
     assert.dom('.expander__content').doesNotExist();
   });
 

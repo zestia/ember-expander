@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4.0
+
+- Remove BEM classes in favour of data attributes
+
 ## 4.3.0
 
 - Ember Auto Import 2x

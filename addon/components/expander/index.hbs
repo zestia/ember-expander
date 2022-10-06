@@ -7,10 +7,8 @@
   )
 }}
 <div
-  class={{concat
-    "expander"
-    (if this.isTransitioning " expander--transitioning")
-  }}
+  class="expander"
+  data-transitioning="{{this.isTransitioning}}"
   aria-expanded="{{this.isExpanded}}"
   tabindex="0"
   ...attributes
