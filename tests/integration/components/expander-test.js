@@ -67,7 +67,7 @@ module('expander', function (hooks) {
       propertyName: 'max-height'
     });
 
-    assert.dom('.expander').doesNotHaveClass('expander--transitioning');
+    assert.dom('.expander').hasAttribute('data-transitioning', 'false');
     assert.dom('.expander__content').hasAttribute('style', '');
   });
 
