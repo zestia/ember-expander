@@ -1,8 +1,9 @@
 # @zestia/ember-expander
 
 [![Latest npm release][npm-badge]][npm-badge-url]
-[![GitHub Actions][github-actions-badge]][github-actions-url]
 [![Ember Observer][ember-observer-badge]][ember-observer-url]
+
+<!-- [![GitHub Actions][github-actions-badge]][github-actions-url] -->
 
 [npm-badge]: https://img.shields.io/npm/v/@zestia/ember-expander.svg
 [npm-badge-url]: https://www.npmjs.com/package/@zestia/ember-expander
@@ -25,16 +26,16 @@ ember install @zestia/ember-expander
 
 https://zestia.github.io/ember-expander/
 
+## Features
+
+- Fixes ["css transition to height auto"](https://google.com/search?q=css+transition+to+height+auto) ✔︎
+- Lazy content ✔︎
+- Cancellable transitions ✔︎
+- Nested expanders ✔︎
+
 ## Notes
 
 - This addon intentionally does not come with any styles.
-- You can nest Expanders.
-- Content is not rendered when collapsed, which results in faster rendering.
-- Transitions/animations can be interrupted part way through
-
-## Usage
-
-Control the content area by using the yielded API: `expand`, `collapse` and `toggle`. Or alternatively, use the `@expanded` argument.
 
 ## Example
 
@@ -49,21 +50,59 @@ Control the content area by using the yielded API: `expand`, `collapse` and `tog
 </Expander>
 ```
 
+## Arguments
+
+### `@expanded`
+
+Optional. Expanders are rendered as collapsed by default. Use this argument to manually control their expanded/collapsed state.
+
+### `@onReady`
+
+Optional. This action exposes an API for full control over an Expander.
+
+### `@onExpanded`
+
+Optional. This action fires after the content has rendered and the transition to reveal that content has finished.
+
+### `@onCollapse`
+
+Optional. This action fires after the transition to hide the content has finished, and the content has been removed from the DOM.
+
+## API
+
+### `toggle`
+
+Toggles the expanded/collapsed state
+
+### `expand`
+
+Expands to reveal the content
+
+### `collapse`
+
+Collapses the content, and un-renders it
+
+### `isExpanded`
+
+Whether or not the content is showing
+
+### `isTransitioning`
+
+Whether or not a transition is in progress to reveal or hide the content.
+
 ## Further explanation
 
-When expanding, `max-height` goes from:
+- When expanding, the component will automatically set the `max-height`. This allows you to use a CSS transition to expand to full height, and reveal the content. `max-height` goes from:
 
-1. none (collapsed)
-2. zero (required to start the transition)
-3. scroll height (the destination of the transition)
-4. none (expanded)
+  1. none (collapsed)
+  2. zero (required to start the transition)
+  3. scroll height (the destination of the transition)
+  4. none (expanded)
 
-When collapsing, `max-height` goes from:
+  The max-height is removed after expansion, this is so that if the contents of your element subsequently changes, the DOM element can still grow or shrink to fit that new content - without cutting it off, or causing an accidental transition.
 
-1. none (expanded)
-2. scroll height (required to start the transition)
-3. zero (the destination of the transition)
+* When collapsing, the component will automatically set the `max-height`. This allows you to use a CSS transition to collapse to zero, hiding the content. `max-height` goes from:
 
-Notice that the `max-height` style is only present for the duration of the transition.
-
-This is so that if the contents of your element change it can still grow or shrink to fit that new content - without causing an additional transition.
+  1. none (expanded)
+  2. scroll height (required to start the transition)
+  3. zero (the destination of the transition)
