@@ -24,7 +24,7 @@ ember install @zestia/ember-expander
 
 ## Demo
 
-https://zestia.github.io/ember-expander/
+https://zestia.github.io/ember-expander
 
 ## Features
 
