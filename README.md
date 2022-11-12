@@ -73,6 +73,10 @@ Optional. This action fires after the transition to hide the content has finishe
 
 ### API
 
+#### `Content`
+
+The area to render the content
+
 #### `toggle`
 
 Toggles the expanded/collapsed state
