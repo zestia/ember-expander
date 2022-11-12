@@ -51,43 +51,45 @@ https://zestia.github.io/ember-expander
 </Expander>
 ```
 
-## Arguments
+## `Expander`
 
-### `@expanded`
+### Arguments
+
+#### `@expanded`
 
 Optional. Expanders are rendered as collapsed by default. Use this argument to manually control their expanded/collapsed state.
 
-### `@onReady`
+#### `@onReady`
 
 Optional. This action exposes an API for full control over an Expander.
 
-### `@onExpanded`
+#### `@onExpanded`
 
 Optional. This action fires after the content has rendered and the transition to reveal that content has finished.
 
-### `@onCollapse`
+#### `@onCollapse`
 
 Optional. This action fires after the transition to hide the content has finished, and the content has been removed from the DOM.
 
-## API
+### API
 
-### `toggle`
+#### `toggle`
 
 Toggles the expanded/collapsed state
 
-### `expand`
+#### `expand`
 
 Expands to reveal the content
 
-### `collapse`
+#### `collapse`
 
 Collapses the content, and un-renders it
 
-### `isExpanded`
+#### `isExpanded`
 
 Whether or not the content is showing
 
-### `isTransitioning`
+#### `isTransitioning`
 
 Whether or not a transition is in progress to reveal or hide the content.
 
