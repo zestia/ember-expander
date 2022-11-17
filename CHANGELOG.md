@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.4.1
+
+- Expose `contentElement` on the API
+
 ## 4.4.0
 
 - Remove BEM classes in favour of data attributes

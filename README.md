@@ -77,6 +77,10 @@ Optional. This action fires after the transition to hide the content has finishe
 
 The area to render the content
 
+#### `contentElement`
+
+The DOM element, when expanded
+
 #### `toggle`
 
 Toggles the expanded/collapsed state

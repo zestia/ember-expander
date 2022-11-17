@@ -28,6 +28,7 @@ class ExpanderComponent extends Component {
   get api() {
     return assign(this.stableAPI, {
       Content: this.renderContent ? this.Content : null,
+      contentElement: this.contentElement,
       toggle: this.toggle,
       expand: this.expand,
       collapse: this.collapse,
@@ -75,7 +76,7 @@ class ExpanderComponent extends Component {
 
     try {
       await this.expandTask;
-      this.args.onExpanded?.();
+      this.args.onExpanded?.(this.api);
     } catch {}
   }
 
@@ -93,7 +94,7 @@ class ExpanderComponent extends Component {
 
     try {
       await this.collapseTask;
-      this.args.onCollapsed?.();
+      this.args.onCollapsed?.(this.api);
     } catch {}
   }
 

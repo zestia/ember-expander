@@ -160,11 +160,9 @@ module('expander', function (hooks) {
   });
 
   test('api', async function (assert) {
-    assert.expect(4);
+    assert.expect(6);
 
-    let api;
-
-    this.handleReady = (expander) => (api = expander);
+    this.handleReady = (expander) => (this.api = expander);
 
     await render(hbs`
       <Expander @onReady={{this.handleReady}} as |expander|>
@@ -175,9 +173,10 @@ module('expander', function (hooks) {
     `);
 
     assert.deepEqual(
-      keys(api),
+      keys(this.api),
       [
         'Content',
+        'contentElement',
         'toggle',
         'expand',
         'collapse',
@@ -189,13 +188,14 @@ module('expander', function (hooks) {
 
     assert.dom('.expander').doesNotIncludeText('Hello World');
 
-    api.expand();
+    this.api.expand();
 
     await settled();
 
+    assert.true(this.api.isExpanded);
+    assert.false(this.api.isTransitioning);
+    assert.deepEqual(this.api.contentElement, find('.expander__content'));
     assert.dom('.expander').hasText('Hello World');
-
-    assert.true(api.isExpanded, 'api is up to date');
   });
 
   test('after transition actions', async function (assert) {
