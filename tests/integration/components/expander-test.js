@@ -30,12 +30,13 @@ module('expander', function (hooks) {
   });
 
   test('it renders', async function (assert) {
-    assert.expect(2);
+    assert.expect(3);
 
     await render(hbs`<Expander />`);
 
     assert.dom('.expander').exists('has an appropriate classname');
-    assert.dom('.expander').hasAttribute('tabindex', '0');
+    assert.dom('.expander').doesNotHaveAttribute('tabindex');
+    assert.dom('.expander').hasAttribute('role', 'region');
   });
 
   test('expanding', async function (assert) {

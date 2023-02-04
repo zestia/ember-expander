@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.4.2
+
+- Remove `tabindex="0"`
+- Add `role="region"`
+
 ## 4.4.1
 
 - Expose `contentElement` on the API

@@ -9,7 +9,7 @@
   class="expander"
   data-transitioning="{{this.isTransitioning}}"
   aria-expanded="{{this.isExpanded}}"
-  tabindex="0"
+  role="region"
   ...attributes
   {{did-insert this.handleInsertElement}}
   {{did-update this.handleUpdatedArguments @expanded}}
