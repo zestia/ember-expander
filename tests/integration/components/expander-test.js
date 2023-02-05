@@ -10,7 +10,7 @@ import {
   waitUntil,
   find
 } from '@ember/test-helpers';
-const { keys } = Object;
+const { keys, isSealed } = Object;
 
 module('expander', function (hooks) {
   setupRenderingTest(hooks);
@@ -161,7 +161,7 @@ module('expander', function (hooks) {
   });
 
   test('api', async function (assert) {
-    assert.expect(6);
+    assert.expect(9);
 
     this.handleReady = (expander) => (this.api = expander);
 
@@ -187,6 +187,9 @@ module('expander', function (hooks) {
       'exposes the api when ready'
     );
 
+    assert.true(isSealed(this.api));
+    assert.false(this.api.isExpanded);
+    assert.strictEqual(this.api.contentElement, undefined);
     assert.dom('.expander').doesNotIncludeText('Hello World');
 
     this.api.expand();

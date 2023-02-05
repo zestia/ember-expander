@@ -3,20 +3,15 @@ import ExpanderContent from './content';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
-import { helper } from '@ember/component/helper';
 import { next, scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { waitForAnimation } from '@zestia/animation-utils';
-const { assign } = Object;
-
-const registerComponents = helper(function ([component], components) {
-  assign(component, components);
-});
+const { seal, assign } = Object;
 
 class ExpanderComponent extends Component {
+  Content = null;
   ExpanderContent = ExpanderContent;
-  registerComponents = registerComponents;
 
   @tracked maxHeight = null;
   @tracked isExpanded = !!this.args.expanded;
@@ -25,16 +20,22 @@ class ExpanderComponent extends Component {
 
   stableAPI = {};
 
+  registerContent = (Content) => {
+    this.Content = Content;
+  };
+
   get api() {
-    return assign(this.stableAPI, {
-      Content: this.renderContent ? this.Content : null,
-      contentElement: this.contentElement,
-      toggle: this.toggle,
-      expand: this.expand,
-      collapse: this.collapse,
-      isExpanded: this.isExpanded,
-      isTransitioning: this.isTransitioning
-    });
+    return seal(
+      assign(this.stableAPI, {
+        Content: this.renderContent ? this.Content : null,
+        contentElement: this.contentElement,
+        toggle: this.toggle,
+        expand: this.expand,
+        collapse: this.collapse,
+        isExpanded: this.isExpanded,
+        isTransitioning: this.isTransitioning
+      })
+    );
   }
 
   get style() {

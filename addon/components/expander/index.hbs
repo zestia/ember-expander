@@ -1,7 +1,6 @@
 {{! template-lint-disable no-unsupported-role-attributes }}
-{{this.registerComponents
-  this
-  Content=(component
+{{this.registerContent
+  (component
     this.ExpanderContent onInsert=this.registerContentElement style=this.style
   )
 }}
