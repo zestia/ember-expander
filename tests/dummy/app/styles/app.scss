@@ -20,11 +20,11 @@
 }
 
 .demo {
-  .expander[aria-expanded='false'] > .expander__content {
+  .expander[data-expanded='false'] > .expander__content {
     border: 1px solid var(--collapsed);
   }
 
-  .expander[aria-expanded='true'] > .expander__content {
+  .expander[data-expanded='true'] > .expander__content {
     border: 1px solid var(--expanded);
   }
 

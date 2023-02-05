@@ -1,9 +1,10 @@
 # Changelog
 
-## 4.4.2
+## 4.5.0
 
 - Remove `tabindex="0"`
 - Add `role="region"`
+- Swap `aria-expanded` for `data-expanded` and updated example usage
 
 ## 4.4.1
 

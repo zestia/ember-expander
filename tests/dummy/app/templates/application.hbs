@@ -7,10 +7,16 @@
 </h4>
 
 <div class="demo">
-  <Expander as |expander|>
-    <button type="button" {{on "click" expander.toggle}}>
+  <Expander id="example1" as |expander|>
+    <button
+      type="button"
+      aria-controls="example1"
+      aria-expanded="{{expander.isExpanded}}"
+      {{on "click" expander.toggle}}
+    >
       Toggle
     </button>
+
     <button type="button" {{on "click" this.toggleMore}}>
       Toggle more content
     </button>
@@ -30,8 +36,13 @@
     Pre-expanded
   </h4>
 
-  <Expander @expanded={{true}} as |expander|>
-    <button type="button" {{on "click" expander.toggle}}>
+  <Expander id="example2" @expanded={{true}} as |expander|>
+    <button
+      type="button"
+      aria-controls="example2"
+      aria-expanded="{{expander.isExpanded}}"
+      {{on "click" expander.toggle}}
+    >
       Toggle
     </button>
 
@@ -46,13 +57,23 @@
     Nested
   </h4>
 
-  <Expander as |expander|>
-    <button type="button" {{on "click" expander.toggle}}>
+  <Expander id="example3" as |expander|>
+    <button
+      type="button"
+      aria-controls="example3"
+      aria-expanded="{{expander.isExpanded}}"
+      {{on "click" expander.toggle}}
+    >
       Toggle
     </button>
     <expander.Content>
-      <Expander as |expander|>
-        <button type="button" {{on "click" expander.toggle}}>
+      <Expander id="example4" as |expander|>
+        <button
+          type="button"
+          aria-controls="example4"
+          aria-expanded="{{expander.isExpanded}}"
+          {{on "click" expander.toggle}}
+        >
           Toggle
         </button>
 
