@@ -10,15 +10,14 @@ import { waitForAnimation } from '@zestia/animation-utils';
 const { seal, assign } = Object;
 
 class ExpanderComponent extends Component {
-  Content = null;
-  ExpanderContent = ExpanderContent;
-
   @tracked maxHeight = null;
   @tracked isExpanded = !!this.args.expanded;
   @tracked renderContent = !!this.args.expanded;
   @tracked isTransitioning = false;
 
-  stableAPI = {};
+  _api = {};
+  Content = null;
+  ExpanderContent = ExpanderContent;
 
   registerContent = (Content) => {
     this.Content = Content;
@@ -26,7 +25,7 @@ class ExpanderComponent extends Component {
 
   get api() {
     return seal(
-      assign(this.stableAPI, {
+      assign(this._api, {
         Content: this.renderContent ? this.Content : null,
         contentElement: this.contentElement,
         toggle: this.toggle,
