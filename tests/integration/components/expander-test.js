@@ -60,7 +60,7 @@ module('expander', function (hooks) {
   });
 
   test('expanding', async function (assert) {
-    assert.expect(11);
+    assert.expect(12);
 
     await render(hbs`
       <Expander as |expander|>
@@ -89,16 +89,20 @@ module('expander', function (hooks) {
     assert.dom('.expander__content').exists();
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
 
-    await waitForAnimation('.expander__content', {
+    const animations = await waitForAnimation('.expander__content', {
       propertyName: 'max-height'
     });
+
+    assert.strictEqual(animations.length, 1);
+
+    await settled();
 
     assert.dom('.expander').hasAttribute('data-transitioning', 'false');
     assert.dom('.expander__content').hasAttribute('style', '');
   });
 
   test('collapsing', async function (assert) {
-    assert.expect(11);
+    assert.expect(12);
 
     await render(hbs`
       <Expander @expanded={{true}} as |expander|>
@@ -127,9 +131,13 @@ module('expander', function (hooks) {
     assert.dom('.expander__button').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
 
-    await waitForAnimation('.expander__content', {
+    const animations = await waitForAnimation('.expander__content', {
       propertyName: 'max-height'
     });
+
+    assert.strictEqual(animations.length, 1);
+
+    await settled();
 
     assert.dom('.expander').hasAttribute('data-transitioning', 'false');
     assert.dom('.expander__content').doesNotExist();
@@ -337,13 +345,12 @@ module('expander', function (hooks) {
       </Expander>
     `);
 
-    assert.rejects(
-      waitForAnimation('.expander__content', {
-        propertyName: 'max-height',
-        maybe: true
-      })
-    );
+    const animations = await waitForAnimation('.expander__content', {
+      propertyName: 'max-height',
+      maybe: true
+    });
 
+    assert.deepEqual(animations, []);
     assert.verifySteps([]);
   });
 
