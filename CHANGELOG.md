@@ -5,6 +5,7 @@
 - Remove `tabindex="0"`
 - Add `role="region"`
 - Swap `aria-expanded` for `data-expanded` and updated example usage
+- Yield button to control expanding
 - Use function helpers
 - Update animation utils
 

@@ -39,12 +39,35 @@ module('expander', function (hooks) {
     assert.dom('.expander').hasAttribute('role', 'region');
   });
 
-  test('expanding', async function (assert) {
-    assert.expect(9);
+  test('it render a button', async function (assert) {
+    assert.expect(2);
 
     await render(hbs`
       <Expander as |expander|>
-        <button type="button" {{on "click" expander.expand}}></button>
+        <expander.Button />
+      </Expander>
+    `);
+
+    assert.ok(
+      find('.expander')
+        .getAttribute('id')
+        .match(/[\w\d]+/)
+    );
+
+    assert
+      .dom('.expander__button')
+      .hasAttribute('aria-controls', find('.expander').getAttribute('id'));
+  });
+
+  test('expanding', async function (assert) {
+    assert.expect(11);
+
+    await render(hbs`
+      <Expander as |expander|>
+        <expander.Button {{on "click" expander.expand}}>
+          Expand
+        </expander.Button>
+
         <expander.Content>
           <div class="test-internal-height"></div>
         </expander.Content>
@@ -53,14 +76,16 @@ module('expander', function (hooks) {
 
     assert.dom('.expander').hasAttribute('data-expanded', 'false');
     assert.dom('.expander').hasAttribute('data-transitioning', 'false');
+    assert.dom('.expander__button').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander__content').doesNotExist();
 
-    click('button');
+    click('.expander__button');
 
     await waitFor('.expander');
 
     assert.dom('.expander').hasAttribute('data-expanded', 'true');
     assert.dom('.expander').hasAttribute('data-transitioning', 'true');
+    assert.dom('.expander__button').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander__content').exists();
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 10px');
 
@@ -73,11 +98,14 @@ module('expander', function (hooks) {
   });
 
   test('collapsing', async function (assert) {
-    assert.expect(9);
+    assert.expect(11);
 
     await render(hbs`
       <Expander @expanded={{true}} as |expander|>
-        <button type="button" {{on "click" expander.collapse}}></button>
+        <expander.Button {{on "click" expander.collapse}}>
+          Collapse
+        </expander.Button>
+
         <expander.Content>
           <div class="test-internal-height"></div>
         </expander.Content>
@@ -86,15 +114,17 @@ module('expander', function (hooks) {
 
     assert.dom('.expander').hasAttribute('data-expanded', 'true');
     assert.dom('.expander').hasAttribute('data-transitioning', 'false');
+    assert.dom('.expander__button').hasAttribute('aria-expanded', 'true');
     assert.dom('.expander__content').exists();
     assert.dom('.expander__content').hasAttribute('style', '');
 
-    click('button');
+    click('.expander__button');
 
     await waitFor('.expander');
 
     assert.dom('.expander').hasAttribute('data-expanded', 'false');
     assert.dom('.expander').hasAttribute('data-transitioning', 'true');
+    assert.dom('.expander__button').hasAttribute('aria-expanded', 'false');
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
 
     await waitForAnimation('.expander__content', {
@@ -117,17 +147,20 @@ module('expander', function (hooks) {
         @onCollapsed={{this.handleCollapsed}}
         as |expander|
       >
-        <button type="button" {{on "click" expander.toggle}}></button>
+        <expander.Button {{on "click" expander.toggle}}>
+          Toggle
+        </expander.Button>
+
         <expander.Content>
           Hello World
         </expander.Content>
       </Expander>
     `);
 
-    click('button');
+    click('.expander__button');
 
     await waitUntil(this.midWay);
-    await click('button');
+    await click('.expander__button');
 
     assert.verifySteps(['collapsed']);
   });
@@ -142,7 +175,10 @@ module('expander', function (hooks) {
         @onCollapsed={{this.handleCollapsed}}
         as |expander|
       >
-        <button type="button" {{on "click" expander.toggle}}></button>
+        <expander.Button {{on "click" expander.toggle}}>
+          Toggle
+        </expander.Button>
+
         <expander.Content>
           Hello World
         </expander.Content>
@@ -152,10 +188,10 @@ module('expander', function (hooks) {
     this.set('handleExpanded', () => assert.step('expanded'));
     this.set('handleCollapsed', () => assert.step('collapsed'));
 
-    click('button');
+    click('.expander__button');
 
     await waitUntil(this.midWay);
-    await click('button');
+    await click('.expander__button');
 
     assert.verifySteps(['expanded']);
   });
@@ -177,6 +213,7 @@ module('expander', function (hooks) {
       keys(this.api),
       [
         'Content',
+        'Button',
         'contentElement',
         'toggle',
         'expand',
@@ -214,18 +251,21 @@ module('expander', function (hooks) {
         @onCollapsed={{this.handleCollapsed}}
         as |expander|
       >
-        <button type="button" {{on "click" expander.toggle}}></button>
+        <expander.Button {{on "click" expander.toggle}}>
+          Toggle
+        </expander.Button>
+
         <expander.Content>
           Hello World
         </expander.Content>
       </Expander>
     `);
 
-    await click('button');
+    await click('.expander__button');
 
     assert.verifySteps(['expanded']);
 
-    await click('button');
+    await click('.expander__button');
 
     assert.verifySteps(['collapsed']);
   });
@@ -241,15 +281,18 @@ module('expander', function (hooks) {
         @onCollapsed={{this.handleCollapsed}}
         as |expander|
       >
-        <button type="button" {{on "click" expander.collapse}}></button>
+        <expander.Button {{on "click" expander.collapse}}>
+          Collapse
+        </expander.Button>
+
         <expander.Content>
           Hello World
         </expander.Content>
       </Expander>
     `);
 
-    click('button');
-    await click('button');
+    click('.expander__button');
+    await click('.expander__button');
 
     assert.verifySteps(['collapsed']);
   });
@@ -261,15 +304,18 @@ module('expander', function (hooks) {
 
     await render(hbs`
       <Expander @onExpanded={{this.handleExpanded}} as |expander|>
-        <button type="button" {{on "click" expander.expand}}></button>
+        <expander.Button {{on "click" expander.expand}}>
+          Expand
+        </expander.Button>
+
         <expander.Content>
           Hello World
         </expander.Content>
       </Expander>
     `);
 
-    click('button');
-    await click('button');
+    click('.expander__button');
+    await click('.expander__button');
 
     assert.verifySteps(['expanded']);
   });
@@ -281,7 +327,10 @@ module('expander', function (hooks) {
 
     await render(hbs`
       <Expander @expanded={{true}} @onExpanded={{this.handleExpanded}} as |expander|>
-        <button type="button" {{on "click" expander.expand}}></button>
+        <expander.Button {{on "click" expander.expand}}>
+          Expand
+        </expander.Button>
+
         <expander.Content>
           Hello World
         </expander.Content>

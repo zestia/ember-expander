@@ -1,11 +1,13 @@
 import Component from '@glimmer/component';
 import ExpanderContent from './content';
+import ExpanderButton from './button';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
 import { next, scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
+import { guidFor } from '@ember/object/internals';
 import { waitForAnimation } from '@zestia/animation-utils';
 const { seal, assign } = Object;
 
@@ -15,18 +17,23 @@ class ExpanderComponent extends Component {
   @tracked renderContent = !!this.args.expanded;
   @tracked isTransitioning = false;
 
+  id = guidFor(this);
+
   _api = {};
   Content = null;
+  Button = null;
   ExpanderContent = ExpanderContent;
+  ExpanderButton = ExpanderButton;
 
-  registerContent = (Content) => {
-    this.Content = Content;
+  registerComponents = (components) => {
+    assign(this, components);
   };
 
   get api() {
     return seal(
       assign(this._api, {
         Content: this.renderContent ? this.Content : null,
+        Button: this.Button,
         contentElement: this.contentElement,
         toggle: this.toggle,
         expand: this.expand,

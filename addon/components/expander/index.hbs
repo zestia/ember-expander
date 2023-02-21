@@ -1,10 +1,16 @@
 {{! template-lint-disable no-unsupported-role-attributes }}
-{{this.registerContent
-  (component
-    this.ExpanderContent onInsert=this.registerContentElement style=this.style
+{{this.registerComponents
+  (hash
+    Button=(component
+      this.ExpanderButton aria-controls=this.id aria-expanded=this.isExpanded
+    )
+    Content=(component
+      this.ExpanderContent onInsert=this.registerContentElement style=this.style
+    )
   )
 }}
 <div
+  id={{this.id}}
   class="expander"
   data-transitioning="{{this.isTransitioning}}"
   data-expanded="{{this.isExpanded}}"
