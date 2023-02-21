@@ -290,7 +290,8 @@ module('expander', function (hooks) {
 
     assert.rejects(
       waitForAnimation('.expander__content', {
-        propertyName: 'max-height'
+        propertyName: 'max-height',
+        maybe: true
       })
     );
 

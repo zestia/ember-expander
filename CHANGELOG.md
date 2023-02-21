@@ -5,8 +5,8 @@
 - Remove `tabindex="0"`
 - Add `role="region"`
 - Swap `aria-expanded` for `data-expanded` and updated example usage
-- Seal api
 - Use function helpers
+- Update animation utils
 
 ## 4.4.1
 
