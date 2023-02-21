@@ -42,9 +42,9 @@ https://zestia.github.io/ember-expander
 
 ```handlebars
 <Expander as |expander|>
-  <button {{on 'click' expander.toggle}}>
+  <expander.Button {{on 'click' expander.toggle}}>
     Toggle
-  </button>
+  </expander.Button>
   <expander.Content>
     Hello World
   </expander.Content>
