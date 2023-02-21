@@ -103,17 +103,21 @@ Whether or not a transition is in progress to reveal or hide the content.
 
 ## Further explanation
 
-- When expanding, the component will automatically set the `max-height`. This allows you to use a CSS transition to expand to full height, and reveal the content. `max-height` goes from:
+### Expanding
 
-  - none (collapsed)
-  - zero (required to start the transition)
-  - scroll height (the destination of the transition)
-  - none (expanded)
+When expanding, the component will automatically set the `max-height`. This allows you to use a CSS transition to expand to full height, and reveal the content. `max-height` goes from:
 
-  The max-height is removed after expansion, this is so that if the contents of your element subsequently changes, the DOM element can still grow or shrink to fit that new content - without cutting it off, or causing an accidental transition.
+- none (collapsed)
+- zero (required to start the transition)
+- scroll height (the destination of the transition)
+- none (expanded)
 
-* When collapsing, the component will automatically set the `max-height`. This allows you to use a CSS transition to collapse to zero, hiding the content. `max-height` goes from:
+The max-height is removed after expansion, this is so that if the contents of your element subsequently changes, the DOM element can still grow or shrink to fit that new content - without cutting it off, or causing an accidental transition.
 
-  - none (expanded)
-  - scroll height (required to start the transition)
-  - zero (the destination of the transition)
+### Collapsing
+
+When collapsing, the component will automatically set the `max-height`. This allows you to use a CSS transition to collapse to zero, hiding the content. `max-height` goes from:
+
+- none (expanded)
+- scroll height (required to start the transition)
+- zero (the destination of the transition)
