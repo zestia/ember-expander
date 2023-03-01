@@ -216,7 +216,7 @@ module('expander', function (hooks) {
       </Expander>
     `);
 
-    assert.strictEqual(this.api.Content, undefined);
+    assert.strictEqual(this.api.Content, null);
     assert.strictEqual(typeof this.api.Button, 'object');
     assert.deepEqual(this.api.contentElement, null);
     assert.strictEqual(typeof this.api.toggle, 'function');

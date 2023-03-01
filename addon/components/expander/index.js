@@ -147,27 +147,23 @@ class ExpanderComponent extends Component {
     });
   }
 
+  get _api() {
+    return {
+      Button: this.Button,
+      Content: this.renderContent ? this.Content : null,
+      contentElement: this.contentElement,
+      toggle: this.toggle,
+      expand: this.expand,
+      collapse: this.collapse,
+      isExpanded: this.isExpanded,
+      isTransitioning: this.isTransitioning
+    };
+  }
+
   api = new Proxy(this, {
     get(target, key) {
-      if (
-        ![
-          'Button',
-          'Content',
-          'contentElement',
-          'toggle',
-          'expand',
-          'collapse',
-          'isExpanded',
-          'isTransitioning'
-        ].includes(key) ||
-        (key === 'Content' && !target.renderContent)
-      ) {
-        return;
-      }
-
-      return target[key];
+      return target._api[key];
     },
-
     set() {}
   });
 }
