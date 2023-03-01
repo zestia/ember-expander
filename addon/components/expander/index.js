@@ -9,40 +9,24 @@ import { action } from '@ember/object';
 import { task } from 'ember-concurrency';
 import { guidFor } from '@ember/object/internals';
 import { waitForAnimation } from '@zestia/animation-utils';
-const { seal, assign } = Object;
+const { assign } = Object;
 
 class ExpanderComponent extends Component {
-  @tracked maxHeight = null;
   @tracked isExpanded = !!this.args.expanded;
-  @tracked renderContent = !!this.args.expanded;
   @tracked isTransitioning = false;
+  @tracked maxHeight = null;
+  @tracked renderContent = !!this.args.expanded;
 
-  id = guidFor(this);
-
-  _api = {};
-  Content = null;
-  Button = null;
-  ExpanderContent = ExpanderContent;
+  Button;
+  Content;
+  contentElement = null;
   ExpanderButton = ExpanderButton;
+  ExpanderContent = ExpanderContent;
+  id = guidFor(this);
 
   registerComponents = (components) => {
     assign(this, components);
   };
-
-  get api() {
-    return seal(
-      assign(this._api, {
-        Content: this.renderContent ? this.Content : null,
-        Button: this.Button,
-        contentElement: this.contentElement,
-        toggle: this.toggle,
-        expand: this.expand,
-        collapse: this.collapse,
-        isExpanded: this.isExpanded,
-        isTransitioning: this.isTransitioning
-      })
-    );
-  }
 
   get style() {
     let style = '';
@@ -162,6 +146,30 @@ class ExpanderComponent extends Component {
       transitionProperty: 'max-height'
     });
   }
+
+  api = new Proxy(this, {
+    get(target, key) {
+      if (
+        ![
+          'Button',
+          'Content',
+          'contentElement',
+          'toggle',
+          'expand',
+          'collapse',
+          'isExpanded',
+          'isTransitioning'
+        ].includes(key) ||
+        (key === 'Content' && !target.renderContent)
+      ) {
+        return;
+      }
+
+      return target[key];
+    },
+
+    set() {}
+  });
 }
 
 export default ExpanderComponent;

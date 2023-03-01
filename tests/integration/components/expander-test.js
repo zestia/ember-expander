@@ -10,7 +10,6 @@ import {
   waitUntil,
   find
 } from '@ember/test-helpers';
-const { keys, isSealed } = Object;
 
 module('expander', function (hooks) {
   setupRenderingTest(hooks);
@@ -205,7 +204,7 @@ module('expander', function (hooks) {
   });
 
   test('api', async function (assert) {
-    assert.expect(9);
+    assert.expect(14);
 
     this.handleReady = (expander) => (this.api = expander);
 
@@ -217,32 +216,25 @@ module('expander', function (hooks) {
       </Expander>
     `);
 
-    assert.deepEqual(
-      keys(this.api),
-      [
-        'Content',
-        'Button',
-        'contentElement',
-        'toggle',
-        'expand',
-        'collapse',
-        'isExpanded',
-        'isTransitioning'
-      ],
-      'exposes the api when ready'
-    );
-
-    assert.true(isSealed(this.api));
+    assert.strictEqual(this.api.Content, undefined);
+    assert.strictEqual(typeof this.api.Button, 'object');
+    assert.deepEqual(this.api.contentElement, null);
+    assert.strictEqual(typeof this.api.toggle, 'function');
+    assert.strictEqual(typeof this.api.expand, 'function');
+    assert.strictEqual(typeof this.api.collapse, 'function');
     assert.false(this.api.isExpanded);
-    assert.strictEqual(this.api.contentElement, undefined);
+    assert.false(this.api.isTransitioning);
+
     assert.dom('.expander').doesNotIncludeText('Hello World');
 
     this.api.expand();
 
+    await waitUntil(() => this.api.isTransitioning);
     await settled();
 
     assert.true(this.api.isExpanded);
     assert.false(this.api.isTransitioning);
+    assert.strictEqual(typeof this.api.Content, 'object');
     assert.deepEqual(this.api.contentElement, find('.expander__content'));
     assert.dom('.expander').hasText('Hello World');
   });
