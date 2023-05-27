@@ -143,7 +143,8 @@ class ExpanderComponent extends Component {
 
   _waitForTransition() {
     return waitForAnimation(this.contentElement, {
-      transitionProperty: 'max-height'
+      transitionProperty: 'max-height',
+      maybe: true
     });
   }
 
