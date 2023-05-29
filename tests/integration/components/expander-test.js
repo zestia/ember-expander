@@ -386,6 +386,7 @@ module('expander', function (hooks) {
     assert.expect(1);
 
     await render(hbs`
+      {{! template-lint-disable no-forbidden-elements }}
       <style>
       #ember-testing .expander__content {
         transition: none
