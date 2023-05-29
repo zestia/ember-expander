@@ -381,4 +381,30 @@ module('expander', function (hooks) {
 
     assert.verifySteps(['collapsed']);
   });
+
+  test('no transition', async function (assert) {
+    assert.expect(1);
+
+    await render(hbs`
+      <style>
+      #ember-testing .expander__content {
+        transition: none
+      }
+      </style>
+
+      <Expander as |expander|>
+        <expander.Button {{on "click" expander.expand}}>
+          Expand
+        </expander.Button>
+
+        <expander.Content>
+          Hello World
+        </expander.Content>
+      </Expander>
+    `);
+
+    await click('.expander__button');
+
+    assert.ok(true, 'does not hang, waiting for a transition');
+  });
 });
