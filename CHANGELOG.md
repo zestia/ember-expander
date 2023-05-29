@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.5.1
+
+- Allow the addon to work when there is no transition
+
 ## 4.5.0
 
 - Remove `tabindex="0"`
