@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import ExpanderContent from './content';
-import ExpanderButton from './button';
+import ExpanderContent from '@zestia/ember-expander/components/expander/content';
+import ExpanderButton from '@zestia/ember-expander/components/expander/button';
 import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';

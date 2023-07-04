@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import waitForAnimation from '../../helpers/wait-for-animation';
+import waitForAnimation from 'dummy/tests/helpers/wait-for-animation';
 import hbs from 'htmlbars-inline-precompile';
 import {
   render,
