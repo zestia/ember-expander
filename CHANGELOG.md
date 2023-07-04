@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.6.1
+
+- Run `ember-cli-update`
+
 ## 4.5.1
 
 - Allow the addon to work when there is no transition
