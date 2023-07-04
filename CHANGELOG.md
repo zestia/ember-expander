@@ -1,6 +1,6 @@
 # Changelog
 
-## 4.6.1
+## 4.6.0
 
 - Run `ember-cli-update`
 
