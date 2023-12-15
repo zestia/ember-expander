@@ -3,6 +3,7 @@
 :root {
   --collapsed: red;
   --expanded: green;
+  --space: 10px;
 }
 
 .expander[data-transitioning='true'] > .expander__content {
@@ -33,6 +34,6 @@
   }
 
   .expander__content > .expander {
-    padding: 10px;
+    padding: var(--space);
   }
 }
