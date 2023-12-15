@@ -1,7 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForAnimation from 'dummy/tests/helpers/wait-for-animation';
-import hbs from 'htmlbars-inline-precompile';
 import {
   render,
   click,
@@ -10,28 +9,37 @@ import {
   waitUntil,
   find
 } from '@ember/test-helpers';
+import Expander from '@zestia/ember-expander/components/expander';
+import { on } from '@ember/modifier';
+import { tracked } from '@glimmer/tracking';
 
 module('expander', function (hooks) {
   setupRenderingTest(hooks);
 
+  let state;
+
+  const midWay = () => {
+    const element = find('.expander__content');
+
+    if (!element) {
+      return;
+    }
+
+    const height = parseInt(getComputedStyle(element).height, 10);
+
+    return height > 0 && height < 10;
+  };
+
   hooks.beforeEach(function () {
-    this.midWay = () => {
-      const element = find('.expander__content');
-
-      if (!element) {
-        return;
-      }
-
-      const height = parseInt(getComputedStyle(element).height, 10);
-
-      return height > 0 && height < 10;
-    };
+    state = new (class {
+      @tracked expanded;
+    })();
   });
 
   test('it renders', async function (assert) {
     assert.expect(3);
 
-    await render(hbs`<Expander />`);
+    await render(<template><Expander /></template>);
 
     assert.dom('.expander').exists('has an appropriate classname');
     assert.dom('.expander').doesNotHaveAttribute('tabindex');
@@ -41,11 +49,11 @@ module('expander', function (hooks) {
   test('it render a button', async function (assert) {
     assert.expect(2);
 
-    await render(hbs`
+    await render(<template>
       <Expander as |expander|>
         <expander.Button />
       </Expander>
-    `);
+    </template>);
 
     assert.ok(
       find('.expander')
@@ -61,7 +69,7 @@ module('expander', function (hooks) {
   test('expanding', async function (assert) {
     assert.expect(12);
 
-    await render(hbs`
+    await render(<template>
       <Expander as |expander|>
         <expander.Button {{on "click" expander.expand}}>
           Expand
@@ -71,7 +79,7 @@ module('expander', function (hooks) {
           <div class="test-internal-height"></div>
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     assert.dom('.expander').hasAttribute('data-expanded', 'false');
     assert.dom('.expander').hasAttribute('data-transitioning', 'false');
@@ -103,7 +111,7 @@ module('expander', function (hooks) {
   test('collapsing', async function (assert) {
     assert.expect(12);
 
-    await render(hbs`
+    await render(<template>
       <Expander @expanded={{true}} as |expander|>
         <expander.Button {{on "click" expander.collapse}}>
           Collapse
@@ -113,7 +121,7 @@ module('expander', function (hooks) {
           <div class="test-internal-height"></div>
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     assert.dom('.expander').hasAttribute('data-expanded', 'true');
     assert.dom('.expander').hasAttribute('data-transitioning', 'false');
@@ -145,13 +153,13 @@ module('expander', function (hooks) {
   test('collapsing mid expand', async function (assert) {
     assert.expect(2);
 
-    this.handleExpanded = () => assert.step('expanded');
-    this.handleCollapsed = () => assert.step('collapsed');
+    const handleExpanded = () => assert.step('expanded');
+    const handleCollapsed = () => assert.step('collapsed');
 
-    await render(hbs`
+    await render(<template>
       <Expander
-        @onExpanded={{this.handleExpanded}}
-        @onCollapsed={{this.handleCollapsed}}
+        @onExpanded={{handleExpanded}}
+        @onCollapsed={{handleCollapsed}}
         as |expander|
       >
         <expander.Button {{on "click" expander.toggle}}>
@@ -162,11 +170,11 @@ module('expander', function (hooks) {
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     click('.expander__button');
 
-    await waitUntil(this.midWay);
+    await waitUntil(midWay);
     await click('.expander__button');
 
     assert.verifySteps(['collapsed']);
@@ -175,11 +183,14 @@ module('expander', function (hooks) {
   test('expanding mid collapse', async function (assert) {
     assert.expect(2);
 
-    await render(hbs`
+    const handleExpanded = () => assert.step('expanded');
+    const handleCollapsed = () => assert.step('collapsed');
+
+    await render(<template>
       <Expander
         @expanded={{true}}
-        @onExpanded={{this.handleExpanded}}
-        @onCollapsed={{this.handleCollapsed}}
+        @onExpanded={{handleExpanded}}
+        @onCollapsed={{handleCollapsed}}
         as |expander|
       >
         <expander.Button {{on "click" expander.toggle}}>
@@ -190,14 +201,11 @@ module('expander', function (hooks) {
           Hello World
         </expander.Content>
       </Expander>
-    `);
-
-    this.set('handleExpanded', () => assert.step('expanded'));
-    this.set('handleCollapsed', () => assert.step('collapsed'));
+    </template>);
 
     click('.expander__button');
 
-    await waitUntil(this.midWay);
+    await waitUntil(midWay);
     await click('.expander__button');
 
     assert.verifySteps(['expanded']);
@@ -206,49 +214,51 @@ module('expander', function (hooks) {
   test('api', async function (assert) {
     assert.expect(14);
 
-    this.handleReady = (expander) => (this.api = expander);
+    let api;
 
-    await render(hbs`
-      <Expander @onReady={{this.handleReady}} as |expander|>
+    const handleReady = (expander) => (api = expander);
+
+    await render(<template>
+      <Expander @onReady={{handleReady}} as |expander|>
         <expander.Content>
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
-    assert.strictEqual(this.api.Content, null);
-    assert.strictEqual(typeof this.api.Button, 'object');
-    assert.deepEqual(this.api.contentElement, null);
-    assert.strictEqual(typeof this.api.toggle, 'function');
-    assert.strictEqual(typeof this.api.expand, 'function');
-    assert.strictEqual(typeof this.api.collapse, 'function');
-    assert.false(this.api.isExpanded);
-    assert.false(this.api.isTransitioning);
+    assert.strictEqual(api.Content, null);
+    assert.strictEqual(typeof api.Button, 'object');
+    assert.deepEqual(api.contentElement, null);
+    assert.strictEqual(typeof api.toggle, 'function');
+    assert.strictEqual(typeof api.expand, 'function');
+    assert.strictEqual(typeof api.collapse, 'function');
+    assert.false(api.isExpanded);
+    assert.false(api.isTransitioning);
 
     assert.dom('.expander').doesNotIncludeText('Hello World');
 
-    this.api.expand();
+    api.expand();
 
-    await waitUntil(() => this.api.isTransitioning);
+    await waitUntil(() => api.isTransitioning);
     await settled();
 
-    assert.true(this.api.isExpanded);
-    assert.false(this.api.isTransitioning);
-    assert.strictEqual(typeof this.api.Content, 'object');
-    assert.deepEqual(this.api.contentElement, find('.expander__content'));
+    assert.true(api.isExpanded);
+    assert.false(api.isTransitioning);
+    assert.strictEqual(typeof api.Content, 'object');
+    assert.deepEqual(api.contentElement, find('.expander__content'));
     assert.dom('.expander').hasText('Hello World');
   });
 
   test('after transition actions', async function (assert) {
     assert.expect(4);
 
-    this.handleExpanded = () => assert.step('expanded');
-    this.handleCollapsed = () => assert.step('collapsed');
+    const handleExpanded = () => assert.step('expanded');
+    const handleCollapsed = () => assert.step('collapsed');
 
-    await render(hbs`
+    await render(<template>
       <Expander
-        @onExpanded={{this.handleExpanded}}
-        @onCollapsed={{this.handleCollapsed}}
+        @onExpanded={{handleExpanded}}
+        @onCollapsed={{handleCollapsed}}
         as |expander|
       >
         <expander.Button {{on "click" expander.toggle}}>
@@ -259,7 +269,7 @@ module('expander', function (hooks) {
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     await click('.expander__button');
 
@@ -273,12 +283,12 @@ module('expander', function (hooks) {
   test('skipping collapsing', async function (assert) {
     assert.expect(2);
 
-    this.handleCollapsed = () => assert.step('collapsed');
+    const handleCollapsed = () => assert.step('collapsed');
 
-    await render(hbs`
+    await render(<template>
       <Expander
         @expanded={{true}}
-        @onCollapsed={{this.handleCollapsed}}
+        @onCollapsed={{handleCollapsed}}
         as |expander|
       >
         <expander.Button {{on "click" expander.collapse}}>
@@ -289,7 +299,7 @@ module('expander', function (hooks) {
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     click('.expander__button');
     await click('.expander__button');
@@ -300,10 +310,10 @@ module('expander', function (hooks) {
   test('skipping expanding', async function (assert) {
     assert.expect(2);
 
-    this.handleExpanded = () => assert.step('expanded');
+    const handleExpanded = () => assert.step('expanded');
 
-    await render(hbs`
-      <Expander @onExpanded={{this.handleExpanded}} as |expander|>
+    await render(<template>
+      <Expander @onExpanded={{handleExpanded}} as |expander|>
         <expander.Button {{on "click" expander.expand}}>
           Expand
         </expander.Button>
@@ -312,7 +322,7 @@ module('expander', function (hooks) {
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     click('.expander__button');
     await click('.expander__button');
@@ -323,10 +333,10 @@ module('expander', function (hooks) {
   test('pre expanding', async function (assert) {
     assert.expect(2);
 
-    this.handleExpanded = () => assert.step('expanded');
+    const handleExpanded = () => assert.step('expanded');
 
-    await render(hbs`
-      <Expander @expanded={{true}} @onExpanded={{this.handleExpanded}} as |expander|>
+    await render(<template>
+      <Expander @expanded={{true}} @onExpanded={{handleExpanded}} as |expander|>
         <expander.Button {{on "click" expander.expand}}>
           Expand
         </expander.Button>
@@ -335,7 +345,7 @@ module('expander', function (hooks) {
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     const animations = await waitForAnimation('.expander__content', {
       propertyName: 'max-height',
@@ -349,25 +359,25 @@ module('expander', function (hooks) {
   test('manual control', async function (assert) {
     assert.expect(6);
 
-    this.handleExpanded = () => assert.step('expanded');
-    this.handleCollapsed = () => assert.step('collapsed');
+    const handleExpanded = () => assert.step('expanded');
+    const handleCollapsed = () => assert.step('collapsed');
 
-    await render(hbs`
+    await render(<template>
       <Expander
-        @expanded={{this.expanded}}
-        @onExpanded={{this.handleExpanded}}
-        @onCollapsed={{this.handleCollapsed}}
+        @expanded={{state.expanded}}
+        @onExpanded={{handleExpanded}}
+        @onCollapsed={{handleCollapsed}}
         as |expander|
       >
         <expander.Content>
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     assert.dom('.expander').hasAttribute('data-expanded', 'false');
 
-    this.set('expanded', true);
+    state.expanded = true;
 
     await settled();
 
@@ -375,7 +385,7 @@ module('expander', function (hooks) {
 
     assert.verifySteps(['expanded']);
 
-    this.set('expanded', false);
+    state.expanded = false;
 
     await settled();
 
@@ -385,12 +395,10 @@ module('expander', function (hooks) {
   test('no transition', async function (assert) {
     assert.expect(1);
 
-    await render(hbs`
+    await render(<template>
       {{! template-lint-disable no-forbidden-elements }}
       <style>
-      #ember-testing .expander__content {
-        transition: none
-      }
+        #ember-testing .expander__content { transition: none }
       </style>
 
       <Expander as |expander|>
@@ -402,7 +410,7 @@ module('expander', function (hooks) {
           Hello World
         </expander.Content>
       </Expander>
-    `);
+    </template>);
 
     await click('.expander__button');
 
