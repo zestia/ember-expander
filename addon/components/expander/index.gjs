@@ -1,17 +1,20 @@
-import Component from '@glimmer/component';
-import ExpanderContent from '@zestia/ember-expander/components/expander/content';
-import ExpanderButton from '@zestia/ember-expander/components/expander/button';
+import { action } from '@ember/object';
+import { guidFor } from '@ember/object/internals';
+import { hash } from '@ember/helper';
 import { htmlSafe } from '@ember/template';
+import { next, scheduleOnce } from '@ember/runloop';
+import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
-import { next, scheduleOnce } from '@ember/runloop';
-import { action } from '@ember/object';
-import { task } from 'ember-concurrency';
-import { guidFor } from '@ember/object/internals';
 import { waitForAnimation } from '@zestia/animation-utils';
+import Component from '@glimmer/component';
+import didInsert from '@ember/render-modifiers/modifiers/did-insert';
+import didUpdate from '@ember/render-modifiers/modifiers/did-update';
+import ExpanderButton from '@zestia/ember-expander/components/expander/button';
+import ExpanderContent from '@zestia/ember-expander/components/expander/content';
 const { assign } = Object;
 
-class ExpanderComponent extends Component {
+export default class ExpanderComponent extends Component {
   @tracked isExpanded = !!this.args.expanded;
   @tracked isTransitioning = false;
   @tracked maxHeight = null;
@@ -20,8 +23,6 @@ class ExpanderComponent extends Component {
   Button;
   Content;
   contentElement = null;
-  ExpanderButton = ExpanderButton;
-  ExpanderContent = ExpanderContent;
   id = guidFor(this);
 
   registerComponents = (components) => {
@@ -167,6 +168,30 @@ class ExpanderComponent extends Component {
     },
     set() {}
   });
-}
 
-export default ExpanderComponent;
+  <template>
+    {{! template-lint-disable no-unsupported-role-attributes }}
+    {{this.registerComponents
+      (hash
+        Button=(component
+          ExpanderButton aria-controls=this.id aria-expanded=this.isExpanded
+        )
+        Content=(component
+          ExpanderContent onInsert=this.registerContentElement style=this.style
+        )
+      )
+    }}
+    <div
+      id={{this.id}}
+      class="expander"
+      data-transitioning="{{this.isTransitioning}}"
+      data-expanded="{{this.isExpanded}}"
+      role="region"
+      ...attributes
+      {{didInsert this.handleInsertElement}}
+      {{didUpdate this.handleUpdatedArguments @expanded}}
+    >
+      {{yield this.api}}
+    </div>
+  </template>
+}
