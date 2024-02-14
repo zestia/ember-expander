@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.6.5
+
+- Correct app re-exports
+
 ## 4.6.4
 
 - Convert to `.gjs`

@@ -1,0 +1,39 @@
+/* stylelint-disable selector-max-id */
+
+:root {
+  --collapsed: red;
+  --expanded: green;
+  --space: 10px;
+}
+
+.expander[data-transitioning='true'] > .expander__content {
+  overflow: hidden;
+}
+
+#ember-testing {
+  .expander__content {
+    transition: max-height 100ms;
+  }
+
+  .test-internal-height {
+    height: 10px;
+  }
+}
+
+.demo {
+  .expander[data-expanded='false'] > .expander__content {
+    border: 1px solid var(--collapsed);
+  }
+
+  .expander[data-expanded='true'] > .expander__content {
+    border: 1px solid var(--expanded);
+  }
+
+  .expander__content {
+    transition: max-height 1s;
+  }
+
+  .expander__content > .expander {
+    padding: var(--space);
+  }
+}
