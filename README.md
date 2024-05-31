@@ -73,7 +73,7 @@ Optional. This action exposes an API for full control over an Expander.
 
 Optional. This action fires after the content has rendered and the transition to reveal that content has finished.
 
-#### `@onCollapse`
+#### `@onCollapsed`
 
 Optional. This action fires after the transition to hide the content has finished, and the content has been removed from the DOM.
 
