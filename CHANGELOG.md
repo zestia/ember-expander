@@ -1,5 +1,10 @@
 # Changelog
 
+## 4.6.6
+
+- Run ember-cli-update
+- Upgrade dependencies
+
 ## 4.6.5
 
 - Correct app re-exports

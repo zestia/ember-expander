@@ -1,18 +1,25 @@
 /* https://github.com/ember-cli/eslint-plugin-ember/issues/2035 */
 /* eslint-disable no-unused-expressions */
 
-import didInsert from '@ember/render-modifiers/modifiers/did-insert';
+import Component from '@glimmer/component';
+import { modifier } from 'ember-modifier';
 
-<template>
-  {{! template-lint-disable no-inline-styles }}
-  {{! Issue: https://github.com/emberjs/rfcs/issues/497 }}
+export default class DragulaContainer extends Component {
+  lifecycle = modifier((element) => {
+    this.args.onInsert(element);
+  });
 
-  <div
-    class="expander__content"
-    style={{@style}}
-    ...attributes
-    {{didInsert @onInsert}}
-  >
-    {{yield}}
-  </div>
-</template>
+  <template>
+    {{! template-lint-disable no-inline-styles }}
+    {{! Issue: https://github.com/emberjs/rfcs/issues/497 }}
+
+    <div
+      class="expander__content"
+      style={{@style}}
+      {{this.lifecycle}}
+      ...attributes
+    >
+      {{yield}}
+    </div>
+  </template>
+}

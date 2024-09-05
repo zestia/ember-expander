@@ -1,3 +1,5 @@
+/* eslint-disable ember/no-runloop */
+
 import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { hash } from '@ember/helper';
@@ -8,8 +10,7 @@ import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
 import { waitForAnimation } from '@zestia/animation-utils';
 import Component from '@glimmer/component';
-import didInsert from '@ember/render-modifiers/modifiers/did-insert';
-import didUpdate from '@ember/render-modifiers/modifiers/did-update';
+import { modifier } from 'ember-modifier';
 import ExpanderButton from '@zestia/ember-expander/components/expander/button';
 import ExpanderContent from '@zestia/ember-expander/components/expander/content';
 const { assign } = Object;
@@ -23,6 +24,7 @@ export default class ExpanderComponent extends Component {
   Button;
   Content;
   contentElement = null;
+  didSetUp;
   id = guidFor(this);
 
   registerComponents = (components) => {
@@ -39,14 +41,23 @@ export default class ExpanderComponent extends Component {
     return htmlSafe(style);
   }
 
+  lifecycle = modifier((element, [expanded]) => {
+    if (!this.didSetUp) {
+      this.handleInsertElement();
+      this.didSetUp = true;
+    }
+
+    this.handleUpdatedArguments({ expanded });
+  });
+
   @action
   handleInsertElement() {
     this.args.onReady?.(this.api);
   }
 
   @action
-  handleUpdatedArguments() {
-    next(() => this._handleManualState());
+  handleUpdatedArguments({ expanded }) {
+    next(() => this._handleManualState(expanded));
   }
 
   @action
@@ -128,10 +139,10 @@ export default class ExpanderComponent extends Component {
     this.maxHeight = null;
   }
 
-  _handleManualState() {
-    if (this.args.expanded === true) {
+  _handleManualState(bool) {
+    if (bool === true) {
       this.expand();
-    } else if (this.args.expanded === false) {
+    } else if (bool === false) {
       this.collapse();
     }
   }
@@ -188,8 +199,7 @@ export default class ExpanderComponent extends Component {
       data-expanded="{{this.isExpanded}}"
       role="region"
       ...attributes
-      {{didInsert this.handleInsertElement}}
-      {{didUpdate this.handleUpdatedArguments @expanded}}
+      {{this.lifecycle @expanded}}
     >
       {{yield this.api}}
     </div>
