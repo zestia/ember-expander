@@ -4,6 +4,7 @@
 
 - Run ember-cli-update
 - Upgrade dependencies
+- Remove use of ember-render-modifiers
 
 ## 4.6.5
 
