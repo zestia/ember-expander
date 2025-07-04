@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.4
+
+- Put `@ember/test-waiters` back in `dependencies`
+
 ## 5.0.3
 
 - Move `@ember/test-waiters` out of `dependencies`
