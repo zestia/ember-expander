@@ -40,7 +40,7 @@
     "ember-modifier": "^4.2.0",
     "@embroider/addon-shim": "^1.8.9",
     "decorator-transforms": "^2.2.2",
-    "@ember/test-waiters": "^4.1.0",
+    "@ember/test-waiters": "^3.1.0",
     "ember-concurrency": "^4.0.2",
     "@zestia/animation-utils": "^5.0.5"
   },
@@ -89,7 +89,12 @@
   "ember-addon": {
     "version": 2,
     "type": "addon",
-    "main": "addon-main.cjs"
+    "main": "addon-main.cjs",
+    "app-js": {
+      "./components/button.js": "./dist/_app_/components/button.js",
+      "./components/content.js": "./dist/_app_/components/content.js",
+      "./components/expander.js": "./dist/_app_/components/expander.js"
+    }
   },
   "imports": {
     "#app/*": "./demo/*",
