@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.1
+
+- Fix exports
+
 ## 5.0.0
 
 - Convert to a v2 addon
