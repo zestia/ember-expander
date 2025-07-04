@@ -1,12 +1,8 @@
 # Changelog
 
-## 5.0.4
-
-- Move `@ember/test-waiters` out of `dependencies`
-
 ## 5.0.3
 
-- Downgrade `@ember/test-waiters` due to [flakes](https://github.com/emberjs/ember-test-waiters/issues/512)
+- Move `@ember/test-waiters` out of `dependencies`
 
 ## 5.0.2
 
