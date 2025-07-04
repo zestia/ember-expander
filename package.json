@@ -89,12 +89,7 @@
   "ember-addon": {
     "version": 2,
     "type": "addon",
-    "main": "addon-main.cjs",
-    "app-js": {
-      "./components/expander/button.js": "./dist/_app_/components/expander/button.js",
-      "./components/expander/content.js": "./dist/_app_/components/expander/content.js",
-      "./components/expander/index.js": "./dist/_app_/components/expander/index.js"
-    }
+    "main": "addon-main.cjs"
   },
   "imports": {
     "#app/*": "./demo/*",

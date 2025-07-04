@@ -11,8 +11,8 @@ import { waitFor } from '@ember/test-waiters';
 import { waitForAnimation } from '@zestia/animation-utils';
 import Component from '@glimmer/component';
 import { modifier } from 'ember-modifier';
-import ExpanderButton from '@zestia/ember-expander/components/expander/button';
-import ExpanderContent from '@zestia/ember-expander/components/expander/content';
+import ExpanderButton from '@zestia/ember-expander/components/button';
+import ExpanderContent from '@zestia/ember-expander/components/content';
 const { assign } = Object;
 
 export default class ExpanderComponent extends Component {

@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.0.2
+
+- Move components 
+
 ## 5.0.1
 
 - Fix exports
