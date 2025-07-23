@@ -50,23 +50,19 @@ export default class ExpanderComponent extends Component {
     this.handleUpdatedArguments({ expanded });
   });
 
-  @action
-  handleInsertElement() {
+  handleInsertElement = () => {
     this.args.onReady?.(this.api);
-  }
+  };
 
-  @action
-  handleUpdatedArguments({ expanded }) {
-    next(() => this._handleManualState(expanded));
-  }
+  handleUpdatedArguments = ({ expanded }) => {
+    next(() => this.#handleManualState(expanded));
+  };
 
-  @action
-  registerContentElement(element) {
+  registerContentElement = (element) => {
     this.contentElement = element;
-  }
+  };
 
-  @action
-  async expand() {
+  expand = async () => {
     if (this.isExpanded) {
       return;
     }
@@ -83,10 +79,9 @@ export default class ExpanderComponent extends Component {
     } catch {
       // squelch
     }
-  }
+  };
 
-  @action
-  async collapse() {
+  collapse = async () => {
     if (!this.isExpanded) {
       return;
     }
@@ -103,16 +98,15 @@ export default class ExpanderComponent extends Component {
     } catch {
       // squelch
     }
-  }
+  };
 
-  @action
-  toggle() {
+  toggle = () => {
     if (this.isExpanded) {
       this.collapse();
     } else {
       this.expand();
     }
-  }
+  };
 
   @task
   @waitFor
@@ -120,10 +114,10 @@ export default class ExpanderComponent extends Component {
     this.renderContent = true;
     this.isExpanded = true;
     this.maxHeight = 0;
-    yield this._waitForRender();
+    yield this.#waitForRender();
     this.maxHeight = this.contentElement.scrollHeight;
     this.isTransitioning = true;
-    yield this._waitForTransition();
+    yield this.#waitForTransition();
     this.isTransitioning = false;
     this.maxHeight = null;
   }
@@ -133,17 +127,17 @@ export default class ExpanderComponent extends Component {
   *_collapse() {
     this.isExpanded = false;
     this.maxHeight = this.contentElement.scrollHeight;
-    yield this._waitForRender();
+    yield this.#waitForRender();
     this.contentElement.getBoundingClientRect();
     this.maxHeight = 0;
     this.isTransitioning = true;
-    yield this._waitForTransition();
+    yield this.#waitForTransition();
     this.isTransitioning = false;
     this.renderContent = false;
     this.maxHeight = null;
   }
 
-  _handleManualState(bool) {
+  #handleManualState(bool) {
     if (bool === true) {
       this.expand();
     } else if (bool === false) {
@@ -151,20 +145,20 @@ export default class ExpanderComponent extends Component {
     }
   }
 
-  _waitForRender() {
+  #waitForRender() {
     return new Promise((resolve) => {
       scheduleOnce('afterRender', resolve);
     });
   }
 
-  _waitForTransition() {
+  #waitForTransition() {
     return waitForAnimation(this.contentElement, {
       transitionProperty: 'max-height',
       maybe: true
     });
   }
 
-  get _api() {
+  get #api() {
     return {
       Button: this.Button,
       Content: this.renderContent ? this.Content : null,
@@ -179,7 +173,7 @@ export default class ExpanderComponent extends Component {
 
   api = new Proxy(this, {
     get(target, key) {
-      return target._api[key];
+      return target.#api[key];
     },
     set() {}
   });
