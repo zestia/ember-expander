@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.0
+
+- Upgrade `ember-concurrency`
+
 ## 5.0.4
 
 - Put `@ember/test-waiters` back in `dependencies`

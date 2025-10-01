@@ -108,34 +108,34 @@ export default class ExpanderComponent extends Component {
     }
   };
 
-  @task
-  @waitFor
-  *_expand() {
-    this.renderContent = true;
-    this.isExpanded = true;
-    this.maxHeight = 0;
-    yield this.#waitForRender();
-    this.maxHeight = this.contentElement.scrollHeight;
-    this.isTransitioning = true;
-    yield this.#waitForTransition();
-    this.isTransitioning = false;
-    this.maxHeight = null;
-  }
+  _expand = task(
+    waitFor(async () => {
+      this.renderContent = true;
+      this.isExpanded = true;
+      this.maxHeight = 0;
+      await this.#waitForRender();
+      this.maxHeight = this.contentElement.scrollHeight;
+      this.isTransitioning = true;
+      await this.#waitForTransition();
+      this.isTransitioning = false;
+      this.maxHeight = null;
+    })
+  );
 
-  @task
-  @waitFor
-  *_collapse() {
-    this.isExpanded = false;
-    this.maxHeight = this.contentElement.scrollHeight;
-    yield this.#waitForRender();
-    this.contentElement.getBoundingClientRect();
-    this.maxHeight = 0;
-    this.isTransitioning = true;
-    yield this.#waitForTransition();
-    this.isTransitioning = false;
-    this.renderContent = false;
-    this.maxHeight = null;
-  }
+  _collapse = task(
+    waitFor(async () => {
+      this.isExpanded = false;
+      this.maxHeight = this.contentElement.scrollHeight;
+      await this.#waitForRender();
+      this.contentElement.getBoundingClientRect();
+      this.maxHeight = 0;
+      this.isTransitioning = true;
+      await this.#waitForTransition();
+      this.isTransitioning = false;
+      this.renderContent = false;
+      this.maxHeight = null;
+    })
+  );
 
   #handleManualState(bool) {
     if (bool === true) {

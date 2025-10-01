@@ -37,11 +37,11 @@
     "release": "release-it"
   },
   "dependencies": {
-    "@ember/test-waiters": "^4.1.0",
+    "@ember/test-waiters": "^4.1.1",
     "@embroider/addon-shim": "^1.8.9",
     "@zestia/animation-utils": "^5.0.5",
     "decorator-transforms": "^2.2.2",
-    "ember-concurrency": "^4.0.2",
+    "ember-concurrency": "^5.1.0",
     "ember-modifier": "^4.2.0"
   },
   "devDependencies": {
