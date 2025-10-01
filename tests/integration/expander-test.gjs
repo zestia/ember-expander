@@ -148,7 +148,7 @@ module('expander', function (hooks) {
     assert.dom('.expander__content').hasAttribute('style', 'max-height: 0px');
 
     const animations = await waitForAnimation('.expander__content', {
-      propertyName: 'max-height'
+      transitionProperty: 'max-height'
     });
 
     assert.strictEqual(animations.length, 1);
@@ -375,7 +375,7 @@ module('expander', function (hooks) {
     );
 
     const animations = await waitForAnimation('.expander__content', {
-      propertyName: 'max-height',
+      transitionProperty: 'max-height',
       maybe: true
     });
 
