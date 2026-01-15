@@ -3,7 +3,6 @@ import Expander from '@zestia/ember-expander/components/expander';
 import { tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
 import Component from '@glimmer/component';
-import '../styles/app.css';
 
 class ApplicationRoute extends Component {
   @tracked show = true;

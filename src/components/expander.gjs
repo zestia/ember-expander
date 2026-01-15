@@ -1,6 +1,5 @@
 /* eslint-disable ember/no-runloop */
 
-import { action } from '@ember/object';
 import { guidFor } from '@ember/object/internals';
 import { hash } from '@ember/helper';
 import { htmlSafe } from '@ember/template';
