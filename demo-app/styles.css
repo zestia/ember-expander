@@ -6,7 +6,7 @@
   --space: 10px;
 }
 
-.expander[data-transitioning="true"] > .expander__content {
+.expander[data-transitioning='true'] > .expander__content {
   overflow: hidden;
 }
 
@@ -21,11 +21,11 @@
 }
 
 .demo {
-  .expander[data-expanded="false"] > .expander__content {
+  .expander[data-expanded='false'] > .expander__content {
     border: 1px solid var(--collapsed);
   }
 
-  .expander[data-expanded="true"] > .expander__content {
+  .expander[data-expanded='true'] > .expander__content {
     border: 1px solid var(--expanded);
   }
 
