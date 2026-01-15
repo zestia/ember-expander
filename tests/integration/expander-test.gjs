@@ -1,5 +1,3 @@
-/* eslint-disable ember/template-no-let-reference */
-
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import waitForAnimation from '../helpers/wait-for-animation';
