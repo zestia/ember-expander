@@ -1,5 +1,5 @@
 import Route from 'ember-route-template';
-import Expander from '@zestia/ember-expander/components/expander';
+import Expander from '#src/components/expander';
 import { tracked } from '@glimmer/tracking';
 import { on } from '@ember/modifier';
 import Component from '@glimmer/component';

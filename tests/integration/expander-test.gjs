@@ -9,10 +9,10 @@ import {
   waitUntil,
   find
 } from '@ember/test-helpers';
-import Expander from '@zestia/ember-expander/components/expander';
+import Expander from '#src/components/expander';
 import { on } from '@ember/modifier';
 import { tracked } from '@glimmer/tracking';
-import '../../demo/styles/app.css';
+import '../../demo-app/styles.css';
 
 module('expander', function (hooks) {
   setupRenderingTest(hooks);
