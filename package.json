@@ -40,7 +40,7 @@
     "lint:hbs:fix": "ember-template-lint . --fix --no-error-on-unmatched-pattern",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "lint:css": "stylelint '**/*.{css,scss}'",
+    "lint:css": "stylelint '**/*.css'",
     "lint:css:fix": "concurrently \"npm:lint:css -- --fix\"",
     "lint:publish": "npm run build && publint run --level error",
     "prepack": "rollup --config",
