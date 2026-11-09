@@ -3,7 +3,8 @@
 import { guidFor } from '@ember/object/internals';
 import { hash } from '@ember/helper';
 import { htmlSafe } from '@ember/template';
-import { next, scheduleOnce } from '@ember/runloop';
+import { next } from '@ember/runloop';
+import { renderSettled } from '@ember/renderer';
 import { task } from 'ember-concurrency';
 import { tracked } from '@glimmer/tracking';
 import { waitFor } from '@ember/test-waiters';
@@ -112,7 +113,7 @@ export default class ExpanderComponent extends Component {
       this.renderContent = true;
       this.isExpanded = true;
       this.maxHeight = 0;
-      await this.#waitForRender();
+      await renderSettled();
       this.maxHeight = this.contentElement.scrollHeight;
       this.isTransitioning = true;
       await this.#waitForTransition();
@@ -125,7 +126,7 @@ export default class ExpanderComponent extends Component {
     waitFor(async () => {
       this.isExpanded = false;
       this.maxHeight = this.contentElement.scrollHeight;
-      await this.#waitForRender();
+      await renderSettled();
       this.contentElement.getBoundingClientRect();
       this.maxHeight = 0;
       this.isTransitioning = true;
@@ -142,12 +143,6 @@ export default class ExpanderComponent extends Component {
     } else if (bool === false) {
       this.collapse();
     }
-  }
-
-  #waitForRender() {
-    return new Promise((resolve) => {
-      scheduleOnce('afterRender', resolve);
-    });
   }
 
   #waitForTransition() {
