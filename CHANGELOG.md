@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.1.1
+
+- Use `renderSettled` internally
+
 ## 5.1.0
 
 - Upgrade `ember-concurrency`
